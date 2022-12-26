@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_main_menu">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/standard_indent_16"
+        android:paddingEnd="@dimen/standard_indent_16"
+        android:paddingTop="14dp"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/main_menu_text_22" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp"
+        android:paddingLeft="@dimen/standard_indent_16"
+        android:paddingRight="@dimen/standard_indent_16"
+        android:paddingBottom="28dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            app:cornerRadius="@dimen/corner_radius_16"
+            android:foreground="?attr/selectableItemBackground"
+
+            android:text="@string/search"
+            android:textSize="@dimen/main_menu_text_22"
+            android:textAllCaps="false"
+            android:textColor="@color/yp_black"
+
+            app:icon="@drawable/icon_search"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/icon_padding_10"
+            app:iconTint="@color/yp_black" />
+
+        <Button
+            android:id="@+id/button_media_library"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            app:cornerRadius="@dimen/corner_radius_16"
+            android:foreground="?attr/selectableItemBackground"
+
+            android:text="@string/media_library"
+            android:textSize="@dimen/main_menu_text_22"
+            android:textAllCaps="false"
+            android:textColor="@color/yp_black"
+
+            app:icon="@drawable/icon_media_library"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/icon_padding_10"
+            app:iconTint="@color/yp_black" />
+
+        <Button
+            android:id="@+id/button_settings"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            app:cornerRadius="@dimen/corner_radius_16"
+            android:foreground="?attr/selectableItemBackground"
+
+            android:text="@string/settings"
+            android:textSize="@dimen/main_menu_text_22"
+            android:textAllCaps="false"
+            android:textColor="@color/yp_black"
+
+            app:icon="@drawable/icon_settings"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/icon_padding_10"
+            app:iconTint="@color/yp_black" />
+
+    </LinearLayout>
+
+</LinearLayout>

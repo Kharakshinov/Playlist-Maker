@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_settings">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:contentDescription="@string/icon_back"
+            android:id="@+id/button_go_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_arrow_back"
+            app:iconTint="@color/yp_black"
+            app:iconGravity="textStart"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="14dp"
+            android:text="@string/settings"
+            android:textColor="@color/yp_black"
+            android:textSize="@dimen/main_menu_text_22" />
+
+    </FrameLayout>
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_indent_16"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="61dp"
+            android:text="@string/black_theme"
+            android:textSize="@dimen/settings_text_16"
+            android:textColor="@color/black"
+            />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_indent_16"
+        android:layout_marginEnd="@dimen/standard_indent_16"
+        android:layout_marginTop="42dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/share"
+            android:textColor="@color/black"
+            android:textSize="@dimen/settings_text_16" />
+
+        <ImageView
+            android:contentDescription="@string/icon_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/icon_share" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_indent_16"
+        android:layout_marginEnd="@dimen/standard_indent_16"
+        android:layout_marginTop="42dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/write_support"
+            android:textColor="@color/black"
+            android:textSize="@dimen/settings_text_16" />
+
+        <ImageView
+            android:contentDescription="@string/icon_support"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/icon_support" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_indent_16"
+        android:layout_marginEnd="@dimen/standard_indent_16"
+        android:layout_marginTop="42dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/user_agreement"
+            android:textColor="@color/black"
+            android:textSize="@dimen/settings_text_16" />
+
+        <ImageView
+            android:contentDescription="@string/icon_arrow_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:src="@drawable/icon_arrow_forward" />
+
+    </FrameLayout>
+
+</LinearLayout>
