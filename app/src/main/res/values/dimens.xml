@@ -5,4 +5,12 @@
     <dimen name="standard_indent_16">16dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
     <dimen name="icon_padding_10">10dp</dimen>
+    <dimen name="margin_0">0dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_14">14dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_28">28dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_42">42dp</dimen>
+    <dimen name="margin_61">42dp</dimen>
 </resources>
