@@ -33,74 +33,66 @@
 
     </FrameLayout>
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/standard_indent_16"
-            android:layout_marginEnd="@dimen/margin_5"
-            android:layout_marginTop="@dimen/margin_61"
-            android:text="@string/black_theme"
-            android:textSize="@dimen/settings_text_16"
-            android:textColor="@color/black"
-            />
-
-    <FrameLayout
+    <Switch
+        android:id="@+id/switch1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_indent_16"
-        android:layout_marginEnd="@dimen/standard_indent_16"
-        android:layout_marginTop="@dimen/margin_42"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="@string/share"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_text_16" />
-
-        <ImageView
-            android:contentDescription="@string/icon_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/icon_share" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/standard_indent_16"
-        android:layout_marginEnd="@dimen/standard_indent_16"
-        android:layout_marginTop="@dimen/margin_42"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="@string/write_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/settings_text_16" />
-
-        <ImageView
-            android:contentDescription="@string/icon_support"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/icon_support" />
-
-    </FrameLayout>
+        android:layout_marginEnd="@dimen/margin_5"
+        android:layout_marginTop="@dimen/margin_61"
+        android:text="@string/black_theme"
+        android:textSize="@dimen/settings_text_16"
+        android:textColor="@color/black"
+        />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/standard_indent_16"
         android:paddingEnd="@dimen/standard_indent_16"
-        android:layout_marginTop="@dimen/margin_42"
+        android:paddingTop="@dimen/margin_42"
+        android:backgroundTint="@color/background_settings"
+        android:stateListAnimator="@null"
+
+        android:text="@string/share"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:fontFamily="Arial"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textAllCaps="false"
+        android:textSize="@dimen/settings_text_16"
+
+        app:icon="@drawable/icon_share"
+        app:iconGravity="end"
+        app:iconTint="@color/grey" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/standard_indent_16"
+        android:paddingEnd="@dimen/standard_indent_16"
+        android:paddingTop="@dimen/margin_42"
+        android:backgroundTint="@color/background_settings"
+        android:stateListAnimator="@null"
+
+        android:text="@string/write_support"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:fontFamily="Arial"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textAllCaps="false"
+        android:textSize="@dimen/settings_text_16"
+
+        app:icon="@drawable/icon_support"
+        app:iconGravity="end"
+        app:iconTint="@color/grey" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/standard_indent_16"
+        android:paddingEnd="@dimen/standard_indent_16"
+        android:paddingTop="@dimen/margin_42"
         android:backgroundTint="@color/background_settings"
         android:stateListAnimator="@null"
 
