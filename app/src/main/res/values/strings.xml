@@ -11,6 +11,7 @@
     <string name="icon_back" translatable="false">Иконка назад</string>
     <string name="icon_share" translatable="false">Иконка поделиться</string>
     <string name="icon_support" translatable="false">Иконка поддержка</string>
+    <string name="icon_clear" translatable="false">Иконка очистить</string>
     <string name="icon_arrow_forward" translatable="false">Иконка стрелка вперед</string>
     <string name="link_Yandex_AndroidDeveloper" translatable="false">https://practicum.yandex.ru/android-developer/</string>
     <string name="write_support_message" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>

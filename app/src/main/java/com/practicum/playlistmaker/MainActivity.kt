@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSettings = findViewById<Button>(R.id.button_settings)
 
         buttonSearch.setOnClickListener {
-            val displaySearch = Intent(this, Search::class.java)
+            val displaySearch = Intent(this, SearchActivity::class.java)
             startActivity(displaySearch)
         }
 

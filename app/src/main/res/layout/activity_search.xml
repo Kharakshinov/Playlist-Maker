@@ -22,4 +22,34 @@
 
     </FrameLayout>
 
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/inputEditText"
+            android:layout_width="@dimen/margin_0"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:hint="@string/search"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:inputType="text"
+            android:textColor="?attr/colorOnSecondary"
+            android:textColorHint="?attr/colorOnSecondary" />
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:contentDescription="@string/icon_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
 </LinearLayout>
