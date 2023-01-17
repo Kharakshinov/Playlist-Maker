@@ -29,16 +29,19 @@
         style="@style/Switch" />
 
     <Button
+        android:id="@+id/button_share_application"
         android:text="@string/share"
         app:icon="@drawable/icon_share"
         style="@style/ButtonSettings" />
 
     <Button
+        android:id="@+id/button_write_support"
         android:text="@string/write_support"
         app:icon="@drawable/icon_support"
         style="@style/ButtonSettings"/>
 
     <Button
+        android:id="@+id/button_user_agreement"
         android:text="@string/user_agreement"
         app:icon="@drawable/icon_arrow_forward"
         style="@style/ButtonSettings"/>

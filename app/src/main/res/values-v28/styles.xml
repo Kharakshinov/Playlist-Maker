@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ButtonMainMenu">
+    <style name="ButtonMainMenu" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginStart">@dimen/standard_indent_16</item>
         <item name="android:layout_marginEnd">@dimen/standard_indent_16</item>
