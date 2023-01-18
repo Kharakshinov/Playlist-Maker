@@ -38,8 +38,8 @@
             android:maxLength="50"
             android:maxLines="1"
             android:inputType="text"
-            android:textColor="?attr/colorOnSecondary"
-            android:textColorHint="?attr/colorOnSecondary" />
+            android:textColor="?attr/text_color"
+            android:textColorHint="?attr/text_color" />
 
         <ImageView
             android:id="@+id/clearIcon"

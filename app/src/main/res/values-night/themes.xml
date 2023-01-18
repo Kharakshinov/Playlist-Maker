@@ -16,21 +16,22 @@
 
     <style name="Theme.PlaylistMaker.MainMenu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/yp_black</item>
-        <item name="colorOnSecondary">@color/white</item>
     </style>
 
     <style name="Theme.PlaylistMaker.Settings" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/yp_black</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="button_background_color">@color/yp_black</item>
+        <item name="text_color">@color/white</item>
+        <item name="icon_color">@color/white</item>
     </style>
 
     <style name="Theme.PlaylistMaker.Search" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/yp_black</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="text_color">@color/white</item>
     </style>
 
     <style name="Theme.PlaylistMaker.MediaLibrary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/yp_black</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="text_color">@color/white</item>
     </style>
 </resources>
