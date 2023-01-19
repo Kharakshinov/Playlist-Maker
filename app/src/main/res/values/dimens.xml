@@ -7,6 +7,7 @@
     <dimen name="icon_padding_10">10dp</dimen>
     <dimen name="margin_0">0dp</dimen>
     <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_9">9dp</dimen>
     <dimen name="margin_14">14dp</dimen>
     <dimen name="margin_20">20dp</dimen>
     <dimen name="margin_28">28dp</dimen>

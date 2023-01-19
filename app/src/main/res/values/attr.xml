@@ -3,4 +3,7 @@
     <attr name = "text_color" format = "reference"/>
     <attr name = "button_background_color" format = "reference"/>
     <attr name = "icon_color" format = "reference"/>
+    <attr name = "search_color" format = "reference"/>
+    <attr name = "search_text_color" format = "reference"/>
+    <attr name = "search_hint_color" format = "reference"/>
 </resources>

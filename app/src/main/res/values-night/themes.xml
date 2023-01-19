@@ -28,6 +28,9 @@
     <style name="Theme.PlaylistMaker.Search" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/yp_black</item>
         <item name="text_color">@color/white</item>
+        <item name="search_color">@color/white</item>
+        <item name="search_hint_color">@color/yp_black</item>
+        <item name="search_text_color">@color/yp_black</item>
     </style>
 
     <style name="Theme.PlaylistMaker.MediaLibrary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
