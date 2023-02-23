@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background_settings">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,22 +14,51 @@
         <ImageView
             android:contentDescription="@string/icon_back"
             android:id="@+id/button_go_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_arrow_back"
-            app:iconTint="@color/yp_black"
-            app:iconGravity="textStart"
-            android:layout_marginTop="@dimen/margin_20"/>
+            style="@style/IconGoBack"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_28"
-            android:layout_marginTop="@dimen/margin_14"
             android:text="@string/search"
-            android:textColor="@color/yp_black"
-            android:textSize="@dimen/main_menu_text_22" />
+            style="@style/TopLeftText"/>
 
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        android:background="@drawable/search_background" >
+
+        <EditText
+            android:drawableStart="@drawable/icon_search_14"
+            android:drawablePadding="@dimen/margin_9"
+
+            android:id="@+id/inputEditText"
+            android:layout_width="@dimen/margin_0"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_0"
+            android:hint="@string/search"
+            android:maxLength="50"
+            android:maxLines="1"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            android:textColor="?attr/search_text_color"
+            android:textSize="@dimen/text_16"
+            android:textColorHint="?attr/search_hint_color"
+            android:background="@null"/>
+
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:contentDescription="@string/icon_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/icon_search_clear"
+            app:tint="?attr/search_hint_color"
+            android:background="@null"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </LinearLayout>

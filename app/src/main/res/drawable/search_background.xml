@@ -1,0 +1,20 @@
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"   >
+
+    <solid
+        android:color="?attr/search_color" >
+    </solid>
+
+    <padding
+        android:left="14dp"
+        android:top="8dp"
+        android:right="14dp"
+        android:bottom="8dp"    >
+    </padding>
+
+    <corners
+        android:radius="8dp"   >
+    </corners>
+
+</shape>

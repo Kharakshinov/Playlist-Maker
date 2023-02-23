@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_menu_text_22">22sp</dimen>
-    <dimen name="settings_text_16">16sp</dimen>
+    <dimen name="text_22">22sp</dimen>
+    <dimen name="text_16">16sp</dimen>
     <dimen name="standard_indent_16">16dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
     <dimen name="icon_padding_10">10dp</dimen>
     <dimen name="margin_0">0dp</dimen>
     <dimen name="margin_5">5dp</dimen>
+    <dimen name="margin_9">9dp</dimen>
     <dimen name="margin_14">14dp</dimen>
     <dimen name="margin_20">20dp</dimen>
     <dimen name="margin_28">28dp</dimen>

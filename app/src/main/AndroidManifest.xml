@@ -13,29 +13,33 @@
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".Search"
-            android:exported="false">
+            android:name=".SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PlaylistMaker.Search">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".MediaLibrary"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.PlaylistMaker.MediaLibrary">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.PlaylistMaker.Settings">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.PlaylistMaker.MainMenu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
