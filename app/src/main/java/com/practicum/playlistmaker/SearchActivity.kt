@@ -15,14 +15,16 @@ class SearchActivity : AppCompatActivity() {
 
     private var textSearch = ""
     private lateinit var inputEditText: EditText
+    private lateinit var buttonGoBack: ImageView
+    private lateinit var clearButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val buttonGoBack = findViewById<ImageView>(R.id.button_go_back)
+        buttonGoBack = findViewById(R.id.button_go_back)
         inputEditText = findViewById(R.id.inputEditText)
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        clearButton = findViewById(R.id.clearIcon)
 
         buttonGoBack.setOnClickListener {
             val displayMainMenu = Intent(this, MainActivity::class.java)
@@ -58,10 +60,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        const val SEARCH_TEXT = "SEARCH_TEXT"
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_TEXT, textSearch)
@@ -71,5 +69,9 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         textSearch = savedInstanceState.getString(SEARCH_TEXT).toString()
         inputEditText.setText(textSearch)
+    }
+
+    companion object {
+        const val SEARCH_TEXT = "SEARCH_TEXT"
     }
 }

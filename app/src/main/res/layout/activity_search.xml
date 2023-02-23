@@ -30,23 +30,15 @@
         android:orientation="horizontal"
         android:background="@drawable/search_background" >
 
-        <ImageView
-            android:id="@+id/searchIcon"
-            android:contentDescription="@string/icon_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/icon_search_14"
-            app:tint="?attr/search_hint_color"
-            android:background="@null"
-            android:visibility="visible" />
-
         <EditText
+            android:drawableStart="@drawable/icon_search_14"
+            android:drawablePadding="@dimen/margin_9"
+
             android:id="@+id/inputEditText"
             android:layout_width="@dimen/margin_0"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_9"
+            android:layout_marginStart="@dimen/margin_0"
             android:hint="@string/search"
             android:maxLength="50"
             android:maxLines="1"
