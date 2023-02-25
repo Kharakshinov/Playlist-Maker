@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="text_11">11sp</dimen>
     <dimen name="text_22">22sp</dimen>
     <dimen name="text_16">16sp</dimen>
     <dimen name="standard_indent_16">16dp</dimen>
@@ -7,6 +8,9 @@
     <dimen name="icon_padding_10">10dp</dimen>
     <dimen name="margin_0">0dp</dimen>
     <dimen name="margin_5">5dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
+    <dimen name="dp_11">11dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
     <dimen name="margin_9">9dp</dimen>
     <dimen name="margin_14">14dp</dimen>
     <dimen name="margin_20">20dp</dimen>
@@ -14,4 +18,5 @@
     <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_42">42dp</dimen>
     <dimen name="margin_61">42dp</dimen>
+    <dimen name="dp_45">45dp</dimen>
 </resources>
