@@ -13,10 +13,12 @@
     <string name="icon_support" translatable="false">Иконка поддержка</string>
     <string name="icon_clear" translatable="false">Иконка очистить</string>
     <string name="icon_search" translatable="false">Иконка Поиска</string>
+    <string name="icon_ellipse" translatable="false">Иконка точка</string>
     <string name="icon_arrow_forward" translatable="false">Иконка стрелка вперед</string>
     <string name="link_Yandex_AndroidDeveloper" translatable="false">https://practicum.yandex.ru/android-developer/</string>
     <string name="write_support_message" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="write_support_subject" translatable="false">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="my_email" translatable="false">d.kharakshinov@mail.ru</string>
     <string name="yandex_offer" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="image_album" translatable="false">Картинка альбома трека</string>
 </resources>

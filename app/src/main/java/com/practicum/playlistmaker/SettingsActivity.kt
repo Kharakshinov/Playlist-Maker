@@ -18,8 +18,9 @@ class SettingsActivity : AppCompatActivity() {
         val buttonOpenUserAgreement = findViewById<Button>(R.id.button_user_agreement)
 
         buttonGoBack.setOnClickListener {
-            val displayMainMenu = Intent(this, MainActivity::class.java)
-            startActivity(displayMainMenu)
+//            val displayMainMenu = Intent(this, MainActivity::class.java)
+//            startActivity(displayMainMenu)
+            finish()
         }
 
         buttonShareApplication.setOnClickListener {
