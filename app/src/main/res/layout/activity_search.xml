@@ -73,11 +73,13 @@
     <ImageView
         android:id="@+id/icon_nothing_found"
         android:contentDescription="@string/icon_nothing_found"
+        android:visibility="gone"
         style="@style/IconNothingFound"/>
 
     <ImageView
         android:id="@+id/icon_no_internet"
         android:contentDescription="@string/icon_no_internet"
+        android:visibility="gone"
         style="@style/IconNoInternet"/>
 
     <TextView

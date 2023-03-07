@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.model.Track
 import com.practicum.playlistmaker.model.TracksResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     private var textSearch = ""
+    private val hidePlaceholders = "Скрыть плейсхолдеры"
     private lateinit var rvTrack: RecyclerView
     private lateinit var inputEditText: EditText
     private lateinit var buttonGoBack: ImageView
@@ -34,12 +34,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var iconNothingFound:ImageView
     private lateinit var iconNoInternet:ImageView
     private lateinit var buttonRefresh:Button
-    private val tracks = ArrayList<Track>()
     private val trackAdapter = TrackAdapter()
 
-    private val iTunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
+        .baseUrl(ITUNES_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val iTunesService = retrofit.create(iTunesApi::class.java)
@@ -65,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            tracks.clear()
+            trackAdapter.tracks.clear()
             trackAdapter.notifyDataSetChanged()
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -89,8 +87,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
-
-        trackAdapter.tracks = tracks
 
         rvTrack.adapter = trackAdapter
 
@@ -121,36 +117,27 @@ class SearchActivity : AppCompatActivity() {
                                         response: Response<TracksResponse>
                 ) {
                     if (response.code() == 200) {
-                        tracks.clear()
+                        trackAdapter.tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
-                            tracks.addAll(response.body()?.results!!)
+                            trackAdapter.tracks.addAll(response.body()?.results!!)
                             trackAdapter.notifyDataSetChanged()
-                            iconNoInternet.visibility = View.GONE
-                            buttonRefresh.visibility = View.GONE
-                            iconNothingFound.visibility = View.GONE
+                            showPlaceholder(hidePlaceholders)
                         }
-                        if (tracks.isEmpty()) {
-                            showMessage(NOTHING_FOUND, "")
-                            iconNoInternet.visibility = View.GONE
-                            buttonRefresh.visibility = View.GONE
-                            iconNothingFound.visibility = View.VISIBLE
+                        if (trackAdapter.tracks.isEmpty()) {
+                            showMessage(getString(R.string.nothing_found), "")
+                            showPlaceholder(getString(R.string.nothing_found))
                         } else {
                             showMessage("", "")
                         }
                     } else {
-                        showMessage(SOMETHING_WENT_WRONG, response.code().toString())
-                        iconNothingFound.visibility = View.GONE
-                        iconNoInternet.visibility = View.VISIBLE
-                        buttonRefresh.visibility = View.VISIBLE
+                        showMessage(getString(R.string.something_went_wrong), response.code().toString())
+                        showPlaceholder(getString(R.string.something_went_wrong))
                     }
                 }
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                    showMessage(SOMETHING_WENT_WRONG, t.message.toString())
-                    iconNothingFound.visibility = View.GONE
-                    iconNoInternet.visibility = View.VISIBLE
-                    buttonRefresh.visibility = View.VISIBLE
+                    showMessage(getString(R.string.something_went_wrong), t.message.toString())
+                    showPlaceholder(getString(R.string.something_went_wrong))
                 }
-
             })
         }
     }
@@ -158,7 +145,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
             placeholderMessage.visibility = View.VISIBLE
-            tracks.clear()
+            trackAdapter.tracks.clear()
             trackAdapter.notifyDataSetChanged()
             placeholderMessage.text = text
             if (additionalMessage.isNotEmpty()) {
@@ -167,6 +154,26 @@ class SearchActivity : AppCompatActivity() {
             }
         } else {
             placeholderMessage.visibility = View.GONE
+        }
+    }
+
+    private fun showPlaceholder(text: String){
+        when (text) {
+            getString(R.string.something_went_wrong) -> {
+                iconNothingFound.visibility = View.GONE
+                iconNoInternet.visibility = View.VISIBLE
+                buttonRefresh.visibility = View.VISIBLE
+            }
+            getString(R.string.nothing_found) -> {
+                iconNoInternet.visibility = View.GONE
+                buttonRefresh.visibility = View.GONE
+                iconNothingFound.visibility = View.VISIBLE
+            }
+            hidePlaceholders -> {
+                iconNoInternet.visibility = View.GONE
+                buttonRefresh.visibility = View.GONE
+                iconNothingFound.visibility = View.GONE
+            }
         }
     }
 
@@ -183,7 +190,6 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
-        const val NOTHING_FOUND = "Ничего не нашлось"
-        const val SOMETHING_WENT_WRONG = "Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету"
+        const val ITUNES_BASE_URL = "https://itunes.apple.com"
     }
 }

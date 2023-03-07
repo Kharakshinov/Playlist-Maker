@@ -10,4 +10,6 @@
     <string name="write_support">Write to support</string>
     <string name="user_agreement">User agreement</string>
     <string name="refresh">Refresh</string>
+    <string name="nothing_found">Nothing was found</string>
+    <string name="something_went_wrong">Communication problems\n\nThe download failed. Check your internet connection</string>
 </resources>

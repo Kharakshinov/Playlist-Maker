@@ -9,6 +9,8 @@
     <string name="share">Поделиться приложением</string>
     <string name="write_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="icon_back" translatable="false">Иконка назад</string>
     <string name="icon_share" translatable="false">Иконка поделиться</string>
     <string name="icon_support" translatable="false">Иконка поддержка</string>
