@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_11">11sp</dimen>
-    <dimen name="text_22">22sp</dimen>
+    <dimen name="text_14">14sp</dimen>
     <dimen name="text_16">16sp</dimen>
+    <dimen name="text_19">19sp</dimen>
+    <dimen name="text_22">22sp</dimen>
     <dimen name="standard_indent_16">16dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
     <dimen name="icon_padding_10">10dp</dimen>
@@ -13,8 +15,11 @@
     <dimen name="dp_11">11dp</dimen>
     <dimen name="dp_13">13dp</dimen>
     <dimen name="dp_14">14dp</dimen>
+    <dimen name="dp_24">24dp</dimen>
     <dimen name="dp_45">45dp</dimen>
+    <dimen name="dp_54">54dp</dimen>
     <dimen name="dp_61">61dp</dimen>
+    <dimen name="dp_110">110dp</dimen>
     <dimen name="dp_150">150dp</dimen>
     <dimen name="margin_0">0dp</dimen>
     <dimen name="margin_5">5dp</dimen>

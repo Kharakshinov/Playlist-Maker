@@ -73,4 +73,23 @@
         <item name="iconGravity">textStart</item>
         <item name="android:layout_marginTop">@dimen/margin_20</item>
     </style>
+
+    <style name="IconNothingFound">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/dp_110</item>
+        <item name="android:src">@drawable/icon_nothing_found</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="IconNoInternet">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">@dimen/dp_110</item>
+        <item name="android:src">@drawable/icon_no_internet</item>
+        <item name="android:background">@null</item>
+    </style>
+
 </resources>

@@ -2,18 +2,24 @@
     <string name="app_name">Playlist Maker</string>
     <string name="title_hello">Привет, Практикум</string>
     <string name="search">Поиск</string>
+    <string name="refresh">Обновить</string>
     <string name="media_library">Медиатека</string>
     <string name="settings">Настройки</string>
     <string name="black_theme">Темная тема</string>
     <string name="share">Поделиться приложением</string>
     <string name="write_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="hide_placeholders" translatable="false">Скрыть плейсхолдеры</string>
     <string name="icon_back" translatable="false">Иконка назад</string>
     <string name="icon_share" translatable="false">Иконка поделиться</string>
     <string name="icon_support" translatable="false">Иконка поддержка</string>
     <string name="icon_clear" translatable="false">Иконка очистить</string>
     <string name="icon_search" translatable="false">Иконка Поиска</string>
     <string name="icon_ellipse" translatable="false">Иконка точка</string>
+    <string name="icon_nothing_found" translatable="false">Иконка ничего не найдено</string>
+    <string name="icon_no_internet" translatable="false">Иконка нет интернета</string>
     <string name="icon_arrow_forward" translatable="false">Иконка стрелка вперед</string>
     <string name="link_Yandex_AndroidDeveloper" translatable="false">https://practicum.yandex.ru/android-developer/</string>
     <string name="write_support_message" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
