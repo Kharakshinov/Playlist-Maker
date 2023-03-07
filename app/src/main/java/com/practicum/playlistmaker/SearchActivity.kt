@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     private var textSearch = ""
-    private val hidePlaceholders = "Скрыть плейсхолдеры"
     private lateinit var rvTrack: RecyclerView
     private lateinit var inputEditText: EditText
     private lateinit var buttonGoBack: ImageView
@@ -121,7 +120,7 @@ class SearchActivity : AppCompatActivity() {
                         if (response.body()?.results?.isNotEmpty() == true) {
                             trackAdapter.tracks.addAll(response.body()?.results!!)
                             trackAdapter.notifyDataSetChanged()
-                            showPlaceholder(hidePlaceholders)
+                            showPlaceholder(getString(R.string.hide_placeholders))
                         }
                         if (trackAdapter.tracks.isEmpty()) {
                             showMessage(getString(R.string.nothing_found), "")
@@ -169,7 +168,7 @@ class SearchActivity : AppCompatActivity() {
                 buttonRefresh.visibility = View.GONE
                 iconNothingFound.visibility = View.VISIBLE
             }
-            hidePlaceholders -> {
+            getString(R.string.hide_placeholders) -> {
                 iconNoInternet.visibility = View.GONE
                 buttonRefresh.visibility = View.GONE
                 iconNothingFound.visibility = View.GONE
