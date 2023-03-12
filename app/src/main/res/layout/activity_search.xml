@@ -111,4 +111,49 @@
         app:cornerRadius="@dimen/dp_54"
         android:visibility="gone"/>
 
+    <LinearLayout
+        android:id="@+id/search_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_25"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/search_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_16"
+            android:text="@string/you_searched"
+            android:textSize="@dimen/text_19"
+            android:textColor="?attr/text_color"
+            android:fontFamily="@font/ys_display_medium"
+            android:gravity="center"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerview_history_search"/>
+
+        <Button
+            android:id="@+id/button_clear_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_24"
+            android:text="@string/clear_search_history"
+            android:textColor="?attr/text_color_white_black"
+            android:stateListAnimator="@null"
+            android:backgroundTint="?attr/text_color"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_14"
+            android:fontFamily="@font/ys_display_medium"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textFontWeight="500"
+            app:cornerRadius="@dimen/dp_54"
+            />
+
+    </LinearLayout>
+
 </LinearLayout>

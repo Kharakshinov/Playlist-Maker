@@ -10,13 +10,19 @@ import com.practicum.playlistmaker.model.Track
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
+class TrackViewHolder(itemView: View, listener: TrackAdapter.onTrackClickListener?): RecyclerView.ViewHolder(itemView)  {
     private val photo: ImageView = itemView.findViewById(R.id.photoImageView)
     private val track: TextView = itemView.findViewById(R.id.track_name_TextView)
     private val author: TextView = itemView.findViewById(R.id.author_name)
     private val length: TextView = itemView.findViewById(R.id.track_length)
     private val ellipse: ImageView = itemView.findViewById(R.id.icon_ellipse)
     private val iconForward: ImageView = itemView.findViewById(R.id.icon_forward)
+
+    init{
+        itemView.setOnClickListener {
+            listener?.onTrackClick(adapterPosition)
+        }
+    }
 
     fun bind (item: Track){
         track.text = item.trackName
