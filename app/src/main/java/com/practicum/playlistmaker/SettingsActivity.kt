@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Switch
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,10 +17,13 @@ class SettingsActivity : AppCompatActivity() {
         val buttonShareApplication = findViewById<Button>(R.id.button_share_application)
         val buttonWriteSupport = findViewById<Button>(R.id.button_write_support)
         val buttonOpenUserAgreement = findViewById<Button>(R.id.button_user_agreement)
+        val buttonThemeSwitcher = findViewById<Switch>(R.id.switch1)
+
+        buttonThemeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
 
         buttonGoBack.setOnClickListener {
-//            val displayMainMenu = Intent(this, MainActivity::class.java)
-//            startActivity(displayMainMenu)
             finish()
         }
 

@@ -3,6 +3,8 @@
     <string name="title_hello">Привет, Практикум</string>
     <string name="search">Поиск</string>
     <string name="refresh">Обновить</string>
+    <string name="you_searched">Вы искали</string>
+    <string name="clear_search_history">Очистить историю</string>
     <string name="media_library">Медиатека</string>
     <string name="settings">Настройки</string>
     <string name="black_theme">Темная тема</string>
