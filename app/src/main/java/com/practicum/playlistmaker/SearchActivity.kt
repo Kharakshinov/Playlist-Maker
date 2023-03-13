@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,18 +11,22 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.practicum.playlistmaker.model.Track
 import com.practicum.playlistmaker.model.TracksResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
 
 class SearchActivity : AppCompatActivity() {
 
@@ -31,13 +36,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var inputEditText: EditText
     private lateinit var buttonGoBack: ImageView
     private lateinit var clearButton: ImageView
-    private lateinit var searchHistoryViewGroup: LinearLayout
+    private lateinit var searchHistoryViewGroup: ConstraintLayout
     private lateinit var placeholderMessage: TextView
     private lateinit var searchHistoryText: TextView
     private lateinit var iconNothingFound:ImageView
     private lateinit var iconNoInternet:ImageView
     private lateinit var buttonRefresh:Button
     private lateinit var buttonClearSearchHistory:Button
+    private lateinit var sharedPreferences : SharedPreferences
     private val trackAdapter = TrackAdapter()
     private val trackAdapterHistory = TrackAdapter()
 
@@ -68,6 +74,9 @@ class SearchActivity : AppCompatActivity() {
         recyclerViewSearch = findViewById(R.id.recyclerview)
         recyclerViewSearchHistory = findViewById(R.id.recyclerview_history_search)
 
+        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
+        trackAdapterHistory.tracks = readListFromSharedPreferences(sharedPreferences)
+
         buttonGoBack.setOnClickListener {
             finish()
         }
@@ -76,9 +85,6 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.setText("")
             trackAdapter.tracks.clear()
             trackAdapter.notifyDataSetChanged()
-            if(trackAdapterHistory.tracks.isNotEmpty()){
-                searchHistoryViewGroup.visibility = View.VISIBLE
-            }
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
@@ -98,7 +104,8 @@ class SearchActivity : AppCompatActivity() {
 
                 if(inputEditText.text.isEmpty() and trackAdapterHistory.tracks.isNotEmpty() and inputEditText.hasFocus()){
                     searchHistoryViewGroup.visibility = View.VISIBLE
-
+                    showPlaceholder(getString(R.string.hide_placeholders))
+                    placeholderMessage.visibility = View.GONE
                 } else {
                     searchHistoryViewGroup.visibility = View.GONE
                 }
@@ -124,7 +131,12 @@ class SearchActivity : AppCompatActivity() {
         buttonClearSearchHistory.setOnClickListener {
             trackAdapterHistory.tracks.clear()
             trackAdapterHistory.notifyDataSetChanged()
+            writeToListFromSharedPreferences(sharedPreferences, trackAdapterHistory.tracks)
             searchHistoryViewGroup.visibility = View.GONE
+        }
+
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            searchHistoryViewGroup.visibility = if (hasFocus and inputEditText.text.isEmpty() and trackAdapterHistory.tracks.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -178,6 +190,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showMessage(text: String, additionalMessage: String) {
+        searchHistoryViewGroup.visibility = View.GONE
         if (text.isNotEmpty()) {
             placeholderMessage.visibility = View.VISIBLE
             trackAdapter.tracks.clear()
@@ -213,6 +226,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showSearchHistory(position: Int){
+        trackAdapterHistory.tracks = readListFromSharedPreferences(sharedPreferences)
         if (trackAdapterHistory.tracks.size < 10){
             if(trackAdapterHistory.tracks.isNotEmpty()){
                 if(trackAdapterHistory.tracks.contains(trackAdapter.tracks[position])){
@@ -234,6 +248,20 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         trackAdapterHistory.notifyDataSetChanged()
+        writeToListFromSharedPreferences(sharedPreferences, trackAdapterHistory.tracks)
+    }
+
+    private fun readListFromSharedPreferences(sharedPreferences: SharedPreferences): ArrayList<Track> {
+        val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return ArrayList()
+        val type: Type = object : TypeToken<ArrayList<Track>>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
+    private fun writeToListFromSharedPreferences(sharedPreferences: SharedPreferences, trackList: ArrayList<Track>) {
+        val json = Gson().toJson(trackList)
+        sharedPreferences.edit()
+            .putString(SEARCH_HISTORY_KEY, json)
+            .apply()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -250,5 +278,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val ITUNES_BASE_URL = "https://itunes.apple.com"
+        const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
+        const val SEARCH_HISTORY_KEY = "key_for_search_history"
     }
 }

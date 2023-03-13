@@ -23,6 +23,8 @@
     <dimen name="dp_61">61dp</dimen>
     <dimen name="dp_110">110dp</dimen>
     <dimen name="dp_150">150dp</dimen>
+    <dimen name="dp_246">246dp</dimen>
+    <dimen name="dp_400">400dp</dimen>
     <dimen name="margin_0">0dp</dimen>
     <dimen name="margin_5">5dp</dimen>
     <dimen name="margin_9">9dp</dimen>

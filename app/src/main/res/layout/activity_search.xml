@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <FrameLayout
+        android:id="@+id/go_back_view_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_20"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:contentDescription="@string/icon_back"
@@ -28,7 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_indent_16"
         android:orientation="horizontal"
-        android:background="@drawable/search_background" >
+        android:background="@drawable/search_background"
+        app:layout_constraintTop_toBottomOf="@id/go_back_view_group"
+        >
 
         <EditText
             android:drawableStart="@drawable/icon_search_14"
@@ -68,30 +71,40 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerview"/>
+        android:id="@+id/recyclerview"
+        app:layout_constraintTop_toBottomOf="@id/container"
+        android:layout_marginTop="@dimen/dp_24"/>
 
     <ImageView
         android:id="@+id/icon_nothing_found"
         android:contentDescription="@string/icon_nothing_found"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         style="@style/IconNothingFound"/>
 
     <ImageView
         android:id="@+id/icon_no_internet"
         android:contentDescription="@string/icon_no_internet"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         style="@style/IconNoInternet"/>
 
     <TextView
         android:id="@+id/placeholderMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/dp_246"
         android:padding="@dimen/dp_24"
         android:textSize="@dimen/text_19"
         android:textColor="?attr/text_color"
         android:fontFamily="@font/ys_display_medium"
-        android:gravity="center"/>
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/container"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/button_refresh"
@@ -109,14 +122,17 @@
         android:textAppearance="?attr/textAppearanceBody2"
         android:textFontWeight="500"
         app:cornerRadius="@dimen/dp_54"
+        app:layout_constraintTop_toBottomOf="@id/placeholderMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_25"
-        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/container"
         android:visibility="gone">
 
         <TextView
@@ -129,19 +145,28 @@
             android:textColor="?attr/text_color"
             android:fontFamily="@font/ys_display_medium"
             android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
             />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_history_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recyclerview_history_search"/>
+            app:layout_constrainedHeight="true"
+            app:layout_constraintHeight_max="@dimen/dp_400"
+            app:layout_constraintTop_toBottomOf="@id/search_message"
+            />
 
         <Button
             android:id="@+id/button_clear_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/recyclerview_history_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/dp_24"
+            android:layout_marginBottom="@dimen/dp_16"
             android:text="@string/clear_search_history"
             android:textColor="?attr/text_color_white_black"
             android:stateListAnimator="@null"
@@ -154,6 +179,6 @@
             app:cornerRadius="@dimen/dp_54"
             />
 
-    </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
