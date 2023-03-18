@@ -227,24 +227,25 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showSearchHistory(position: Int){
         trackAdapterHistory.tracks = readListFromSharedPreferences(sharedPreferences)
+        val chosenTrack = trackAdapter.tracks[position]
         if (trackAdapterHistory.tracks.size < 10){
             if(trackAdapterHistory.tracks.isNotEmpty()){
-                if(trackAdapterHistory.tracks.contains(trackAdapter.tracks[position])){
-                    trackAdapterHistory.tracks.remove(trackAdapter.tracks[position])
+                if(trackAdapterHistory.tracks.contains(chosenTrack)){
+                    trackAdapterHistory.tracks.remove(chosenTrack)
                 }
-                trackAdapterHistory.tracks.add(0, trackAdapter.tracks[position])
+                trackAdapterHistory.tracks.add(0, chosenTrack)
             } else {
-                trackAdapterHistory.tracks.add(trackAdapter.tracks[position])
+                trackAdapterHistory.tracks.add(chosenTrack)
             }
         } else {
-            if(trackAdapterHistory.tracks.contains(trackAdapter.tracks[position])){
-                trackAdapterHistory.tracks.remove(trackAdapter.tracks[position])
-                trackAdapterHistory.tracks.add(0, trackAdapter.tracks[position])
+            if(trackAdapterHistory.tracks.contains(chosenTrack)){
+                trackAdapterHistory.tracks.remove(chosenTrack)
+                trackAdapterHistory.tracks.add(0, chosenTrack)
             } else {
                 for(i in 9 downTo 1){
                     trackAdapterHistory.tracks[i] = trackAdapterHistory.tracks[i-1]
                 }
-                trackAdapterHistory.tracks[0] = trackAdapter.tracks[position]
+                trackAdapterHistory.tracks[0] = chosenTrack
             }
         }
         trackAdapterHistory.notifyDataSetChanged()

@@ -11,8 +11,6 @@ class MediaLibrary : AppCompatActivity() {
         val buttonGoBack = findViewById<ImageView>(R.id.button_go_back)
 
         buttonGoBack.setOnClickListener {
-//            val displayMainMenu = Intent(this, MainActivity::class.java)
-//            startActivity(displayMainMenu)
             finish()
         }
     }
