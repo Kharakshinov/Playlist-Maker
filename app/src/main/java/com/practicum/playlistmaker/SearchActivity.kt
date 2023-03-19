@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -52,7 +53,6 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val iTunesService = retrofit.create(iTunesApi::class.java)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,6 +125,24 @@ class SearchActivity : AppCompatActivity() {
         trackAdapter.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener{
             override fun onTrackClick(position: Int) {
                 showSearchHistory(position)
+                val displayAudioPlayer = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                val chosenTrack = trackAdapter.tracks[position]
+                displayAudioPlayer.putExtra("chosen_track", Gson().toJson(chosenTrack))
+                startActivity(displayAudioPlayer)
+            }
+        })
+
+        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener{
+            override fun onTrackClick(position: Int) {
+                val displayAudioPlayer = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                val chosenTrack = trackAdapterHistory.tracks[position]
+                displayAudioPlayer.putExtra("chosen_track", Gson().toJson(chosenTrack))
+                startActivity(displayAudioPlayer)
+                trackAdapterHistory.tracks = readListFromSharedPreferences(sharedPreferences)
+                trackAdapterHistory.tracks.add(0, chosenTrack)
+                trackAdapterHistory.tracks.removeAt(position + 1)
+                trackAdapterHistory.notifyDataSetChanged()
+                writeToListFromSharedPreferences(sharedPreferences, trackAdapterHistory.tracks)
             }
         })
 
