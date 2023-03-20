@@ -37,11 +37,12 @@ class AudioPlayerActivity : AppCompatActivity() {
             chosenTrack = Gson().fromJson(chosenTrackJSON, Track::class.java)
         }
 
+        val radius = resources.getDimensionPixelSize(R.dimen.dp_8)
         Glide.with(applicationContext)
             .load(chosenTrack.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
             .centerInside()
             .placeholder(R.drawable.icon_no_reply)
-            .transform(RoundedCorners(16))
+            .transform(RoundedCorners(radius))
             .into(trackImage)
 
         trackName.text = chosenTrack.trackName
