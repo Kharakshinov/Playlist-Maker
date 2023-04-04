@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -52,7 +53,6 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val iTunesService = retrofit.create(iTunesApi::class.java)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,6 +125,20 @@ class SearchActivity : AppCompatActivity() {
         trackAdapter.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener{
             override fun onTrackClick(position: Int) {
                 showSearchHistory(position)
+                val chosenTrack = trackAdapter.tracks[position]
+                openAudioPlayerDisplay(chosenTrack)
+            }
+        })
+
+        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener{
+            override fun onTrackClick(position: Int) {
+                val chosenTrack = trackAdapterHistory.tracks[position]
+                openAudioPlayerDisplay(chosenTrack)
+                trackAdapterHistory.tracks = readListFromSharedPreferences(sharedPreferences)
+                trackAdapterHistory.tracks.add(0, chosenTrack)
+                trackAdapterHistory.tracks.removeAt(position + 1)
+                trackAdapterHistory.notifyDataSetChanged()
+                writeToListFromSharedPreferences(sharedPreferences, trackAdapterHistory.tracks)
             }
         })
 
@@ -263,6 +277,12 @@ class SearchActivity : AppCompatActivity() {
         sharedPreferences.edit()
             .putString(SEARCH_HISTORY_KEY, json)
             .apply()
+    }
+
+    private fun openAudioPlayerDisplay(chosenTrack: Track) {
+        val displayAudioPlayer = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+        displayAudioPlayer.putExtra("chosen_track", Gson().toJson(chosenTrack))
+        startActivity(displayAudioPlayer)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

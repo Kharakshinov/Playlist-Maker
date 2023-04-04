@@ -39,4 +39,9 @@
         <item name="android:background">@color/yp_black</item>
         <item name="text_color">@color/white</item>
     </style>
+
+    <style name="Theme.PlaylistMaker.AudioPlayer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:background">@color/yp_black</item>
+        <item name="text_color">@color/white</item>
+    </style>
 </resources>
