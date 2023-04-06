@@ -4,14 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -45,8 +47,13 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var buttonRefresh:Button
     private lateinit var buttonClearSearchHistory:Button
     private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var progressBar: ProgressBar
     private val trackAdapter = TrackAdapter()
     private val trackAdapterHistory = TrackAdapter()
+    private var isClickAllowed = true
+    private val searchRunnable = Runnable { makeSearch() }
+
+    private val handler = Handler(Looper.getMainLooper())
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(ITUNES_BASE_URL)
@@ -66,6 +73,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage = findViewById(R.id.placeholderMessage)
         iconNothingFound = findViewById(R.id.icon_nothing_found)
         iconNoInternet = findViewById(R.id.icon_no_internet)
+        progressBar = findViewById(R.id.progressBar)
 
         searchHistoryText = findViewById(R.id.search_message)
         searchHistoryViewGroup = findViewById(R.id.search_history)
@@ -99,6 +107,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchDebounce()
                 clearButton.visibility = clearButtonVisibility(s)
                 textSearch = inputEditText.text.toString()
 
@@ -153,13 +162,20 @@ class SearchActivity : AppCompatActivity() {
             searchHistoryViewGroup.visibility = if (hasFocus and inputEditText.text.isEmpty() and trackAdapterHistory.tracks.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                makeSearch()
-                true
-            }
-            false
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed){
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
         }
+        return current
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -172,12 +188,18 @@ class SearchActivity : AppCompatActivity() {
 
     private fun makeSearch(){
         if (inputEditText.text.isNotEmpty()) {
+            recyclerViewSearch.visibility = View.GONE
+            showPlaceholder(getString(R.string.hide_placeholders))
+            showMessage("", "")
+            progressBar.visibility = View.VISIBLE
             iTunesService.searchTrack(inputEditText.text.toString()).enqueue(object :
                 Callback<TracksResponse> {
                 override fun onResponse(call: Call<TracksResponse>,
                                         response: Response<TracksResponse>
                 ) {
+                    progressBar.visibility = View.GONE
                     if (response.code() == 200) {
+                        recyclerViewSearch.visibility = View.VISIBLE
                         trackAdapter.tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
                             trackAdapter.tracks.addAll(response.body()?.results!!)
@@ -196,6 +218,7 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    progressBar.visibility = View.GONE
                     showMessage(getString(R.string.something_went_wrong), t.message.toString())
                     showPlaceholder(getString(R.string.something_went_wrong))
                 }
@@ -280,9 +303,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun openAudioPlayerDisplay(chosenTrack: Track) {
-        val displayAudioPlayer = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-        displayAudioPlayer.putExtra("chosen_track", Gson().toJson(chosenTrack))
-        startActivity(displayAudioPlayer)
+        if (clickDebounce()){
+            val displayAudioPlayer = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+            displayAudioPlayer.putExtra("chosen_track", Gson().toJson(chosenTrack))
+            startActivity(displayAudioPlayer)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -301,5 +326,7 @@ class SearchActivity : AppCompatActivity() {
         const val ITUNES_BASE_URL = "https://itunes.apple.com"
         const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
         const val SEARCH_HISTORY_KEY = "key_for_search_history"
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
