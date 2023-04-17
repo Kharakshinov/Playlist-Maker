@@ -12,6 +12,8 @@
     <string name="add_to_playlist" translatable="false">Добавить в плейлист</string>
     <string name="add_to_favourites" translatable="false">Добавить в избранные</string>
     <string name="button_play_track" translatable="false">Кнопка включить трек</string>
+    <string name="button_pause_track" translatable="false">Кнопка поставить трек на паузу</string>
+    <string name="track_progress_0" translatable="false">00:00</string>
     <string name="write_support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="nothing_found">Ничего не нашлось</string>
