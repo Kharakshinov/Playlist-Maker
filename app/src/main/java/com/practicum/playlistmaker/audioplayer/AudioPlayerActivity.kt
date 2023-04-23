@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.audioplayer
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -11,11 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerPresenter
+import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerView
 import com.practicum.playlistmaker.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioPlayerActivity : AppCompatActivity() {
+class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var buttonGoBack: ImageView
     private lateinit var trackImage: ImageView
     private lateinit var trackName: TextView
@@ -28,34 +31,25 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var playButton: ImageView
     private lateinit var pauseButton: ImageView
     private lateinit var trackTimePassed: TextView
-    private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
     private lateinit var chosenTrack : Track
     private lateinit var url: String
-    private lateinit var handler: Handler
     private lateinit var timePassedRunnable: Runnable
+    private var handler = Handler(Looper.getMainLooper())
     private var isPlayerUsed = false
+    private var mediaPlayer = MediaPlayer()
+    private lateinit var audioPlayerPresenter: AudioPlayerPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audioplayer)
-        buttonGoBack = findViewById(R.id.button_go_back)
-        trackImage = findViewById(R.id.track_image)
-        trackName = findViewById(R.id.track_name)
-        artistName = findViewById(R.id.track_author)
-        trackTime = findViewById(R.id.track_time)
-        collectionName = findViewById(R.id.track_album)
-        releaseDate = findViewById(R.id.track_year)
-        primaryGenreName = findViewById(R.id.track_genre)
-        country = findViewById(R.id.track_country)
-        playButton = findViewById(R.id.button_play_track)
-        pauseButton = findViewById(R.id.button_pause_track)
-        trackTimePassed  = findViewById(R.id.track_time_passed)
-        handler = Handler(Looper.getMainLooper())
-        val extras: Bundle? = intent.extras
+        initView()
+        val extras = intent.extras
+        audioPlayerPresenter = AudioPlayerPresenter(
+            view = this
+        )
 
         buttonGoBack.setOnClickListener {
-            finish()
+            audioPlayerPresenter.backButtonClicked()
         }
 
         if (extras != null) {
@@ -81,11 +75,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         url = chosenTrack.previewUrl
 
         playButton.setOnClickListener{
-            playbackControl()
+            audioPlayerPresenter.onPlayButtonClicked()
         }
 
         pauseButton.setOnClickListener{
-            playbackControl()
+            audioPlayerPresenter.onPauseButtonClicked()
         }
 
         preparePlayer()
@@ -109,6 +103,21 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
+    private fun initView() {
+        buttonGoBack = findViewById(R.id.button_go_back)
+        trackImage = findViewById(R.id.track_image)
+        trackName = findViewById(R.id.track_name)
+        artistName = findViewById(R.id.track_author)
+        trackTime = findViewById(R.id.track_time)
+        collectionName = findViewById(R.id.track_album)
+        releaseDate = findViewById(R.id.track_year)
+        primaryGenreName = findViewById(R.id.track_genre)
+        country = findViewById(R.id.track_country)
+        playButton = findViewById(R.id.button_play_track)
+        pauseButton = findViewById(R.id.button_pause_track)
+        trackTimePassed  = findViewById(R.id.track_time_passed)
+    }
+
     private fun createTimePassedTask(): Runnable  {
         return object : Runnable {
                 override fun run() {
@@ -123,11 +132,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             playButton.isEnabled = true
-            playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {
             pauseButton.visibility = View.GONE
-            playerState = STATE_PREPARED
             if(isPlayerUsed) {
                 handler.removeCallbacks(timePassedRunnable)
             }
@@ -135,9 +142,12 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun startPlayer() {
+    override fun goBack() {
+        finish()
+    }
+
+    override fun startPlayer() {
         mediaPlayer.start()
-        playerState = STATE_PLAYING
         if(!isPlayerUsed){
             timePassedRunnable = createTimePassedTask()
         }
@@ -145,29 +155,19 @@ class AudioPlayerActivity : AppCompatActivity() {
         isPlayerUsed = true
     }
 
-    private fun pausePlayer() {
+    override fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = STATE_PAUSED
     }
 
-    private fun playbackControl() {
-        when(playerState) {
-            STATE_PLAYING -> {
-                pauseButton.visibility = View.GONE
-                pausePlayer()
-            }
-            STATE_PREPARED, STATE_PAUSED -> {
-                pauseButton.visibility = View.VISIBLE
-                startPlayer()
-            }
-        }
+    override fun showPauseButton() {
+        pauseButton.visibility = View.VISIBLE
+    }
+
+    override fun hidePauseButton() {
+        pauseButton.visibility = View.GONE
     }
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
         private const val DELAY = 1000L
     }
 }
