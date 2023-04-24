@@ -44,9 +44,6 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         setContentView(R.layout.activity_audioplayer)
         initView()
         val extras = intent.extras
-        audioPlayerPresenter = AudioPlayerPresenter(
-            view = this
-        )
 
         buttonGoBack.setOnClickListener {
             audioPlayerPresenter.backButtonClicked()
@@ -74,6 +71,15 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         country.text = chosenTrack.country
         url = chosenTrack.previewUrl
 
+        audioPlayerPresenter = AudioPlayerPresenter(
+            view = this,
+            trackTimePassed = trackTimePassed,
+            url = url,
+            playButton = playButton
+        )
+
+        audioPlayerPresenter.preparePlayer()
+
         playButton.setOnClickListener{
             audioPlayerPresenter.onPlayButtonClicked()
         }
@@ -82,25 +88,17 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
             audioPlayerPresenter.onPauseButtonClicked()
         }
 
-        preparePlayer()
-
     }
 
     override fun onPause() {
-        pauseButton.visibility = View.GONE
         super.onPause()
-        pausePlayer()
-        if(isPlayerUsed){
-            handler.removeCallbacks(timePassedRunnable)
-        }
+        hidePauseButton()
+        audioPlayerPresenter.pausePlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        if(isPlayerUsed) {
-            handler.removeCallbacks(timePassedRunnable)
-        }
+        audioPlayerPresenter.releasePlayer()
     }
 
     private fun initView() {
@@ -118,46 +116,46 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         trackTimePassed  = findViewById(R.id.track_time_passed)
     }
 
-    private fun createTimePassedTask(): Runnable  {
-        return object : Runnable {
-                override fun run() {
-                    trackTimePassed.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-                    handler.postDelayed(this, DELAY)
-                }
-            }
-        }
+//    private fun createTimePassedTask(): Runnable  {
+//        return object : Runnable {
+//                override fun run() {
+//                    trackTimePassed.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+//                    handler.postDelayed(this, DELAY)
+//                }
+//            }
+//        }
 
-    private fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playButton.isEnabled = true
-        }
-        mediaPlayer.setOnCompletionListener {
-            pauseButton.visibility = View.GONE
-            if(isPlayerUsed) {
-                handler.removeCallbacks(timePassedRunnable)
-            }
-            trackTimePassed.text = getString(R.string.track_progress_0)
-        }
-    }
+//    private fun preparePlayer() {
+//        mediaPlayer.setDataSource(url)
+//        mediaPlayer.prepareAsync()
+//        mediaPlayer.setOnPreparedListener {
+//            playButton.isEnabled = true
+//        }
+//        mediaPlayer.setOnCompletionListener {
+//            pauseButton.visibility = View.GONE
+//            if(isPlayerUsed) {
+//                handler.removeCallbacks(timePassedRunnable)
+//            }
+//            trackTimePassed.text = getString(R.string.track_progress_0)
+//        }
+//    }
 
     override fun goBack() {
         finish()
     }
 
-    override fun startPlayer() {
-        mediaPlayer.start()
-        if(!isPlayerUsed){
-            timePassedRunnable = createTimePassedTask()
-        }
-        handler.post(timePassedRunnable)
-        isPlayerUsed = true
-    }
-
-    override fun pausePlayer() {
-        mediaPlayer.pause()
-    }
+//    override fun startPlayer() {
+//        mediaPlayer.start()
+//        if(!isPlayerUsed){
+//            timePassedRunnable = createTimePassedTask()
+//        }
+//        handler.post(timePassedRunnable)
+//        isPlayerUsed = true
+//    }
+//
+//    override fun pausePlayer() {
+//        mediaPlayer.pause()
+//    }
 
     override fun showPauseButton() {
         pauseButton.visibility = View.VISIBLE
