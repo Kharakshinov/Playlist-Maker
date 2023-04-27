@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.search
 
 import android.content.Context
 import android.content.Intent
@@ -22,9 +22,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerActivity
-import com.practicum.playlistmaker.model.Track
-import com.practicum.playlistmaker.model.TracksResponse
+import com.practicum.playlistmaker.search.model.Track
+import com.practicum.playlistmaker.search.model.TracksResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -132,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerViewSearchHistory.adapter = trackAdapterHistory
         recyclerViewSearchHistory.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        trackAdapter.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener{
+        trackAdapter.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener {
             override fun onTrackClick(position: Int) {
                 showSearchHistory(position)
                 val chosenTrack = trackAdapter.tracks[position]
@@ -140,7 +141,7 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener{
+        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener {
             override fun onTrackClick(position: Int) {
                 val chosenTrack = trackAdapterHistory.tracks[position]
                 openAudioPlayerDisplay(chosenTrack)
