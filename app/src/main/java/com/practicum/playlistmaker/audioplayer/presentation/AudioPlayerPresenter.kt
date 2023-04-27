@@ -10,6 +10,7 @@ import java.util.Locale
 
 class AudioPlayerPresenter(
     private val view: AudioPlayerView,
+    private val trackMediaPlayerInteractor: TrackMediaPlayerInteractor,
     private val trackTimePassed: TextView,
     private val url: String,
     private val playButton: ImageView
@@ -17,7 +18,7 @@ class AudioPlayerPresenter(
     private var isPlayerUsed = false
     private var handler = Handler(Looper.getMainLooper())
     private lateinit var timePassedRunnable: Runnable
-    private val trackMediaPlayerInteractor = TrackMediaPlayerInteractor()
+
 
     init{
         playButton.isEnabled = false

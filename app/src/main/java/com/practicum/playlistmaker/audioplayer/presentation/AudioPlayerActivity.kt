@@ -1,9 +1,6 @@
-package com.practicum.playlistmaker.audioplayer
+package com.practicum.playlistmaker.audioplayer.presentation
 
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,8 +9,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerPresenter
-import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerView
+import com.practicum.playlistmaker.audioplayer.data.TrackMediaPlayer
+import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
 import com.practicum.playlistmaker.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -33,52 +30,31 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var trackTimePassed: TextView
     private lateinit var chosenTrack : Track
     private lateinit var url: String
-    private lateinit var timePassedRunnable: Runnable
-    private var handler = Handler(Looper.getMainLooper())
-    private var isPlayerUsed = false
-    private var mediaPlayer = MediaPlayer()
     private lateinit var audioPlayerPresenter: AudioPlayerPresenter
+    private lateinit var extras: Bundle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audioplayer)
         initView()
-        val extras = intent.extras
-
-        buttonGoBack.setOnClickListener {
-            audioPlayerPresenter.backButtonClicked()
-        }
-
-        if (extras != null) {
-            val chosenTrackJSON = extras.getString("chosen_track")
-            chosenTrack = Gson().fromJson(chosenTrackJSON, Track::class.java)
-        }
-
-        val radius = resources.getDimensionPixelSize(R.dimen.dp_8)
-        Glide.with(applicationContext)
-            .load(chosenTrack.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
-            .centerInside()
-            .placeholder(R.drawable.icon_no_reply)
-            .transform(RoundedCorners(radius))
-            .into(trackImage)
-
-        trackName.text = chosenTrack.trackName
-        artistName.text = chosenTrack.artistName
-        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(chosenTrack.trackTimeMillis)
-        collectionName.text = chosenTrack.collectionName
-        releaseDate.text = chosenTrack.releaseDate.take(4)
-        primaryGenreName.text = chosenTrack.primaryGenreName
-        country.text = chosenTrack.country
-        url = chosenTrack.previewUrl
+        setChosenTrack()
+        setTrackData()
 
         audioPlayerPresenter = AudioPlayerPresenter(
             view = this,
+            trackMediaPlayerInteractor = TrackMediaPlayerInteractor(
+                TrackMediaPlayer()
+            ),
             trackTimePassed = trackTimePassed,
             url = url,
             playButton = playButton
         )
 
         audioPlayerPresenter.preparePlayer()
+
+        buttonGoBack.setOnClickListener {
+            audioPlayerPresenter.backButtonClicked()
+        }
 
         playButton.setOnClickListener{
             audioPlayerPresenter.onPlayButtonClicked()
@@ -116,46 +92,34 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         trackTimePassed  = findViewById(R.id.track_time_passed)
     }
 
-//    private fun createTimePassedTask(): Runnable  {
-//        return object : Runnable {
-//                override fun run() {
-//                    trackTimePassed.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-//                    handler.postDelayed(this, DELAY)
-//                }
-//            }
-//        }
+    private fun setChosenTrack(){
+        extras = intent.extras!!
+        val chosenTrackJSON = extras.getString("chosen_track")
+        chosenTrack = Gson().fromJson(chosenTrackJSON, Track::class.java)
+    }
 
-//    private fun preparePlayer() {
-//        mediaPlayer.setDataSource(url)
-//        mediaPlayer.prepareAsync()
-//        mediaPlayer.setOnPreparedListener {
-//            playButton.isEnabled = true
-//        }
-//        mediaPlayer.setOnCompletionListener {
-//            pauseButton.visibility = View.GONE
-//            if(isPlayerUsed) {
-//                handler.removeCallbacks(timePassedRunnable)
-//            }
-//            trackTimePassed.text = getString(R.string.track_progress_0)
-//        }
-//    }
+    private fun setTrackData(){
+        val radius = resources.getDimensionPixelSize(R.dimen.dp_8)
+        Glide.with(applicationContext)
+            .load(chosenTrack.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
+            .centerInside()
+            .placeholder(R.drawable.icon_no_reply)
+            .transform(RoundedCorners(radius))
+            .into(trackImage)
+
+        trackName.text = chosenTrack.trackName
+        artistName.text = chosenTrack.artistName
+        trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(chosenTrack.trackTimeMillis)
+        collectionName.text = chosenTrack.collectionName
+        releaseDate.text = chosenTrack.releaseDate.take(4)
+        primaryGenreName.text = chosenTrack.primaryGenreName
+        country.text = chosenTrack.country
+        url = chosenTrack.previewUrl
+    }
 
     override fun goBack() {
         finish()
     }
-
-//    override fun startPlayer() {
-//        mediaPlayer.start()
-//        if(!isPlayerUsed){
-//            timePassedRunnable = createTimePassedTask()
-//        }
-//        handler.post(timePassedRunnable)
-//        isPlayerUsed = true
-//    }
-//
-//    override fun pausePlayer() {
-//        mediaPlayer.pause()
-//    }
 
     override fun showPauseButton() {
         pauseButton.visibility = View.VISIBLE
@@ -165,7 +129,4 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         pauseButton.visibility = View.GONE
     }
 
-    companion object {
-        private const val DELAY = 1000L
-    }
 }

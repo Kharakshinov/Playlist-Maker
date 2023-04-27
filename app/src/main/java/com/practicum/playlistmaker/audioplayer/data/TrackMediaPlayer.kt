@@ -1,40 +1,41 @@
 package com.practicum.playlistmaker.audioplayer.data
 
 import android.media.MediaPlayer
+import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInterface
 
-class TrackMediaPlayer {
+class TrackMediaPlayer : TrackMediaPlayerInterface {
 
     private val mediaPlayer = MediaPlayer()
 
-    fun startPlayer() {
+    override fun startPlayer() {
         mediaPlayer.start()
     }
 
-    fun pausePlayer() {
+    override fun pausePlayer() {
         mediaPlayer.pause()
     }
 
-    fun releasePlayer(){
+    override fun releasePlayer(){
         mediaPlayer.release()
     }
 
-    fun setDataSource(url: String){
+    override fun setDataSource(url: String){
         mediaPlayer.setDataSource(url)
     }
 
-    fun prepareAsync(){
+    override fun prepareAsync(){
         mediaPlayer.prepareAsync()
     }
 
-    fun setOnPreparedListener(listener: (MediaPlayer) -> Unit) {
+    override fun setOnPreparedListener(listener: (MediaPlayer) -> Unit) {
         mediaPlayer.setOnPreparedListener(listener)
     }
 
-    fun setOnCompletionListener(listener: (MediaPlayer) -> Unit) {
+    override fun setOnCompletionListener(listener: (MediaPlayer) -> Unit) {
         mediaPlayer.setOnCompletionListener(listener)
     }
 
-    fun getTrackMediaPlayer(): MediaPlayer{
+    override fun getTrackMediaPlayer(): MediaPlayer{
         return mediaPlayer
     }
 }

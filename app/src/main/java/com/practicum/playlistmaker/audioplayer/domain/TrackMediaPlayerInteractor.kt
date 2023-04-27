@@ -1,11 +1,10 @@
 package com.practicum.playlistmaker.audioplayer.domain
 
 import android.media.MediaPlayer
-import com.practicum.playlistmaker.audioplayer.data.TrackMediaPlayer
 
-class TrackMediaPlayerInteractor {
-
-    private val trackMediaPlayer : TrackMediaPlayer = TrackMediaPlayer()
+class TrackMediaPlayerInteractor (
+    private val trackMediaPlayer: TrackMediaPlayerInterface
+        ) {
 
     fun startPlayer(){
         trackMediaPlayer.startPlayer()
