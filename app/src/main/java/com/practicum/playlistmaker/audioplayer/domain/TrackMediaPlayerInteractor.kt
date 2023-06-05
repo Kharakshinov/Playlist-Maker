@@ -1,7 +1,5 @@
 package com.practicum.playlistmaker.audioplayer.domain
 
-import android.media.MediaPlayer
-
 class TrackMediaPlayerInteractor (
     private val trackMediaPlayer: TrackMediaPlayerInterface
         ) {
@@ -26,15 +24,16 @@ class TrackMediaPlayerInteractor (
         trackMediaPlayer.prepareAsync()
     }
 
-    fun setOnPreparedListener(listener: (Any) -> Unit) {
-        trackMediaPlayer.setOnPreparedListener(listener)
+    fun subscribeOnPlayer(listener: TrackMediaPlayerStateListener) {
+        trackMediaPlayer.listener = listener
     }
 
-    fun setOnCompletionListener(listener: (Any) -> Unit) {
-        trackMediaPlayer.setOnCompletionListener(listener)
+    fun unSubscribeOnPlayer() {
+        trackMediaPlayer.listener = null
     }
 
-    fun getMediaPlayer(): MediaPlayer {
-        return trackMediaPlayer.getTrackMediaPlayer()
+    fun showPlayerCurrentPosition(): String{
+        return trackMediaPlayer.showCurrentPosition()
     }
+
 }

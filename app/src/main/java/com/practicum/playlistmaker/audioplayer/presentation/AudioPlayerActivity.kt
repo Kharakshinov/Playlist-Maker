@@ -32,6 +32,8 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var url: String
     private lateinit var audioPlayerPresenter: AudioPlayerPresenter
     private lateinit var extras: Bundle
+    private val trackMediaPlayer = TrackMediaPlayer()
+    private val trackMediaPlayerInteractor = TrackMediaPlayerInteractor(trackMediaPlayer)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +44,8 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
 
         audioPlayerPresenter = AudioPlayerPresenter(
             view = this,
-            trackMediaPlayerInteractor = TrackMediaPlayerInteractor(
-                TrackMediaPlayer()
-            ),
-            trackTimePassed = trackTimePassed,
+            trackMediaPlayerInteractor = trackMediaPlayerInteractor,
             url = url,
-            playButton = playButton
         )
 
         audioPlayerPresenter.preparePlayer()
@@ -94,7 +92,7 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
 
     private fun setChosenTrack(){
         extras = intent.extras!!
-        val chosenTrackJSON = extras.getString("chosen_track")
+        val chosenTrackJSON = extras.getString(CHOSEN_TRACK)
         chosenTrack = Gson().fromJson(chosenTrackJSON, Track::class.java)
     }
 
@@ -121,12 +119,30 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         finish()
     }
 
+    override fun playButtonAvailability(isAvailable: Boolean) {
+        playButton.isEnabled = isAvailable
+    }
+
+    override fun updateTrackTimePassed(position: String) {
+        when(position){
+            START_POSITION -> trackTimePassed.text = ZERO
+            CURRENT_POSITION -> trackTimePassed.text = audioPlayerPresenter.showPlayerCurrentPosition()
+        }
+    }
+
     override fun showPauseButton() {
         pauseButton.visibility = View.VISIBLE
     }
 
     override fun hidePauseButton() {
         pauseButton.visibility = View.GONE
+    }
+
+    companion object {
+        private const val CHOSEN_TRACK = "chosen_track"
+        private const val START_POSITION = "start"
+        private const val CURRENT_POSITION = "current"
+        private const val ZERO = "00:00"
     }
 
 }

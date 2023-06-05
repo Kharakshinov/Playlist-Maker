@@ -8,15 +8,12 @@ import com.practicum.playlistmaker.search.domain.model.Track
 
 class SearchPresenter(
     private val view: SearchScreenView,
-    private val trackAdapter: TrackAdapter,
-    private val trackAdapterHistory: TrackAdapter,
     private val interactor: SearchInteractor,
-    private val inputEditText: EditText,
     private val router: SearchRouter
 ) {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { loadTracks(inputEditText.text.toString()) }
+    private val searchRunnable = Runnable { view.loadTracks() }
 
     fun onClearHistoryClicked(){
         view.clearSearchHistory()
@@ -57,8 +54,11 @@ class SearchPresenter(
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
-    fun showHistoryTracksEditTextOnFocus() {
-        if(inputEditText.text.isEmpty() and trackAdapterHistory.tracks.isNotEmpty() and inputEditText.hasFocus()){
+    fun showHistoryTracksEditTextOnFocus(
+        editText: EditText,
+        historyTracks: ArrayList<Track>,
+    ) {
+        if(editText.text.isEmpty() and historyTracks.isNotEmpty() and editText.hasFocus()){
             view.showSearchHistoryViewGroup()
             view.hideNoInternetNothingFoundViews()
         } else {
@@ -68,7 +68,7 @@ class SearchPresenter(
 
     fun onTrackClicked(position: Int) {
         if(clickDebounce()){
-            val chosenTrack = trackAdapter.tracks[position]
+            val chosenTrack = view.getChosenTrack(position)
             view.showSearchHistory(position)
             router.openTrack(chosenTrack)
         }
@@ -76,14 +76,14 @@ class SearchPresenter(
 
     fun onHistoryTrackClicked(position: Int) {
         if(clickDebounce()){
-            val chosenTrack = trackAdapterHistory.tracks[position]
+            val chosenTrack = view.getChosenHistoryTrack(position)
             view.addTrackOnTopSearchHistory(chosenTrack, position)
             router.openTrack(chosenTrack)
         }
     }
 
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
-        val historyTracks = trackAdapterHistory.tracks
+        val historyTracks = view.getTracksHistory()
         if (hasFocus and text.isEmpty() and historyTracks.isNotEmpty()){
             view.showSearchHistoryViewGroup()
         } else {

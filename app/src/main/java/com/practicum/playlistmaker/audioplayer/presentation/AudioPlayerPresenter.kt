@@ -2,18 +2,13 @@ package com.practicum.playlistmaker.audioplayer.presentation
 
 import android.os.Handler
 import android.os.Looper
-import android.widget.ImageView
-import android.widget.TextView
+import com.practicum.playlistmaker.audioplayer.domain.PlayerState
 import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class AudioPlayerPresenter(
     private val view: AudioPlayerView,
     private val trackMediaPlayerInteractor: TrackMediaPlayerInteractor,
-    private val trackTimePassed: TextView,
     private val url: String,
-    private val playButton: ImageView
 ) {
     private var isPlayerUsed = false
     private var handler = Handler(Looper.getMainLooper())
@@ -21,7 +16,7 @@ class AudioPlayerPresenter(
 
 
     init{
-        playButton.isEnabled = false
+        view.playButtonAvailability(false)
     }
 
     fun onPlayButtonClicked() {
@@ -53,6 +48,7 @@ class AudioPlayerPresenter(
     }
 
     fun releasePlayer(){
+        trackMediaPlayerInteractor.unSubscribeOnPlayer()
         trackMediaPlayerInteractor.releasePlayer()
         handlerRemoveCallbacks()
     }
@@ -60,20 +56,28 @@ class AudioPlayerPresenter(
     fun preparePlayer() {
         trackMediaPlayerInteractor.setDataSource(url)
         trackMediaPlayerInteractor.prepareAsync()
-        trackMediaPlayerInteractor.setOnPreparedListener {
-            playButton.isEnabled = true
+
+        trackMediaPlayerInteractor.subscribeOnPlayer { state ->
+            when(state) {
+                PlayerState.NOT_READY -> {}
+                PlayerState.PREPARED -> view.playButtonAvailability(true)
+                PlayerState.COMPLETE -> {
+                    view.hidePauseButton()
+                    handlerRemoveCallbacks()
+                    view.updateTrackTimePassed(START_POSITION)
+                }
+            }
         }
-        trackMediaPlayerInteractor.setOnCompletionListener {
-            view.hidePauseButton()
-            handlerRemoveCallbacks()
-            trackTimePassed.text = START_POINT
-        }
+    }
+
+    fun showPlayerCurrentPosition(): String{
+        return trackMediaPlayerInteractor.showPlayerCurrentPosition()
     }
 
     private fun createTimePassedTask(): Runnable  {
         return object : Runnable {
             override fun run() {
-                trackTimePassed.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackMediaPlayerInteractor.getMediaPlayer().currentPosition)
+                view.updateTrackTimePassed(CURRENT_POSITION)
                 handler.postDelayed(this, DELAY)
             }
         }
@@ -87,7 +91,8 @@ class AudioPlayerPresenter(
 
     companion object {
         private const val DELAY = 1000L
-        private const val START_POINT = "00:00"
+        private const val START_POSITION = "start"
+        private const val CURRENT_POSITION = "current"
     }
 
 }

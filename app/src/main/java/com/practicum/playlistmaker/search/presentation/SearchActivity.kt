@@ -51,20 +51,16 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val repository = SearchRepository(retrofit.create(iTunesApi::class.java))
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initView()
         initAdapters()
         initSharedPreferences()
+        val repository = SearchRepository(retrofit.create(iTunesApi::class.java))
         presenter = SearchPresenter(
             view = this,
-            trackAdapter = trackAdapter,
-            trackAdapterHistory = trackAdapterHistory,
             interactor = SearchInteractor(sharedPreferencesWriteRead, repository),
-            inputEditText = inputEditText,
             router = SearchRouter(this)
         )
         initHistory()
@@ -92,7 +88,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 presenter.searchDebounce()
                 clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-                presenter.showHistoryTracksEditTextOnFocus()
+                presenter.showHistoryTracksEditTextOnFocus(inputEditText, trackAdapterHistory.tracks)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -150,6 +146,10 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         recyclerViewSearchHistory.adapter = trackAdapterHistory
         recyclerViewSearchHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+    }
+
+    override fun loadTracks(){
+        presenter.loadTracks(inputEditText.text.toString())
     }
 
     override fun showSearchHistory(position: Int){
@@ -256,6 +256,18 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         searchHistoryViewGroup.visibility = View.GONE
         placeholderMessage.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
+    }
+
+    override fun getChosenTrack(position: Int): Track {
+        return trackAdapter.tracks[position]
+    }
+
+    override fun getChosenHistoryTrack(position: Int): Track {
+        return trackAdapterHistory.tracks[position]
+    }
+
+    override fun getTracksHistory(): List<Track> {
+        return trackAdapterHistory.tracks
     }
 
     companion object {
