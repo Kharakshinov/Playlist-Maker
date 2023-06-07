@@ -70,48 +70,26 @@ class SearchActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, SearchViewModelFactory(interactor))[SearchViewModel::class.java]
         initHistory()
 
-        viewModel.clearHistoryLiveData.observe(this){ clearHistory ->
-            if(clearHistory){
-                clearSearchHistory()
-            }
-        }
-
-        viewModel.showHistoryLiveData.observe(this){ showHistory ->
-            if(showHistory){
-                showSearchHistoryViewGroup()
-                hideNoInternetNothingFoundViews()
-            } else {
-                hideSearchHistoryViewGroup()
-            }
-        }
-
-        viewModel.tracksLiveData.observe(this){
-            showTracks(it)
-        }
-
-        viewModel.searchTextClearButtonLiveData.observe(this){ clearSearchText ->
-            if(clearSearchText){
-                clearSearchText()
-                hideKeyboard()
-                hideTracks()
-            }
-        }
-
-        viewModel.loadingLiveData.observe(this){ isLoading ->
-            if(isLoading){
-                showLoading()
-            }
-        }
-
-        viewModel.emptyResultLiveData.observe(this){ isResultEmpty ->
-            if(isResultEmpty){
-                showEmptyResult()
-            }
-        }
-
-        viewModel.errorLiveData.observe(this){ isError ->
-            if(isError){
-                showTracksError()
+        viewModel.state.observe(this){ state ->
+            when(state){
+                SearchState.Empty -> showEmptyResult()
+                SearchState.Error -> showTracksError()
+                SearchState.Loading -> showLoading()
+                is SearchState.Tracks -> showTracks(state.tracks)
+                SearchState.ClearTracks -> {
+                    clearSearchText()
+                    hideKeyboard()
+                    hideTracks()
+                }
+                is SearchState.History -> {
+                    if(state.isShown){
+                        showSearchHistoryViewGroup()
+                        hideNoInternetNothingFoundViews()
+                    } else {
+                        hideSearchHistoryViewGroup()
+                    }
+                }
+                SearchState.ClearHistory -> clearSearchHistory()
             }
         }
 

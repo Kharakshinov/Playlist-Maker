@@ -11,36 +11,18 @@ class SearchViewModel(
     private val interactor: SearchInteractor,
 ): ViewModel() {
 
-    private val _clearHistoryLiveData = MutableLiveData<Boolean>()
-    val clearHistoryLiveData: LiveData<Boolean> = _clearHistoryLiveData
-
-    private val _showHistoryLiveData = MutableLiveData<Boolean>()
-    val showHistoryLiveData: LiveData<Boolean> = _showHistoryLiveData
+    private val _state = MutableLiveData<SearchState>()
+    val state: LiveData<SearchState> = _state
 
     private val _sharedPreferencesLiveData = MutableLiveData<ArrayList<Track>>()
     val sharedPreferencesLiveData: LiveData<ArrayList<Track>> = _sharedPreferencesLiveData
 
-    private val _tracksLiveData = MutableLiveData<List<Track>>()
-    val tracksLiveData: LiveData<List<Track>> = _tracksLiveData
-
-    private val _searchTextClearButtonLiveData = MutableLiveData<Boolean>()
-    val searchTextClearButtonLiveData: LiveData<Boolean> = _searchTextClearButtonLiveData
-
-    private val _loadingLiveData = MutableLiveData<Boolean>()
-    val loadingLiveData: LiveData<Boolean> = _loadingLiveData
-
-    private val _emptyResultLiveData = MutableLiveData<Boolean>()
-    val emptyResultLiveData: LiveData<Boolean> = _emptyResultLiveData
-
-    private val _errorLiveData = MutableLiveData<Boolean>()
-    val errorLiveData: LiveData<Boolean> = _errorLiveData
-
     fun onClearHistoryClicked(){
-        _clearHistoryLiveData.postValue(true)
+        _state.postValue(SearchState.ClearHistory)
     }
 
     fun searchTextClearClicked() {
-        _searchTextClearButtonLiveData.postValue(true)
+        _state.postValue(SearchState.ClearTracks)
     }
 
     fun showHistoryTracksEditTextOnFocus(
@@ -48,9 +30,9 @@ class SearchViewModel(
         historyTracks: ArrayList<Track>,
     ) {
         if(editText.text.isEmpty() and historyTracks.isNotEmpty() and editText.hasFocus()){
-            _showHistoryLiveData.postValue(true)
+            _state.postValue(SearchState.History(true))
         } else {
-            _showHistoryLiveData.postValue(false)
+            _state.postValue(SearchState.History(false))
         }
     }
 
@@ -58,18 +40,18 @@ class SearchViewModel(
         if(query.isEmpty()){
             return
         }
-        _loadingLiveData.postValue(true)
+        _state.postValue(SearchState.Loading)
         interactor.loadTracks(
             query = query,
             onSuccess = {tracks ->
                 if(tracks.isEmpty()){
-                    _emptyResultLiveData.postValue(true)
+                    _state.postValue(SearchState.Empty)
                 } else {
-                    _tracksLiveData.postValue(tracks)
+                    _state.postValue(SearchState.Tracks(tracks))
                 }
             },
             onError = {
-                _errorLiveData.postValue(true)
+                _state.postValue(SearchState.Error)
             }
         )
     }
