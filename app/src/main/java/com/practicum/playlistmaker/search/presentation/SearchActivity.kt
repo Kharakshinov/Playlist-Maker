@@ -20,13 +20,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.data.SearchRepository
-import com.practicum.playlistmaker.search.data.SharedPreferencesWriteRead
-import com.practicum.playlistmaker.search.domain.SearchInteractor
 import com.practicum.playlistmaker.search.domain.model.Track
-import com.practicum.playlistmaker.search.iTunesApi
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.practicum.playlistmaker.util.Creator
 
 class SearchActivity : AppCompatActivity() {
 
@@ -43,7 +38,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var buttonRefresh:Button
     private lateinit var buttonClearSearchHistory:Button
     private lateinit var sharedPreferences : SharedPreferences
-    private lateinit var sharedPreferencesWriteRead : SharedPreferencesWriteRead
     private lateinit var progressBar: ProgressBar
     private lateinit var viewModel: SearchViewModel
     private lateinit var router: SearchRouter
@@ -53,19 +47,13 @@ class SearchActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { loadTracks() }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(ITUNES_BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         initView()
         initAdapters()
         initSharedPreferences()
-        val repository = SearchRepository(retrofit.create(iTunesApi::class.java))
-        val interactor = SearchInteractor(sharedPreferencesWriteRead, repository)
+        val interactor = Creator.provideSearchInteracor(sharedPreferences)
         router = SearchRouter(this)
         viewModel = ViewModelProvider(this, SearchViewModelFactory(interactor))[SearchViewModel::class.java]
         initHistory()
@@ -172,7 +160,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initSharedPreferences(){
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
-        sharedPreferencesWriteRead = SharedPreferencesWriteRead(sharedPreferences)
     }
     private fun initHistory(){
         viewModel.readFromSharedPreferences()
@@ -310,7 +297,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val ITUNES_BASE_URL = "https://itunes.apple.com"
         const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
         const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_DEBOUNCE_DELAY = 2000L
