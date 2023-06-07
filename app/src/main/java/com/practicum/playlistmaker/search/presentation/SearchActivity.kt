@@ -56,7 +56,6 @@ class SearchActivity : AppCompatActivity() {
         val interactor = Creator.provideSearchInteracor(sharedPreferences)
         router = SearchRouter(this)
         viewModel = ViewModelProvider(this, SearchViewModelFactory(interactor))[SearchViewModel::class.java]
-        initHistory()
 
         viewModel.state.observe(this){ state ->
             when(state){
@@ -70,7 +69,9 @@ class SearchActivity : AppCompatActivity() {
                     hideTracks()
                 }
                 is SearchState.History -> {
-                    if(state.isShown){
+                    trackAdapterHistory.tracks = state.history
+                    trackAdapterHistory.notifyDataSetChanged()
+                    if(state.isShown and trackAdapterHistory.tracks.isNotEmpty()){
                         showSearchHistoryViewGroup()
                         hideNoInternetNothingFoundViews()
                     } else {
@@ -79,10 +80,6 @@ class SearchActivity : AppCompatActivity() {
                 }
                 SearchState.ClearHistory -> clearSearchHistory()
             }
-        }
-
-        viewModel.sharedPreferencesLiveData.observe(this){
-            trackAdapterHistory.tracks = it
         }
 
         buttonClearSearchHistory.setOnClickListener {
@@ -108,7 +105,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchDebounce()
                 clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-                viewModel.showHistoryTracksEditTextOnFocus(inputEditText, trackAdapterHistory.tracks)
+                viewModel.showHistoryTracksEditTextOnFocus(inputEditText)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -137,7 +134,7 @@ class SearchActivity : AppCompatActivity() {
         })
 
         inputEditText.setOnFocusChangeListener { _, _ ->
-            viewModel.showHistoryTracksEditTextOnFocus(inputEditText, trackAdapterHistory.tracks)
+            viewModel.showHistoryTracksEditTextOnFocus(inputEditText)
         }
 
     }
@@ -160,9 +157,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initSharedPreferences(){
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
-    }
-    private fun initHistory(){
-        viewModel.readFromSharedPreferences()
     }
 
     private fun initAdapters() {

@@ -4,7 +4,7 @@ import com.practicum.playlistmaker.search.domain.model.Track
 
 sealed class SearchState {
     object ClearHistory: SearchState()
-    class History(val isShown: Boolean): SearchState()
+    class History(val isShown: Boolean, val history: ArrayList<Track>): SearchState()
     class Tracks(val tracks: List<Track>): SearchState()
     object ClearTracks: SearchState()
     object Error: SearchState()

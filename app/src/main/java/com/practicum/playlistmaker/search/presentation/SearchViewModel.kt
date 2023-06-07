@@ -14,9 +14,6 @@ class SearchViewModel(
     private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
 
-    private val _sharedPreferencesLiveData = MutableLiveData<ArrayList<Track>>()
-    val sharedPreferencesLiveData: LiveData<ArrayList<Track>> = _sharedPreferencesLiveData
-
     fun onClearHistoryClicked(){
         _state.postValue(SearchState.ClearHistory)
     }
@@ -27,12 +24,11 @@ class SearchViewModel(
 
     fun showHistoryTracksEditTextOnFocus(
         editText: EditText,
-        historyTracks: ArrayList<Track>,
     ) {
-        if(editText.text.isEmpty() and historyTracks.isNotEmpty() and editText.hasFocus()){
-            _state.postValue(SearchState.History(true))
+        if(editText.text.isEmpty() and editText.hasFocus()){
+            _state.postValue(SearchState.History(true, readFromSharedPreferences()))
         } else {
-            _state.postValue(SearchState.History(false))
+            _state.postValue(SearchState.History(false, readFromSharedPreferences()))
         }
     }
 
@@ -56,9 +52,8 @@ class SearchViewModel(
         )
     }
 
-    fun readFromSharedPreferences(){
-        val historyList = interactor.readFromSharedPreferences()
-        _sharedPreferencesLiveData.postValue(historyList)
+    private fun readFromSharedPreferences(): ArrayList<Track>{
+        return interactor.readFromSharedPreferences()
     }
 
     fun writeToSharedPreferences(trackList: ArrayList<Track>){
