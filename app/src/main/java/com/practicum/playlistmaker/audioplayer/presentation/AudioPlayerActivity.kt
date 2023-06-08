@@ -5,17 +5,17 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.audioplayer.data.TrackMediaPlayer
-import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
 import com.practicum.playlistmaker.audioplayer.domain.model.Track
+import com.practicum.playlistmaker.util.Creator
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
+class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var buttonGoBack: ImageView
     private lateinit var trackImage: ImageView
     private lateinit var trackName: TextView
@@ -30,10 +30,8 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     private lateinit var trackTimePassed: TextView
     private lateinit var chosenTrack : Track
     private lateinit var url: String
-    private lateinit var audioPlayerPresenter: AudioPlayerPresenter
     private lateinit var extras: Bundle
-    private val trackMediaPlayer = TrackMediaPlayer()
-    private val trackMediaPlayerInteractor = TrackMediaPlayerInteractor(trackMediaPlayer)
+    private lateinit var viewModel: AudioPlayerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,24 +40,38 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         setChosenTrack()
         setTrackData()
 
-        audioPlayerPresenter = AudioPlayerPresenter(
-            view = this,
-            trackMediaPlayerInteractor = trackMediaPlayerInteractor,
-            url = url,
-        )
+        val interactor = Creator.provideTrackMediaPlayerInteractor()
+        viewModel = ViewModelProvider(this, AudioPlayerViewModelFactory(interactor, url))[AudioPlayerViewModel::class.java]
 
-        audioPlayerPresenter.preparePlayer()
+        viewModel.state.observe(this){ state ->
+            when (state){
+                AudioPlayerState.NotReady -> playButtonAvailability(false)
+                AudioPlayerState.Ready -> playButtonAvailability(true)
+                AudioPlayerState.OnStart -> {
+                    hidePauseButton()
+                    updateTrackTimePassed(ZERO)
+                }
+                AudioPlayerState.Pause -> hidePauseButton()
+                is AudioPlayerState.Play -> {
+                    showPauseButton()
+                    updateTrackTimePassed(state.currentPosition)
+                }
+            }
+
+        }
+
+        viewModel.preparePlayer()
 
         buttonGoBack.setOnClickListener {
-            audioPlayerPresenter.backButtonClicked()
+            finish()
         }
 
         playButton.setOnClickListener{
-            audioPlayerPresenter.onPlayButtonClicked()
+            viewModel.onPlayButtonClicked()
         }
 
         pauseButton.setOnClickListener{
-            audioPlayerPresenter.onPauseButtonClicked()
+            viewModel.onPauseButtonClicked()
         }
 
     }
@@ -67,12 +79,12 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
     override fun onPause() {
         super.onPause()
         hidePauseButton()
-        audioPlayerPresenter.pausePlayer()
+        viewModel.pausePlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        audioPlayerPresenter.releasePlayer()
+        viewModel.releasePlayer()
     }
 
     private fun initView() {
@@ -115,33 +127,24 @@ class AudioPlayerActivity : AppCompatActivity(), AudioPlayerView {
         url = chosenTrack.previewUrl
     }
 
-    override fun goBack() {
-        finish()
-    }
-
-    override fun playButtonAvailability(isAvailable: Boolean) {
+    private fun playButtonAvailability(isAvailable: Boolean) {
         playButton.isEnabled = isAvailable
     }
 
-    override fun updateTrackTimePassed(position: String) {
-        when(position){
-            START_POSITION -> trackTimePassed.text = ZERO
-            CURRENT_POSITION -> trackTimePassed.text = audioPlayerPresenter.showPlayerCurrentPosition()
-        }
+    private fun updateTrackTimePassed(position: String) {
+        trackTimePassed.text = position
     }
 
-    override fun showPauseButton() {
+    private fun showPauseButton() {
         pauseButton.visibility = View.VISIBLE
     }
 
-    override fun hidePauseButton() {
+    private fun hidePauseButton() {
         pauseButton.visibility = View.GONE
     }
 
     companion object {
         private const val CHOSEN_TRACK = "chosen_track"
-        private const val START_POSITION = "start"
-        private const val CURRENT_POSITION = "current"
         private const val ZERO = "00:00"
     }
 
