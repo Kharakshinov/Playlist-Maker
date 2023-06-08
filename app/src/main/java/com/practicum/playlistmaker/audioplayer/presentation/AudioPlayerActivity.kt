@@ -40,8 +40,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         setChosenTrack()
         setTrackData()
 
-        val interactor = Creator.provideTrackMediaPlayerInteractor()
-        viewModel = ViewModelProvider(this, AudioPlayerViewModelFactory(interactor, url))[AudioPlayerViewModel::class.java]
+        viewModel = ViewModelProvider(this, Creator.provideAudioPlayerViewModelFactory(url))[AudioPlayerViewModel::class.java]
 
         viewModel.state.observe(this){ state ->
             when (state){
@@ -60,8 +59,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         }
 
-        viewModel.preparePlayer()
-
         buttonGoBack.setOnClickListener {
             finish()
         }
@@ -78,13 +75,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        hidePauseButton()
         viewModel.pausePlayer()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.releasePlayer()
     }
 
     private fun initView() {

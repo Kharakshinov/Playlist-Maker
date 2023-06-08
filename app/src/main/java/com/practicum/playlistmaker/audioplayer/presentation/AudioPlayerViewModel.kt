@@ -21,7 +21,12 @@ class AudioPlayerViewModel(
 
     init{
         _state.postValue(AudioPlayerState.NotReady)
+        preparePlayer()
     }
+
+   override fun onCleared(){
+       releasePlayer()
+   }
 
     fun onPlayButtonClicked() {
         startPlayer()
@@ -43,17 +48,18 @@ class AudioPlayerViewModel(
     }
 
     fun pausePlayer() {
+        _state.postValue(AudioPlayerState.Pause)
         trackMediaPlayerInteractor.pausePlayer()
         handlerRemoveCallbacks()
     }
 
-    fun releasePlayer(){
+    private fun releasePlayer(){
         trackMediaPlayerInteractor.unSubscribeOnPlayer()
         trackMediaPlayerInteractor.releasePlayer()
         handlerRemoveCallbacks()
     }
 
-    fun preparePlayer() {
+    private fun preparePlayer() {
         trackMediaPlayerInteractor.setDataSource(url)
         trackMediaPlayerInteractor.prepareAsync()
 
