@@ -4,9 +4,9 @@ import android.content.Context
 import com.practicum.playlistmaker.app.App
 import com.practicum.playlistmaker.settings.domain.IThemeChanger
 
-class ThemeChanger(): IThemeChanger {
+class ThemeChanger(private val applicationContext: Context): IThemeChanger {
 
-    override fun changeTheme(applicationContext: Context, checked: Boolean){
+    override fun changeTheme(checked: Boolean){
         (applicationContext as App).switchTheme(checked)
     }
 }

@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         val buttonThemeSwitcher = findViewById<Switch>(R.id.switch1)
 
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
-        val viewModel = ViewModelProvider(this, Creator.provideSettingsViewModelFactory(this, sharedPreferences))[SettingsViewModel::class.java]
+        val viewModel = ViewModelProvider(this, Creator.provideSettingsViewModelFactory(this, sharedPreferences, applicationContext))[SettingsViewModel::class.java]
         viewModel.setStartState()
 
         viewModel.state.observe(this){state ->
@@ -48,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
                    buttonThemeSwitcher.isChecked = state.savedTheme
                }
                is SettingsState.DarkTheme -> {
-                   viewModel.setTheme(applicationContext, state.isDark)
+                   viewModel.setTheme(state.isDark)
                }
            }
 

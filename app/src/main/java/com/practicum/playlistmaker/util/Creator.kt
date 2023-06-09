@@ -71,16 +71,16 @@ object Creator {
         return SharingInteractor(provideExternalNavigator(context))
     }
 
-    private fun providethemeChanger(): ThemeChanger{
-        return ThemeChanger()
+    private fun providethemeChanger(applicationContext: Context): ThemeChanger{
+        return ThemeChanger(applicationContext)
     }
 
-    private fun provideThemeInteractor(sharedPreferences: SharedPreferences): ThemeInteractor{
-        return ThemeInteractor(providethemeChanger(), provideSharedPreferencesWriteRead(sharedPreferences))
+    private fun provideThemeInteractor(sharedPreferences: SharedPreferences, applicationContext: Context): ThemeInteractor{
+        return ThemeInteractor(providethemeChanger(applicationContext), provideSharedPreferencesWriteRead(sharedPreferences))
     }
 
-    fun provideSettingsViewModelFactory(context: Context, sharedPreferences: SharedPreferences): SettingsViewModelFactory{
-        return SettingsViewModelFactory(provideSharingInteractor(context), provideThemeInteractor(sharedPreferences))
+    fun provideSettingsViewModelFactory(context: Context, sharedPreferences: SharedPreferences, applicationContext: Context): SettingsViewModelFactory{
+        return SettingsViewModelFactory(provideSharingInteractor(context), provideThemeInteractor(sharedPreferences, applicationContext))
     }
 
 }

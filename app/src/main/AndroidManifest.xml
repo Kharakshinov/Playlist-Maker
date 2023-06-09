@@ -32,7 +32,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".medialibrary.MediaLibrary"
+            android:name=".medialibrary.presentation.MediaLibrary"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker.MediaLibrary">
             <meta-data

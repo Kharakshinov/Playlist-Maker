@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.settings.presentation
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,8 +45,8 @@ class SettingsViewModel(
         sharingInteractor.openUserAgreement()
     }
 
-    fun setTheme(applicationContext: Context, checked: Boolean){
-        themeInteractor.changeTheme(applicationContext, checked)
+    fun setTheme(checked: Boolean){
+        themeInteractor.changeTheme(checked)
     }
 
     fun saveTheme(isDark: Boolean){

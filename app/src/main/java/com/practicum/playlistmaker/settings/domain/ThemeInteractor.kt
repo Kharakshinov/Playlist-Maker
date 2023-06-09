@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.settings.domain
 
-import android.content.Context
 import com.practicum.playlistmaker.search.domain.ISharedPreferencesWriteRead
 
 class ThemeInteractor(
@@ -8,8 +7,8 @@ class ThemeInteractor(
     private val sharedPreferencesWriteRead: ISharedPreferencesWriteRead,
 ) {
 
-    fun changeTheme(applicationContext: Context, checked: Boolean){
-        themeChanger.changeTheme(applicationContext, checked)
+    fun changeTheme(checked: Boolean){
+        themeChanger.changeTheme(checked)
     }
 
     fun saveTheme(isDark: Boolean){
