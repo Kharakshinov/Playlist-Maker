@@ -2,11 +2,17 @@ package com.practicum.playlistmaker.mainscreen.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
+
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,15 +42,34 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonSearch.setOnClickListener {
-            viewModel.searchScreenOpened()
+            if(clickDebounce()){
+                viewModel.searchScreenOpened()
+            }
         }
 
         buttonMediaLibrary.setOnClickListener {
-            viewModel.mediaLibraryOpened()
+            if(clickDebounce()) {
+                viewModel.mediaLibraryOpened()
+            }
         }
 
         buttonSettings.setOnClickListener {
-           viewModel.settingsOpened()
+            if(clickDebounce()) {
+                viewModel.settingsOpened()
+            }
         }
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed){
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    companion object {
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

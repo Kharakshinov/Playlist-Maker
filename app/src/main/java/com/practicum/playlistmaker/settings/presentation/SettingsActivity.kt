@@ -2,6 +2,8 @@ package com.practicum.playlistmaker.settings.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Switch
@@ -10,6 +12,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.util.Creator
 
 class SettingsActivity : AppCompatActivity() {
+
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,19 +64,35 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         buttonShareApplication.setOnClickListener {
-            viewModel.shareApplicationClicked()
+            if(clickDebounce()){
+                viewModel.shareApplicationClicked()
+            }
         }
 
         buttonWriteSupport.setOnClickListener {
-            viewModel.writeToSupportClicked()
+            if(clickDebounce()) {
+                viewModel.writeToSupportClicked()
+            }
         }
 
         buttonOpenUserAgreement.setOnClickListener {
-            viewModel.openUserAgreementClicked()
+            if(clickDebounce()) {
+                viewModel.openUserAgreementClicked()
+            }
         }
+    }
+
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed){
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
     companion object {
         const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
