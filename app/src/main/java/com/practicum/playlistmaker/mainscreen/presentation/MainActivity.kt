@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.mainscreen.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
 
 class MainActivity : AppCompatActivity() {
@@ -14,16 +15,36 @@ class MainActivity : AppCompatActivity() {
         val buttonSettings = findViewById<Button>(R.id.button_settings)
         val router = MainScreenRouter(this)
 
+        val viewModel = ViewModelProvider(this, MainScreenViewModelFactory())[MainScreenViewModel::class.java]
+        viewModel.state.observe(this){ state ->
+            when(state){
+                MainScreenState.OpenSearch -> {
+                    router.openSearch()
+                    viewModel.setStartState()
+                }
+                MainScreenState.OpenMediaLibrary -> {
+                    router.openMediaPlayer()
+                    viewModel.setStartState()
+                }
+                MainScreenState.OpenSettings -> {
+                    router.openSettings()
+                    viewModel.setStartState()
+                }
+                MainScreenState.Start -> {}
+            }
+
+        }
+
         buttonSearch.setOnClickListener {
-            router.openSearch()
+            viewModel.searchScreenOpened()
         }
 
         buttonMediaLibrary.setOnClickListener {
-            router.openMediaPlayer()
+            viewModel.mediaLibraryOpened()
         }
 
         buttonSettings.setOnClickListener {
-           router.openSettings()
+           viewModel.settingsOpened()
         }
     }
 }
