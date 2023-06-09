@@ -48,7 +48,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".mainscreen.MainActivity"
+            android:name=".mainscreen.presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.PlaylistMaker.MainMenu">
             <intent-filter>
