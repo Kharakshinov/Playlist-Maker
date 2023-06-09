@@ -15,7 +15,7 @@ class SettingsViewModel(
     val state: LiveData<SettingsState> = _state
 
     fun setStartState(){
-        _state.postValue(SettingsState.Start)
+        _state.postValue(SettingsState.Start(getTheme()))
     }
 
     fun shareApplicationClicked(){
@@ -54,7 +54,7 @@ class SettingsViewModel(
         themeInteractor.saveTheme(isDark)
     }
 
-    fun getTheme(): Boolean {
+    private fun getTheme(): Boolean {
         return themeInteractor.getTheme()
     }
 

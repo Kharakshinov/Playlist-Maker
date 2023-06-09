@@ -39,8 +39,8 @@ class SettingsActivity : AppCompatActivity() {
                    viewModel.openUserAgreement()
                    viewModel.setStartState()
                }
-               SettingsState.Start -> {
-                   buttonThemeSwitcher.isChecked = viewModel.getTheme()
+               is SettingsState.Start -> {
+                   buttonThemeSwitcher.isChecked = state.savedTheme
                }
                is SettingsState.DarkTheme -> {
                    viewModel.setTheme(applicationContext, state.isDark)

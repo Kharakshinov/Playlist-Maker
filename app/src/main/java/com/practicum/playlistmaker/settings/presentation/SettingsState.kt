@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.settings.presentation
 
 sealed class SettingsState {
-    object Start: SettingsState()
+    class Start(val savedTheme: Boolean): SettingsState()
     object ShareApplication: SettingsState()
     object WriteToSupport: SettingsState()
     object OpenUserAgreement: SettingsState()
