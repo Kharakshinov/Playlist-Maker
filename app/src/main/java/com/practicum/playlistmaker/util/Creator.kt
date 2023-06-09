@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.util
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.practicum.playlistmaker.audioplayer.data.TrackMediaPlayer
 import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
@@ -8,6 +9,11 @@ import com.practicum.playlistmaker.search.data.SearchRepository
 import com.practicum.playlistmaker.search.data.SharedPreferencesWriteRead
 import com.practicum.playlistmaker.search.domain.SearchInteractor
 import com.practicum.playlistmaker.search.iTunesApi
+import com.practicum.playlistmaker.settings.data.ExternalNavigator
+import com.practicum.playlistmaker.settings.data.ThemeChanger
+import com.practicum.playlistmaker.settings.domain.SharingInteractor
+import com.practicum.playlistmaker.settings.domain.ThemeInteractor
+import com.practicum.playlistmaker.settings.presentation.SettingsViewModelFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -34,6 +40,12 @@ object Creator {
         return SearchInteractor(provideSharedPreferencesWriteRead(sharedPreferences), provideRepository())
     }
 
+
+
+
+
+
+
     private fun provideTrackMediaPlayer(): TrackMediaPlayer{
         return TrackMediaPlayer()
     }
@@ -44,6 +56,31 @@ object Creator {
 
     fun provideAudioPlayerViewModelFactory(url: String): AudioPlayerViewModelFactory{
         return AudioPlayerViewModelFactory(provideTrackMediaPlayerInteractor(), url)
+    }
+
+
+
+
+
+
+    private fun provideExternalNavigator(context: Context): ExternalNavigator{
+        return ExternalNavigator(context)
+    }
+
+    private fun provideSharingInteractor(context: Context): SharingInteractor{
+        return SharingInteractor(provideExternalNavigator(context))
+    }
+
+    private fun providethemeChanger(): ThemeChanger{
+        return ThemeChanger()
+    }
+
+    private fun provideThemeInteractor(sharedPreferences: SharedPreferences): ThemeInteractor{
+        return ThemeInteractor(providethemeChanger(), provideSharedPreferencesWriteRead(sharedPreferences))
+    }
+
+    fun provideSettingsViewModelFactory(context: Context, sharedPreferences: SharedPreferences): SettingsViewModelFactory{
+        return SettingsViewModelFactory(provideSharingInteractor(context), provideThemeInteractor(sharedPreferences))
     }
 
 }

@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.medialibrary.MediaLibrary
 import com.practicum.playlistmaker.search.presentation.SearchActivity
-import com.practicum.playlistmaker.settings.SettingsActivity
+import com.practicum.playlistmaker.settings.presentation.SettingsActivity
 
 class MainScreenRouter(
     private val activity: AppCompatActivity

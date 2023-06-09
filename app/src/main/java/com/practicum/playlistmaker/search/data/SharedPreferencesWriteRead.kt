@@ -24,7 +24,21 @@ class SharedPreferencesWriteRead (
             .apply()
     }
 
+    override fun saveTheme(isDark: Boolean) {
+        val json = Gson().toJson(isDark)
+        sharedPreferences.edit()
+            .putString(THEME_KEY, json)
+            .apply()
+    }
+
+    override fun getTheme(): Boolean {
+        val json = sharedPreferences.getString(THEME_KEY, null) ?: return false
+        val type: Type = object : TypeToken<Boolean>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
     companion object {
         const val SEARCH_HISTORY_KEY = "key_for_search_history"
+        const val THEME_KEY = "key_for_theme"
     }
 }
