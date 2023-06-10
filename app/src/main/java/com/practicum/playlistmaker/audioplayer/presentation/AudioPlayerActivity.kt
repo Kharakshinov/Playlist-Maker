@@ -138,5 +138,4 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val CHOSEN_TRACK = "chosen_track"
         private const val ZERO = "00:00"
     }
-
 }

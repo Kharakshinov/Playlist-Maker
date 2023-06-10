@@ -16,8 +16,8 @@ class TrackMediaPlayerInteractor (
         trackMediaPlayer.releasePlayer()
     }
 
-    fun setDataSource(url: String){
-        trackMediaPlayer.setDataSource(url)
+    fun setDataSource(){
+        trackMediaPlayer.setDataSource()
     }
 
     fun prepareAsync(){
@@ -35,5 +35,4 @@ class TrackMediaPlayerInteractor (
     fun showPlayerCurrentPosition(): String{
         return trackMediaPlayer.showCurrentPosition()
     }
-
 }

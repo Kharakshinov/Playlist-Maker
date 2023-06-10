@@ -10,7 +10,7 @@ interface TrackMediaPlayerInterface {
 
     fun releasePlayer()
 
-    fun setDataSource(url: String)
+    fun setDataSource()
 
     fun prepareAsync()
 

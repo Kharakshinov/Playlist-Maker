@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerStateListe
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackMediaPlayer : TrackMediaPlayerInterface {
+class TrackMediaPlayer(private val url: String) : TrackMediaPlayerInterface {
 
     private val mediaPlayer = MediaPlayer()
 
@@ -36,7 +36,7 @@ class TrackMediaPlayer : TrackMediaPlayerInterface {
         mediaPlayer.release()
     }
 
-    override fun setDataSource(url: String){
+    override fun setDataSource(){
         mediaPlayer.setDataSource(url)
     }
 

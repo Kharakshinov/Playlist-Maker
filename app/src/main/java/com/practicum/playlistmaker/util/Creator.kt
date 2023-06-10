@@ -40,28 +40,17 @@ object Creator {
         return SearchInteractor(provideSharedPreferencesWriteRead(sharedPreferences), provideRepository())
     }
 
-
-
-
-
-
-
-    private fun provideTrackMediaPlayer(): TrackMediaPlayer{
-        return TrackMediaPlayer()
+    private fun provideTrackMediaPlayer(url: String): TrackMediaPlayer{
+        return TrackMediaPlayer(url)
     }
 
-    private fun provideTrackMediaPlayerInteractor(): TrackMediaPlayerInteractor{
-        return TrackMediaPlayerInteractor(provideTrackMediaPlayer())
+    private fun provideTrackMediaPlayerInteractor(url: String): TrackMediaPlayerInteractor{
+        return TrackMediaPlayerInteractor(provideTrackMediaPlayer(url))
     }
 
     fun provideAudioPlayerViewModelFactory(url: String): AudioPlayerViewModelFactory{
-        return AudioPlayerViewModelFactory(provideTrackMediaPlayerInteractor(), url)
+        return AudioPlayerViewModelFactory(provideTrackMediaPlayerInteractor(url))
     }
-
-
-
-
-
 
     private fun provideExternalNavigator(context: Context): ExternalNavigator{
         return ExternalNavigator(context)
@@ -82,6 +71,5 @@ object Creator {
     fun provideSettingsViewModelFactory(context: Context, sharedPreferences: SharedPreferences, applicationContext: Context): SettingsViewModelFactory{
         return SettingsViewModelFactory(provideSharingInteractor(context), provideThemeInteractor(sharedPreferences, applicationContext))
     }
-
 }
 

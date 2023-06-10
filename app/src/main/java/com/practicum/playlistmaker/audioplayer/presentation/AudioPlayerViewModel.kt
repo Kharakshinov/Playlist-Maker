@@ -10,7 +10,6 @@ import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
 
 class AudioPlayerViewModel(
     private val trackMediaPlayerInteractor: TrackMediaPlayerInteractor,
-    private val url: String,
 ): ViewModel() {
     private var isPlayerUsed = false
     private var handler = Handler(Looper.getMainLooper())
@@ -60,7 +59,7 @@ class AudioPlayerViewModel(
     }
 
     private fun preparePlayer() {
-        trackMediaPlayerInteractor.setDataSource(url)
+        trackMediaPlayerInteractor.setDataSource()
         trackMediaPlayerInteractor.prepareAsync()
 
         trackMediaPlayerInteractor.subscribeOnPlayer { state ->
