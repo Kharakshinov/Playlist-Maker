@@ -1,21 +1,18 @@
 package com.practicum.playlistmaker.audioplayer.domain
 
-import android.media.MediaPlayer
-
 interface TrackMediaPlayerInterface {
+
+    var listener: TrackMediaPlayerStateListener?
+
     fun startPlayer()
 
     fun pausePlayer()
 
     fun releasePlayer()
 
-    fun setDataSource(url: String)
+    fun setDataSource()
 
     fun prepareAsync()
 
-    fun setOnPreparedListener(listener: (MediaPlayer) -> Unit)
-
-    fun setOnCompletionListener(listener: (MediaPlayer) -> Unit)
-
-    fun getTrackMediaPlayer(): MediaPlayer
+    fun showCurrentPosition(): String
 }

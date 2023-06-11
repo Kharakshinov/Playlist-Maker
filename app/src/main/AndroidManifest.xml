@@ -32,7 +32,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".medialibrary.MediaLibrary"
+            android:name=".medialibrary.presentation.MediaLibrary"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker.MediaLibrary">
             <meta-data
@@ -40,7 +40,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".settings.presentation.SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.PlaylistMaker.Settings">
             <meta-data
@@ -48,7 +48,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".mainscreen.MainActivity"
+            android:name=".mainscreen.presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.PlaylistMaker.MainMenu">
             <intent-filter>

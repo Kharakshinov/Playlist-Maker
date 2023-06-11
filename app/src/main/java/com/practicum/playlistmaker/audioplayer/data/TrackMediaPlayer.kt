@@ -1,11 +1,28 @@
 package com.practicum.playlistmaker.audioplayer.data
 
 import android.media.MediaPlayer
+import com.practicum.playlistmaker.audioplayer.domain.PlayerState
 import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInterface
+import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerStateListener
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class TrackMediaPlayer : TrackMediaPlayerInterface {
+class TrackMediaPlayer(private val url: String) : TrackMediaPlayerInterface {
 
     private val mediaPlayer = MediaPlayer()
+
+    override var listener: TrackMediaPlayerStateListener? = null
+
+    init{
+        listener?.onStateChanged(PlayerState.NOT_READY)
+        mediaPlayer.setOnPreparedListener{
+            listener?.onStateChanged(PlayerState.PREPARED)
+        }
+        mediaPlayer.setOnCompletionListener{
+            listener?.onStateChanged(PlayerState.COMPLETE)
+        }
+
+    }
 
     override fun startPlayer() {
         mediaPlayer.start()
@@ -19,7 +36,7 @@ class TrackMediaPlayer : TrackMediaPlayerInterface {
         mediaPlayer.release()
     }
 
-    override fun setDataSource(url: String){
+    override fun setDataSource(){
         mediaPlayer.setDataSource(url)
     }
 
@@ -27,15 +44,7 @@ class TrackMediaPlayer : TrackMediaPlayerInterface {
         mediaPlayer.prepareAsync()
     }
 
-    override fun setOnPreparedListener(listener: (MediaPlayer) -> Unit) {
-        mediaPlayer.setOnPreparedListener(listener)
-    }
-
-    override fun setOnCompletionListener(listener: (MediaPlayer) -> Unit) {
-        mediaPlayer.setOnCompletionListener(listener)
-    }
-
-    override fun getTrackMediaPlayer(): MediaPlayer{
-        return mediaPlayer
+    override fun showCurrentPosition(): String{
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
     }
 }

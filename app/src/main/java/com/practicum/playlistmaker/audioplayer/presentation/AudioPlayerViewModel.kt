@@ -2,40 +2,39 @@ package com.practicum.playlistmaker.audioplayer.presentation
 
 import android.os.Handler
 import android.os.Looper
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.audioplayer.domain.PlayerState
 import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class AudioPlayerPresenter(
-    private val view: AudioPlayerView,
+class AudioPlayerViewModel(
     private val trackMediaPlayerInteractor: TrackMediaPlayerInteractor,
-    private val trackTimePassed: TextView,
-    private val url: String,
-    private val playButton: ImageView
-) {
+): ViewModel() {
     private var isPlayerUsed = false
     private var handler = Handler(Looper.getMainLooper())
     private lateinit var timePassedRunnable: Runnable
 
+    private val _state = MutableLiveData<AudioPlayerState>()
+    val state: LiveData<AudioPlayerState> = _state
 
     init{
-        playButton.isEnabled = false
+        _state.postValue(AudioPlayerState.NotReady)
+        preparePlayer()
     }
+
+   override fun onCleared(){
+       releasePlayer()
+   }
 
     fun onPlayButtonClicked() {
         startPlayer()
-        view.showPauseButton()
+        _state.postValue(AudioPlayerState.Play(showPlayerCurrentPosition()))
     }
 
     fun onPauseButtonClicked() {
         pausePlayer()
-        view.hidePauseButton()
-    }
-
-    fun backButtonClicked() {
-        view.goBack()
+        _state.postValue(AudioPlayerState.Pause)
     }
 
     private fun startPlayer() {
@@ -48,32 +47,43 @@ class AudioPlayerPresenter(
     }
 
     fun pausePlayer() {
+        _state.postValue(AudioPlayerState.Pause)
         trackMediaPlayerInteractor.pausePlayer()
         handlerRemoveCallbacks()
     }
 
-    fun releasePlayer(){
+    private fun releasePlayer(){
+        trackMediaPlayerInteractor.unSubscribeOnPlayer()
         trackMediaPlayerInteractor.releasePlayer()
         handlerRemoveCallbacks()
     }
 
-    fun preparePlayer() {
-        trackMediaPlayerInteractor.setDataSource(url)
+    private fun preparePlayer() {
+        trackMediaPlayerInteractor.setDataSource()
         trackMediaPlayerInteractor.prepareAsync()
-        trackMediaPlayerInteractor.setOnPreparedListener {
-            playButton.isEnabled = true
+
+        trackMediaPlayerInteractor.subscribeOnPlayer { state ->
+            when(state) {
+                PlayerState.NOT_READY -> {}
+                PlayerState.PREPARED -> {
+                    _state.postValue(AudioPlayerState.Ready)
+                }
+                PlayerState.COMPLETE -> {
+                    _state.postValue(AudioPlayerState.OnStart)
+                    handlerRemoveCallbacks()
+                }
+            }
         }
-        trackMediaPlayerInteractor.setOnCompletionListener {
-            view.hidePauseButton()
-            handlerRemoveCallbacks()
-            trackTimePassed.text = START_POINT
-        }
+    }
+
+    fun showPlayerCurrentPosition(): String{
+        return trackMediaPlayerInteractor.showPlayerCurrentPosition()
     }
 
     private fun createTimePassedTask(): Runnable  {
         return object : Runnable {
             override fun run() {
-                trackTimePassed.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackMediaPlayerInteractor.getMediaPlayer().currentPosition)
+                _state.postValue(AudioPlayerState.Play(showPlayerCurrentPosition()))
                 handler.postDelayed(this, DELAY)
             }
         }
@@ -87,7 +97,5 @@ class AudioPlayerPresenter(
 
     companion object {
         private const val DELAY = 1000L
-        private const val START_POINT = "00:00"
     }
-
 }
