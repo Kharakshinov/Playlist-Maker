@@ -16,8 +16,8 @@ class TrackMediaPlayerInteractor (
         trackMediaPlayer.releasePlayer()
     }
 
-    fun setDataSource(){
-        trackMediaPlayer.setDataSource()
+    fun setDataSource(url: String){
+        trackMediaPlayer.setDataSource(url)
     }
 
     fun prepareAsync(){

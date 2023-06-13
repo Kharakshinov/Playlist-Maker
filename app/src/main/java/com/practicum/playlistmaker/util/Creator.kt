@@ -2,9 +2,6 @@ package com.practicum.playlistmaker.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.practicum.playlistmaker.audioplayer.data.TrackMediaPlayer
-import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
-import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerViewModelFactory
 import com.practicum.playlistmaker.search.data.SearchRepository
 import com.practicum.playlistmaker.search.data.SharedPreferencesWriteRead
 import com.practicum.playlistmaker.search.domain.SearchInteractor
@@ -38,18 +35,6 @@ object Creator {
 
     fun provideSearchInteracor(sharedPreferences: SharedPreferences): SearchInteractor{
         return SearchInteractor(provideSharedPreferencesWriteRead(sharedPreferences), provideRepository())
-    }
-
-    private fun provideTrackMediaPlayer(url: String): TrackMediaPlayer{
-        return TrackMediaPlayer(url)
-    }
-
-    private fun provideTrackMediaPlayerInteractor(url: String): TrackMediaPlayerInteractor{
-        return TrackMediaPlayerInteractor(provideTrackMediaPlayer(url))
-    }
-
-    fun provideAudioPlayerViewModelFactory(url: String): AudioPlayerViewModelFactory{
-        return AudioPlayerViewModelFactory(provideTrackMediaPlayerInteractor(url))
     }
 
     private fun provideExternalNavigator(context: Context): ExternalNavigator{
