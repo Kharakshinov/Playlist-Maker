@@ -7,9 +7,8 @@ import android.os.Looper
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Switch
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.util.Creator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -26,8 +25,7 @@ class SettingsActivity : AppCompatActivity() {
         val buttonOpenUserAgreement = findViewById<Button>(R.id.button_user_agreement)
         val buttonThemeSwitcher = findViewById<Switch>(R.id.switch1)
 
-        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
-        val viewModel = ViewModelProvider(this, Creator.provideSettingsViewModelFactory(this, sharedPreferences, applicationContext))[SettingsViewModel::class.java]
+        val viewModel: SettingsViewModel by viewModel()
         viewModel.setStartState()
 
         viewModel.state.observe(this){state ->
@@ -92,7 +90,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

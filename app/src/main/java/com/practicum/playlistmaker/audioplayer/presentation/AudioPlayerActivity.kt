@@ -5,13 +5,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.audioplayer.domain.model.Track
-import com.practicum.playlistmaker.util.Creator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,7 +30,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var chosenTrack : Track
     private lateinit var url: String
     private lateinit var extras: Bundle
-    private lateinit var viewModel: AudioPlayerViewModel
+    private val viewModel: AudioPlayerViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +38,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         initView()
         setChosenTrack()
         setTrackData()
-
-        viewModel = ViewModelProvider(this, Creator.provideAudioPlayerViewModelFactory(url))[AudioPlayerViewModel::class.java]
+        viewModel.startPreparingPlayer(url)
 
         viewModel.state.observe(this){ state ->
             when (state){

@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Button
-import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSettings = findViewById<Button>(R.id.button_settings)
         val router = MainScreenRouter(this)
 
-        val viewModel = ViewModelProvider(this, MainScreenViewModelFactory())[MainScreenViewModel::class.java]
+        val viewModel: MainScreenViewModel by viewModel()
         viewModel.state.observe(this){ state ->
             when(state){
                 MainScreenState.OpenSearch -> {

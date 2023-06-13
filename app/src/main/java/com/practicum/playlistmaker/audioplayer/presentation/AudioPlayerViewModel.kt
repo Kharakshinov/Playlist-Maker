@@ -12,6 +12,7 @@ class AudioPlayerViewModel(
     private val trackMediaPlayerInteractor: TrackMediaPlayerInteractor,
 ): ViewModel() {
     private var isPlayerUsed = false
+    private var isPlayerPrepared = false
     private var handler = Handler(Looper.getMainLooper())
     private lateinit var timePassedRunnable: Runnable
 
@@ -20,7 +21,11 @@ class AudioPlayerViewModel(
 
     init{
         _state.postValue(AudioPlayerState.NotReady)
-        preparePlayer()
+    }
+
+    fun startPreparingPlayer(url: String){
+        if(!isPlayerPrepared)
+            preparePlayer(url)
     }
 
    override fun onCleared(){
@@ -58,9 +63,10 @@ class AudioPlayerViewModel(
         handlerRemoveCallbacks()
     }
 
-    private fun preparePlayer() {
-        trackMediaPlayerInteractor.setDataSource()
+    private fun preparePlayer(url: String) {
+        trackMediaPlayerInteractor.setDataSource(url)
         trackMediaPlayerInteractor.prepareAsync()
+        isPlayerPrepared = true
 
         trackMediaPlayerInteractor.subscribeOnPlayer { state ->
             when(state) {
