@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.search.presentation
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,12 +15,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.model.Track
-import com.practicum.playlistmaker.util.Creator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -37,10 +35,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var iconNoInternet:ImageView
     private lateinit var buttonRefresh:Button
     private lateinit var buttonClearSearchHistory:Button
-    private lateinit var sharedPreferences : SharedPreferences
     private lateinit var progressBar: ProgressBar
-    private lateinit var viewModel: SearchViewModel
     private lateinit var router: SearchRouter
+    private val viewModel: SearchViewModel by viewModel()
     private val trackAdapter = TrackAdapter()
     private val trackAdapterHistory = TrackAdapter()
     private var isClickAllowed = true
@@ -52,10 +49,7 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
         initView()
         initAdapters()
-        initSharedPreferences()
-        val interactor = Creator.provideSearchInteracor(sharedPreferences)
         router = SearchRouter(this)
-        viewModel = ViewModelProvider(this, SearchViewModelFactory(interactor))[SearchViewModel::class.java]
 
         viewModel.state.observe(this){ state ->
             when(state){
@@ -153,10 +147,6 @@ class SearchActivity : AppCompatActivity() {
         buttonClearSearchHistory = findViewById(R.id.button_clear_history)
         recyclerViewSearch = findViewById(R.id.recyclerview)
         recyclerViewSearchHistory = findViewById(R.id.recyclerview_history_search)
-    }
-
-    private fun initSharedPreferences(){
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
     }
 
     private fun initAdapters() {
@@ -291,7 +281,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
         const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_DEBOUNCE_DELAY = 2000L
     }

@@ -6,6 +6,9 @@ import com.practicum.playlistmaker.audioplayer.di.audioPlayerDataModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDomainModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerPresentationModule
 import com.practicum.playlistmaker.mainscreen.di.mainScreenPresentationModule
+import com.practicum.playlistmaker.search.di.searchDataModule
+import com.practicum.playlistmaker.search.di.searchDomainModule
+import com.practicum.playlistmaker.search.di.searchPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -18,6 +21,7 @@ class App : Application() {
             modules(
                 audioPlayerDataModule, audioPlayerDomainModule, audioPlayerPresentationModule,
                 mainScreenPresentationModule,
+                searchDataModule, searchDomainModule, searchPresentationModule
                 )
         }
     }
@@ -30,5 +34,9 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    companion object {
+        const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
     }
 }
