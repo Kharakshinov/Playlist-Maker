@@ -9,6 +9,9 @@ import com.practicum.playlistmaker.mainscreen.di.mainScreenPresentationModule
 import com.practicum.playlistmaker.search.di.searchDataModule
 import com.practicum.playlistmaker.search.di.searchDomainModule
 import com.practicum.playlistmaker.search.di.searchPresentationModule
+import com.practicum.playlistmaker.settings.di.settingsDataModule
+import com.practicum.playlistmaker.settings.di.settingsDomainModule
+import com.practicum.playlistmaker.settings.di.settingsPresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -21,7 +24,8 @@ class App : Application() {
             modules(
                 audioPlayerDataModule, audioPlayerDomainModule, audioPlayerPresentationModule,
                 mainScreenPresentationModule,
-                searchDataModule, searchDomainModule, searchPresentationModule
+                searchDataModule, searchDomainModule, searchPresentationModule,
+                settingsDataModule, settingsDomainModule, settingsPresentationModule,
                 )
         }
     }

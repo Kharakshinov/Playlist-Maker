@@ -16,7 +16,7 @@ class ExternalNavigator(private val context: Context): IExternalNavigator {
             type = "text/plain"
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
-        context.startActivity(shareIntent)
+        context.startActivity(shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     override fun writeToSupport(){
@@ -27,7 +27,7 @@ class ExternalNavigator(private val context: Context): IExternalNavigator {
         writeSupport.putExtra(Intent.EXTRA_EMAIL, arrayOf(context.getString(R.string.my_email)))
         writeSupport.putExtra(Intent.EXTRA_SUBJECT, subject)
         writeSupport.putExtra(Intent.EXTRA_TEXT, message)
-        context.startActivity(writeSupport)
+        context.startActivity(writeSupport.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
 
@@ -35,6 +35,6 @@ class ExternalNavigator(private val context: Context): IExternalNavigator {
         val userAgreementLink = context.getString(R.string.yandex_offer)
         val openURL = Intent(Intent.ACTION_VIEW)
         openURL.data = Uri.parse(userAgreementLink)
-        context.startActivity(openURL)
+        context.startActivity(openURL.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 }
