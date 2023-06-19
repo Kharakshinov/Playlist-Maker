@@ -6,6 +6,7 @@ import com.practicum.playlistmaker.audioplayer.di.audioPlayerDataModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDomainModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerPresentationModule
 import com.practicum.playlistmaker.mainscreen.di.mainScreenPresentationModule
+import com.practicum.playlistmaker.medialibrary.di.mediaLibraryPresentationModule
 import com.practicum.playlistmaker.search.di.searchDataModule
 import com.practicum.playlistmaker.search.di.searchDomainModule
 import com.practicum.playlistmaker.search.di.searchPresentationModule
@@ -24,6 +25,7 @@ class App : Application() {
             modules(
                 audioPlayerDataModule, audioPlayerDomainModule, audioPlayerPresentationModule,
                 mainScreenPresentationModule,
+                mediaLibraryPresentationModule,
                 searchDataModule, searchDomainModule, searchPresentationModule,
                 settingsDataModule, settingsDomainModule, settingsPresentationModule,
                 )
