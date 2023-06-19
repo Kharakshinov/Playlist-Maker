@@ -16,6 +16,8 @@ class MediaLibrary : AppCompatActivity() {
         binding = ActivityMediaLibraryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val router = MediaLibraryRouter(this)
+
         binding.viewPager.adapter = MediaLibraryViewPagerAdapter(supportFragmentManager, lifecycle)
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
@@ -27,7 +29,7 @@ class MediaLibrary : AppCompatActivity() {
         tabMediator.attach()
 
         binding.buttonGoBack.setOnClickListener {
-            finish()
+            router.goBack()
         }
     }
 
