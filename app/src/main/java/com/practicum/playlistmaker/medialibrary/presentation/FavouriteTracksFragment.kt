@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentFavouriteTracksBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -14,7 +13,13 @@ class FavouriteTracksFragment: Fragment() {
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
     companion object {
-        fun newInstance() = FavouriteTracksFragment().apply {}
+        private const val TEXT = "text"
+
+        fun newInstance(text: String) = FavouriteTracksFragment().apply {
+            arguments = Bundle().apply {
+                putString(TEXT, text)
+            }
+        }
     }
 
     private lateinit var binding: FragmentFavouriteTracksBinding
@@ -27,6 +32,6 @@ class FavouriteTracksFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-                binding.placeholderMessage.text = requireActivity().getString(R.string.empty_medialibrary)
+                binding.placeholderMessage.text = requireArguments().getString(TEXT)
     }
 }
