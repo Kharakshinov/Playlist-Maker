@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.mainscreen.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
-import com.practicum.playlistmaker.medialibrary.presentation.MediaLibrary
+import com.practicum.playlistmaker.medialibrary.presentation.MediaLibraryFragment
 import com.practicum.playlistmaker.search.presentation.SearchFragment
 import com.practicum.playlistmaker.settings.presentation.SettingsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,8 +45,15 @@ class MainScreenFragment: Fragment() {
                     viewModel.setStartState()
                 }
                 MainScreenState.OpenMediaLibrary -> {
-                    val displayMediaLibrary = Intent(requireContext(), MediaLibrary::class.java)
-                    startActivity(displayMediaLibrary)
+                    parentFragmentManager.commit {
+                        replace(
+                            R.id.rootFragmentContainerView,
+                            MediaLibraryFragment(),
+                            MediaLibraryFragment.TAG
+                        )
+
+                        addToBackStack(MediaLibraryFragment.TAG)
+                    }
                     viewModel.setStartState()
                 }
                 MainScreenState.OpenSettings -> {

@@ -25,15 +25,6 @@
                 android:value="" />
         </activity>
 
-        <activity
-            android:name=".medialibrary.presentation.MediaLibrary"
-            android:exported="false"
-            android:theme="@style/Theme.PlaylistMaker.MediaLibrary">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-
         <activity android:name=".RootActivity"
             android:exported="true">
             <intent-filter>

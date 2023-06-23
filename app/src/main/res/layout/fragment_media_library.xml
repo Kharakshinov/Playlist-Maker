@@ -4,18 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/text_color_white_black"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMaker.MediaLibrary"
+    >
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_20"
         android:orientation="horizontal">
-
-        <ImageView
-            android:contentDescription="@string/icon_back"
-            android:id="@+id/button_go_back"
-            style="@style/IconGoBack"/>
 
         <TextView
             android:text="@string/media_library"
