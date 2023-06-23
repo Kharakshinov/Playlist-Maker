@@ -16,7 +16,6 @@
 
     <style name="Theme.PlaylistMaker.MainMenu" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/blue_3772E7</item>
-        <item name="text_color">@color/yp_black</item>
     </style>
 
     <style name="Theme.PlaylistMaker.Settings" parent="Theme.MaterialComponents.DayNight.NoActionBar">
