@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/text_color_white_black"
     android:orientation="vertical">
 
     <FrameLayout
@@ -21,5 +22,21 @@
             style="@style/TopLeftText"/>
 
     </FrameLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
+        app:tabTextColor="?attr/text_color"
+        android:background="?attr/text_color_white_black"
+        app:tabIndicatorColor = "?attr/text_color"
+        app:tabTextAppearance="@style/TabLayoutMediaLibrary"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

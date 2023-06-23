@@ -115,4 +115,9 @@
         <item name="android:layout_marginStart">@dimen/dp_16</item>
     </style>
 
+    <style name="TabLayoutMediaLibrary" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_14</item>
+    </style>
+
 </resources>

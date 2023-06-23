@@ -1,11 +1,13 @@
 package com.practicum.playlistmaker.app
 
 import android.app.Application
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDataModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDomainModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerPresentationModule
 import com.practicum.playlistmaker.mainscreen.di.mainScreenPresentationModule
+import com.practicum.playlistmaker.medialibrary.di.mediaLibraryPresentationModule
 import com.practicum.playlistmaker.search.di.searchDataModule
 import com.practicum.playlistmaker.search.di.searchDomainModule
 import com.practicum.playlistmaker.search.di.searchPresentationModule
@@ -16,6 +18,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
 class App : Application() {
+
     override fun onCreate() {
         super.onCreate()
 
@@ -24,10 +27,13 @@ class App : Application() {
             modules(
                 audioPlayerDataModule, audioPlayerDomainModule, audioPlayerPresentationModule,
                 mainScreenPresentationModule,
+                mediaLibraryPresentationModule,
                 searchDataModule, searchDomainModule, searchPresentationModule,
                 settingsDataModule, settingsDomainModule, settingsPresentationModule,
                 )
         }
+
+        res = resources
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
@@ -42,5 +48,6 @@ class App : Application() {
 
     companion object {
         const val SHARED_PREFERENCES = "shared_preferences_playlistmaker"
+        lateinit var res: Resources
     }
 }

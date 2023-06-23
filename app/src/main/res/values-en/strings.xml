@@ -19,4 +19,9 @@
     <string name="country">Country</string>
     <string name="album">Album</string>
     <string name="year">Year</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="empty_medialibrary">Your media library is empty</string>
+    <string name="no_playlist">You haven\'t created\n any playlists</string>
+    <string name="favourite_tracks">Favourite tracks</string>
+    <string name="playlists">Playlists</string>
 </resources>
