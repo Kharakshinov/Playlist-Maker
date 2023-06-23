@@ -13,7 +13,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
 import com.practicum.playlistmaker.medialibrary.presentation.MediaLibrary
 import com.practicum.playlistmaker.search.presentation.SearchFragment
-import com.practicum.playlistmaker.settings.presentation.SettingsActivity
+import com.practicum.playlistmaker.settings.presentation.SettingsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainScreenFragment: Fragment() {
@@ -51,8 +51,15 @@ class MainScreenFragment: Fragment() {
                     viewModel.setStartState()
                 }
                 MainScreenState.OpenSettings -> {
-                    val displaySettings = Intent(requireContext(), SettingsActivity::class.java)
-                    startActivity(displaySettings)
+                    parentFragmentManager.commit {
+                        replace(
+                            R.id.rootFragmentContainerView,
+                            SettingsFragment(),
+                            SettingsFragment.TAG
+                        )
+
+                        addToBackStack(SettingsFragment.TAG)
+                    }
                     viewModel.setStartState()
                 }
                 MainScreenState.Start -> {}

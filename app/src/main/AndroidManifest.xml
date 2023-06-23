@@ -34,15 +34,6 @@
                 android:value="" />
         </activity>
 
-        <activity
-            android:name=".settings.presentation.SettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.PlaylistMaker.Settings">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-
         <activity android:name=".RootActivity"
             android:exported="true">
             <intent-filter>
