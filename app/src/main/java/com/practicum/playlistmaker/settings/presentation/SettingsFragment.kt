@@ -13,7 +13,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SettingsFragment: Fragment() {
 
     companion object {
-        const val TAG = "SettingsFragment"
         const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 

@@ -11,10 +11,6 @@ import com.practicum.playlistmaker.databinding.FragmentMediaLibraryBinding
 
 class MediaLibraryFragment: Fragment() {
 
-    companion object {
-        const val TAG = "MediaLibraryFragment"
-    }
-
     private lateinit var binding: FragmentMediaLibraryBinding
     private lateinit var tabsMediator: TabLayoutMediator
 

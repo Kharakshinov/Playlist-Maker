@@ -23,7 +23,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SearchFragment: Fragment() {
 
     companion object {
-        const val TAG = "SearchFragment"
         const val CLICK_DEBOUNCE_DELAY = 1000L
         const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
@@ -221,7 +220,10 @@ class SearchFragment: Fragment() {
 
     private fun hideKeyboard() {
         val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(requireActivity().currentFocus!!.windowToken, 0)
+        val focusedView = requireActivity().currentFocus
+        if (focusedView != null) {
+            inputMethodManager?.hideSoftInputFromWindow(focusedView.windowToken, 0)
+        }
     }
 
     private fun hideTracks() {
