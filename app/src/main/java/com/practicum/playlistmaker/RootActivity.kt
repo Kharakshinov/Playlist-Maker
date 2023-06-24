@@ -2,9 +2,7 @@ package com.practicum.playlistmaker
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.commit
 import com.practicum.playlistmaker.databinding.ActivityRootBinding
-import com.practicum.playlistmaker.mainscreen.presentation.MainScreenFragment
 
 class RootActivity : AppCompatActivity() {
 
@@ -15,12 +13,5 @@ class RootActivity : AppCompatActivity() {
 
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                this.add(R.id.rootFragmentContainerView, MainScreenFragment())
-            }
-        }
     }
-
 }

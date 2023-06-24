@@ -7,12 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
-import com.practicum.playlistmaker.medialibrary.presentation.MediaLibraryFragment
-import com.practicum.playlistmaker.search.presentation.SearchFragment
-import com.practicum.playlistmaker.settings.presentation.SettingsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainScreenFragment: Fragment() {
@@ -33,39 +30,15 @@ class MainScreenFragment: Fragment() {
         viewModel.state.observe(viewLifecycleOwner){ state ->
             when(state){
                 MainScreenState.OpenSearch -> {
-                    parentFragmentManager.commit {
-                        replace(
-                            R.id.rootFragmentContainerView,
-                            SearchFragment(),
-                            SearchFragment.TAG
-                        )
-
-                        addToBackStack(SearchFragment.TAG)
-                    }
+                    findNavController().navigate(R.id.action_mainScreenFragment_to_searchFragment)
                     viewModel.setStartState()
                 }
                 MainScreenState.OpenMediaLibrary -> {
-                    parentFragmentManager.commit {
-                        replace(
-                            R.id.rootFragmentContainerView,
-                            MediaLibraryFragment(),
-                            MediaLibraryFragment.TAG
-                        )
-
-                        addToBackStack(MediaLibraryFragment.TAG)
-                    }
+                    findNavController().navigate(R.id.action_mainScreenFragment_to_mediaLibraryFragment)
                     viewModel.setStartState()
                 }
                 MainScreenState.OpenSettings -> {
-                    parentFragmentManager.commit {
-                        replace(
-                            R.id.rootFragmentContainerView,
-                            SettingsFragment(),
-                            SettingsFragment.TAG
-                        )
-
-                        addToBackStack(SettingsFragment.TAG)
-                    }
+                    findNavController().navigate(R.id.action_mainScreenFragment_to_settingsFragment)
                     viewModel.setStartState()
                 }
                 MainScreenState.Start -> {}
