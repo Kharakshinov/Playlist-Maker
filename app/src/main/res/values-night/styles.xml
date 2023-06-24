@@ -29,4 +29,12 @@
         <item name="android:src">@drawable/icon_no_internet_night</item>
         <item name="android:background">@null</item>
     </style>
+
+    <style name="BottomNavigation">
+        <item name="android:layout_width">@dimen/dp_0</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/yp_black</item>
+        <item name="itemTextColor">@color/bottom_nav_color_night</item>
+        <item name="itemIconTint">@color/bottom_nav_color_night</item>
+    </style>
 </resources>
