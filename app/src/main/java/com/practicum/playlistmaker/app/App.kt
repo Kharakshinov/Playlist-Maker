@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDataModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDomainModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerPresentationModule
-import com.practicum.playlistmaker.mainscreen.di.mainScreenPresentationModule
 import com.practicum.playlistmaker.medialibrary.di.mediaLibraryPresentationModule
 import com.practicum.playlistmaker.search.di.searchDataModule
 import com.practicum.playlistmaker.search.di.searchDomainModule
@@ -26,7 +25,6 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 audioPlayerDataModule, audioPlayerDomainModule, audioPlayerPresentationModule,
-                mainScreenPresentationModule,
                 mediaLibraryPresentationModule,
                 searchDataModule, searchDomainModule, searchPresentationModule,
                 settingsDataModule, settingsDomainModule, settingsPresentationModule,

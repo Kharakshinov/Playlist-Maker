@@ -3,19 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/text_color_white_black"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMaker.MediaLibrary"
+    tools:context="com.practicum.playlistmaker.medialibrary.presentation.MediaLibraryFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_20"
         android:orientation="horizontal">
-
-        <ImageView
-            android:contentDescription="@string/icon_back"
-            android:id="@+id/button_go_back"
-            style="@style/IconGoBack"/>
 
         <TextView
             android:text="@string/media_library"
