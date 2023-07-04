@@ -34,10 +34,11 @@ class SearchFragment: Fragment() {
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { loadTracks() }
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -128,6 +129,12 @@ class SearchFragment: Fragment() {
             viewModel.showHistoryTracksEditTextOnFocus(binding.inputEditText)
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        handler.removeCallbacks(searchRunnable)
+        _binding = null
     }
 
     private fun initAdapters() {

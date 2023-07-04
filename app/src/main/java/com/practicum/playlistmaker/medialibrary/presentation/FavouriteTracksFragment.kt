@@ -13,16 +13,24 @@ class FavouriteTracksFragment: Fragment() {
 
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
-    private lateinit var binding: FragmentFavouriteTracksBinding
+    private var _binding: FragmentFavouriteTracksBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        binding = FragmentFavouriteTracksBinding.inflate(inflater, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentFavouriteTracksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
                 binding.placeholderMessage.text = requireActivity().getString(R.string.empty_medialibrary)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

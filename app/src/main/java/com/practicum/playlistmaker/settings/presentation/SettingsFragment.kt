@@ -20,10 +20,11 @@ class SettingsFragment: Fragment() {
     private val handler = Handler(Looper.getMainLooper())
     private val viewModel: SettingsViewModel by viewModel()
 
-    private lateinit var binding: FragmentSettingsBinding
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -77,6 +78,11 @@ class SettingsFragment: Fragment() {
                 viewModel.openUserAgreementClicked()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun clickDebounce() : Boolean {
