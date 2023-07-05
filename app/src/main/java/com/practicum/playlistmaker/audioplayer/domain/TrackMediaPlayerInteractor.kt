@@ -35,4 +35,8 @@ class TrackMediaPlayerInteractor (
     fun showPlayerCurrentPosition(): String{
         return trackMediaPlayer.showCurrentPosition()
     }
+
+    fun isPlaying(): Boolean{
+        return trackMediaPlayer.isPlaying()
+    }
 }

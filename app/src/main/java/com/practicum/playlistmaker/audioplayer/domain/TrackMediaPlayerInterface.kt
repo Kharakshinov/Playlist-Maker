@@ -15,4 +15,6 @@ interface TrackMediaPlayerInterface {
     fun prepareAsync()
 
     fun showCurrentPosition(): String
+
+    fun isPlaying():Boolean
 }

@@ -45,4 +45,8 @@ class TrackMediaPlayer(private val mediaPlayer: MediaPlayer) : TrackMediaPlayerI
     override fun showCurrentPosition(): String{
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
     }
+
+    override fun isPlaying(): Boolean {
+        return mediaPlayer.isPlaying
+    }
 }
