@@ -1,13 +1,14 @@
 package com.practicum.playlistmaker.settings.presentation
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment: Fragment() {
@@ -17,7 +18,6 @@ class SettingsFragment: Fragment() {
     }
 
     private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
     private val viewModel: SettingsViewModel by viewModel()
 
     private var _binding: FragmentSettingsBinding? = null
@@ -89,7 +89,10 @@ class SettingsFragment: Fragment() {
         val current = isClickAllowed
         if (isClickAllowed){
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
