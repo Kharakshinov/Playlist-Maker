@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class SearchInteractor (
-    private val sharedPreferencesWriteRead: ISharedPreferencesWriteRead,
-    private val repository: ISearchRepository
+    private val sharedPreferencesWriteRead: SharedPreferencesWriteRead,
+    private val repository: SearchRepository
         ) {
 
     fun readFromSharedPreferences(): ArrayList<Track>{
@@ -24,7 +24,7 @@ class SearchInteractor (
                 is Resource.Success -> {
                     Pair(result.data, null)
                 }
-                is Resource.Error -> {
+                else -> {
                     Pair(null, result.message)
                 }
             }

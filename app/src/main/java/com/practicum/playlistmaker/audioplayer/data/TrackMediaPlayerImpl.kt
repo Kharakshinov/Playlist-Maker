@@ -2,12 +2,12 @@ package com.practicum.playlistmaker.audioplayer.data
 
 import android.media.MediaPlayer
 import com.practicum.playlistmaker.audioplayer.domain.PlayerState
-import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInterface
+import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayer
 import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerStateListener
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackMediaPlayer(private val mediaPlayer: MediaPlayer) : TrackMediaPlayerInterface {
+class TrackMediaPlayerImpl(private val mediaPlayer: MediaPlayer) : TrackMediaPlayer {
 
     override var listener: TrackMediaPlayerStateListener? = null
 

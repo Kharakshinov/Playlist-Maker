@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.audioplayer.domain
 
 class TrackMediaPlayerInteractor (
-    private val trackMediaPlayer: TrackMediaPlayerInterface
+    private val trackMediaPlayer: TrackMediaPlayer
         ) {
 
     fun startPlayer(){

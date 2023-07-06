@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.audioplayer.domain
 
-interface TrackMediaPlayerInterface {
+interface TrackMediaPlayer {
 
     var listener: TrackMediaPlayerStateListener?
 

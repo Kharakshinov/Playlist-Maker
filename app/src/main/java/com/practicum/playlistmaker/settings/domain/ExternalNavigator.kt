@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.settings.domain
 
-interface IExternalNavigator {
+interface ExternalNavigator {
 
     fun shareApplication()
 

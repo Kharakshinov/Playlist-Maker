@@ -3,13 +3,13 @@ package com.practicum.playlistmaker.search.data
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.search.domain.ISharedPreferencesWriteRead
+import com.practicum.playlistmaker.search.domain.SharedPreferencesWriteRead
 import com.practicum.playlistmaker.search.domain.model.Track
 import java.lang.reflect.Type
 
-class SharedPreferencesWriteRead (
+class SharedPreferencesWriteReadImpl (
     private val sharedPreferences: SharedPreferences
-    ) : ISharedPreferencesWriteRead {
+    ) : SharedPreferencesWriteRead {
 
     override fun readFromSharedPreferences(): ArrayList<Track> {
         val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return ArrayList()

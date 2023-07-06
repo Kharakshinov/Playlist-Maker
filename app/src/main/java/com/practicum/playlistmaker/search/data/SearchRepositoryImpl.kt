@@ -1,14 +1,14 @@
 package com.practicum.playlistmaker.search.data
 
-import com.practicum.playlistmaker.search.domain.ISearchRepository
+import com.practicum.playlistmaker.search.domain.SearchRepository
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class SearchRepository(
+class SearchRepositoryImpl(
     private val networkClient: NetworkClient
-) : ISearchRepository {
+) : SearchRepository {
 
     override fun loadTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))

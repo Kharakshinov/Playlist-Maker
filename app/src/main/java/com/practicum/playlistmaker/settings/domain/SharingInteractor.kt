@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.settings.domain
 
-class SharingInteractor(private val navigator: IExternalNavigator) {
+class SharingInteractor(private val navigator: ExternalNavigator) {
 
     fun shareApplication(){
         navigator.shareApplication()
