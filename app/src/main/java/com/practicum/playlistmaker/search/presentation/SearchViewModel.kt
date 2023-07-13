@@ -4,8 +4,10 @@ import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.search.domain.SearchInteractor
 import com.practicum.playlistmaker.search.domain.model.Track
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
@@ -32,24 +34,33 @@ class SearchViewModel(
         }
     }
 
-    fun loadTracks(query: String){
-        if(query.isEmpty()){
+    fun loadTracks(expression: String){
+        if(expression.isEmpty()){
             return
         }
         _state.postValue(SearchState.Loading)
-        interactor.loadTracks(
-            query = query,
-            onSuccess = {tracks ->
-                if(tracks.isEmpty()){
-                    _state.postValue(SearchState.Empty)
-                } else {
-                    _state.postValue(SearchState.Tracks(tracks))
+
+        viewModelScope.launch {
+            interactor
+                .loadTracks(expression)
+                .collect { pair ->
+                    processResult(pair.first, pair.second)
                 }
-            },
-            onError = {
-                _state.postValue(SearchState.Error)
-            }
-        )
+        }
+
+    }
+
+    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
+        val tracks = mutableListOf<Track>()
+        if (foundTracks != null) {
+            tracks.addAll(foundTracks)
+        }
+
+        when {
+            errorMessage != null -> _state.postValue(SearchState.Error)
+            tracks.isEmpty() -> _state.postValue(SearchState.Empty)
+            else -> _state.postValue(SearchState.Tracks(tracks))
+        }
     }
 
     private fun readFromSharedPreferences(): ArrayList<Track>{

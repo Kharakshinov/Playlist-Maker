@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.settings.domain.IExternalNavigator
+import com.practicum.playlistmaker.settings.domain.ExternalNavigator
 
-class ExternalNavigator(private val context: Context): IExternalNavigator {
+class ExternalNavigatorImpl(private val context: Context): ExternalNavigator {
 
     override fun shareApplication(){
         val courseLink = context.getString(R.string.link_Yandex_AndroidDeveloper)

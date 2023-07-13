@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.search.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,12 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerActivity
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.util.debounce
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment: Fragment() {
@@ -31,11 +33,11 @@ class SearchFragment: Fragment() {
     private val trackAdapter = TrackAdapter()
     private val trackAdapterHistory = TrackAdapter()
     private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { loadTracks() }
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var trackSearchDebounce: (String) -> Unit
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
@@ -46,6 +48,10 @@ class SearchFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapters()
+
+        trackSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, true) { changedText ->
+            loadTracks(changedText)
+        }
 
         viewModel.state.observe(viewLifecycleOwner){ state ->
             when(state){
@@ -89,7 +95,8 @@ class SearchFragment: Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchDebounce()
+                val changedText = binding.inputEditText.text.toString()
+                searchDebounce(changedText)
                 binding.clearSearchTextButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
                 viewModel.showHistoryTracksEditTextOnFocus(binding.inputEditText)
             }
@@ -133,7 +140,6 @@ class SearchFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        handler.removeCallbacks(searchRunnable)
         _binding = null
     }
 
@@ -147,8 +153,8 @@ class SearchFragment: Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun loadTracks(){
-        viewModel.loadTracks(binding.inputEditText.text.toString())
+    private fun loadTracks(changedText: String){
+        viewModel.loadTracks(changedText)
     }
 
     private fun addTrackToHistory(chosenTrack: Track){
@@ -257,16 +263,18 @@ class SearchFragment: Fragment() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    private fun searchDebounce(changedText: String) {
+        trackSearchDebounce(changedText)
     }
 
     private fun clickDebounce() : Boolean {
         val current = isClickAllowed
         if (isClickAllowed){
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }

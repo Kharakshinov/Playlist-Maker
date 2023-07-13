@@ -1,23 +1,25 @@
 package com.practicum.playlistmaker.audioplayer.presentation
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.audioplayer.domain.PlayerState
 import com.practicum.playlistmaker.audioplayer.domain.TrackMediaPlayerInteractor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val trackMediaPlayerInteractor: TrackMediaPlayerInteractor,
 ): ViewModel() {
     private var isPlayerUsed = false
     private var isPlayerPrepared = false
-    private var handler = Handler(Looper.getMainLooper())
-    private lateinit var timePassedRunnable: Runnable
 
     private val _state = MutableLiveData<AudioPlayerState>()
     val state: LiveData<AudioPlayerState> = _state
+
+    private var timerJob: Job? = null
 
     init{
         _state.postValue(AudioPlayerState.NotReady)
@@ -44,23 +46,20 @@ class AudioPlayerViewModel(
 
     private fun startPlayer() {
         trackMediaPlayerInteractor.startPlayer()
-        if(!isPlayerUsed){
-            timePassedRunnable = createTimePassedTask()
-        }
-        handler.post(timePassedRunnable)
+        startTimer()
         isPlayerUsed = true
     }
 
     fun pausePlayer() {
         _state.postValue(AudioPlayerState.Pause)
         trackMediaPlayerInteractor.pausePlayer()
-        handlerRemoveCallbacks()
+        timerJob?.cancel()
     }
 
     private fun releasePlayer(){
         trackMediaPlayerInteractor.unSubscribeOnPlayer()
         trackMediaPlayerInteractor.releasePlayer()
-        handlerRemoveCallbacks()
+        timerJob?.cancel()
     }
 
     private fun preparePlayer(url: String) {
@@ -76,32 +75,26 @@ class AudioPlayerViewModel(
                 }
                 PlayerState.COMPLETE -> {
                     _state.postValue(AudioPlayerState.OnStart)
-                    handlerRemoveCallbacks()
+                    timerJob?.cancel()
                 }
             }
         }
     }
 
-    fun showPlayerCurrentPosition(): String{
+    private fun showPlayerCurrentPosition(): String{
         return trackMediaPlayerInteractor.showPlayerCurrentPosition()
     }
 
-    private fun createTimePassedTask(): Runnable  {
-        return object : Runnable {
-            override fun run() {
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (trackMediaPlayerInteractor.isPlaying()) {
+                delay(DELAY)
                 _state.postValue(AudioPlayerState.Play(showPlayerCurrentPosition()))
-                handler.postDelayed(this, DELAY)
             }
         }
     }
 
-    private fun handlerRemoveCallbacks(){
-        if(isPlayerUsed) {
-            handler.removeCallbacks(timePassedRunnable)
-        }
-    }
-
     companion object {
-        private const val DELAY = 1000L
+        private const val DELAY = 300L
     }
 }

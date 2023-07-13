@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.audioplayer.domain
 
 class TrackMediaPlayerInteractor (
-    private val trackMediaPlayer: TrackMediaPlayerInterface
+    private val trackMediaPlayer: TrackMediaPlayer
         ) {
 
     fun startPlayer(){
@@ -34,5 +34,9 @@ class TrackMediaPlayerInteractor (
 
     fun showPlayerCurrentPosition(): String{
         return trackMediaPlayer.showCurrentPosition()
+    }
+
+    fun isPlaying(): Boolean{
+        return trackMediaPlayer.isPlaying()
     }
 }

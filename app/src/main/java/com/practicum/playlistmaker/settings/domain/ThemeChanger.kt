@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.settings.domain
 
-interface IThemeChanger {
+interface ThemeChanger {
 
     fun changeTheme(checked: Boolean)
 }

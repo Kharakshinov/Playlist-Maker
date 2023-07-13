@@ -1,10 +1,10 @@
 package com.practicum.playlistmaker.settings.domain
 
-import com.practicum.playlistmaker.search.domain.ISharedPreferencesWriteRead
+import com.practicum.playlistmaker.search.domain.SharedPreferencesWriteRead
 
 class ThemeInteractor(
-    private val themeChanger: IThemeChanger,
-    private val sharedPreferencesWriteRead: ISharedPreferencesWriteRead,
+    private val themeChanger: ThemeChanger,
+    private val sharedPreferencesWriteRead: SharedPreferencesWriteRead,
 ) {
 
     fun changeTheme(checked: Boolean){

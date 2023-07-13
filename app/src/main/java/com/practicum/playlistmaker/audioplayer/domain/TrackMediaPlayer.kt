@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.audioplayer.domain
 
-interface TrackMediaPlayerInterface {
+interface TrackMediaPlayer {
 
     var listener: TrackMediaPlayerStateListener?
 
@@ -15,4 +15,6 @@ interface TrackMediaPlayerInterface {
     fun prepareAsync()
 
     fun showCurrentPosition(): String
+
+    fun isPlaying():Boolean
 }
