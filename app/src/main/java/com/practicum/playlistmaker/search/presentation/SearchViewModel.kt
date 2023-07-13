@@ -57,15 +57,9 @@ class SearchViewModel(
         }
 
         when {
-            errorMessage != null -> {
-                _state.postValue(SearchState.Error)
-            }
-            tracks.isEmpty() -> {
-                _state.postValue(SearchState.Empty)
-            }
-            else -> {
-                _state.postValue(SearchState.Tracks(tracks))
-            }
+            errorMessage != null -> _state.postValue(SearchState.Error)
+            tracks.isEmpty() -> _state.postValue(SearchState.Empty)
+            else -> _state.postValue(SearchState.Tracks(tracks))
         }
     }
 
