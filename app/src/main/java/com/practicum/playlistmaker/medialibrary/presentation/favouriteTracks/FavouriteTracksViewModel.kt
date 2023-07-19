@@ -30,7 +30,7 @@ class FavouriteTracksViewModel(
                     .collect() {
                         favouriteTracks = it
                     }
-                favouriteTracks.sortedByDescending { it.timeSaved }
+                favouriteTracks = favouriteTracks.sortedByDescending { it.timeSaved }
                 if(favouriteTracks.isEmpty())
                     _state.postValue(FavouriteTracksState.Empty)
                 else
