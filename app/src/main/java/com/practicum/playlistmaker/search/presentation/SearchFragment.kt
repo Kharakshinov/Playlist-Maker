@@ -16,7 +16,7 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.audioplayer.presentation.AudioPlayerActivity
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
-import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.search.domain.model.TrackDomainSearch
 import com.practicum.playlistmaker.util.debounce
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -157,7 +157,7 @@ class SearchFragment: Fragment() {
         viewModel.loadTracks(changedText)
     }
 
-    private fun addTrackToHistory(chosenTrack: Track){
+    private fun addTrackToHistory(chosenTrack: TrackDomainSearch){
         if (trackAdapterHistory.tracks.size < 10){
             if(trackAdapterHistory.tracks.isNotEmpty()){
                 if(trackAdapterHistory.tracks.contains(chosenTrack)){
@@ -182,7 +182,7 @@ class SearchFragment: Fragment() {
         viewModel.writeToSharedPreferences(trackAdapterHistory.tracks)
     }
 
-    private fun addTrackOnTopSearchHistory(chosenTrack: Track, position: Int){
+    private fun addTrackOnTopSearchHistory(chosenTrack: TrackDomainSearch, position: Int){
         trackAdapterHistory.tracks.add(0, chosenTrack)
         trackAdapterHistory.tracks.removeAt(position + 1)
         trackAdapterHistory.notifyDataSetChanged()
@@ -211,7 +211,7 @@ class SearchFragment: Fragment() {
         binding.placeholderMessage.text = getString(R.string.nothing_found)
     }
 
-    private fun showTracks(tracks: List<Track>){
+    private fun showTracks(tracks: List<TrackDomainSearch>){
         binding.progressBar.visibility = View.GONE
         binding.recyclerview.visibility = View.VISIBLE
         trackAdapter.tracks.clear()

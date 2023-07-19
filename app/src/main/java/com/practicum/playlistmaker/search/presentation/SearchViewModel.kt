@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.search.domain.SearchInteractor
-import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.search.domain.model.TrackDomainSearch
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
@@ -50,8 +50,8 @@ class SearchViewModel(
 
     }
 
-    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
-        val tracks = mutableListOf<Track>()
+    private fun processResult(foundTracks: List<TrackDomainSearch>?, errorMessage: String?) {
+        val tracks = mutableListOf<TrackDomainSearch>()
         if (foundTracks != null) {
             tracks.addAll(foundTracks)
         }
@@ -63,11 +63,11 @@ class SearchViewModel(
         }
     }
 
-    private fun readFromSharedPreferences(): ArrayList<Track>{
+    private fun readFromSharedPreferences(): ArrayList<TrackDomainSearch>{
         return interactor.readFromSharedPreferences()
     }
 
-    fun writeToSharedPreferences(trackList: ArrayList<Track>){
+    fun writeToSharedPreferences(trackList: ArrayList<TrackDomainSearch>){
         interactor.writeToSharedPreferences(trackList)
     }
 

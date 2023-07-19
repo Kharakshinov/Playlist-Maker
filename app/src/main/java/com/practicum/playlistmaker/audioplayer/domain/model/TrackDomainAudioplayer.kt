@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.audioplayer.domain.model
 
-data class Track (
+data class TrackDomainAudioplayer (
+    val trackId: Long,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,
@@ -9,5 +10,6 @@ data class Track (
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
+    val previewUrl: String,
+    val timeSaved: Long?
 )

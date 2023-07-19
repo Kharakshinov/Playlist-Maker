@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.search.domain.model.TrackDomainSearch
 
 class TrackAdapter(): RecyclerView.Adapter<TrackViewHolder> () {
 
-    var tracks = ArrayList<Track>()
+    var tracks = ArrayList<TrackDomainSearch>()
     private var trackListener : onTrackClickListener? = null
 
     interface onTrackClickListener {

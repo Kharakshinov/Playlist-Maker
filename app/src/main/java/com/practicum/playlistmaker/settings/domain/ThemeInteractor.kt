@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.settings.domain
 
-import com.practicum.playlistmaker.search.domain.SharedPreferencesWriteRead
+import com.practicum.playlistmaker.sharedpreferences.domain.SharedPreferencesWriteRead
 
 class ThemeInteractor(
     private val themeChanger: ThemeChanger,

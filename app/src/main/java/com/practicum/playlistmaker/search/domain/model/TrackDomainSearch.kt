@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.search.domain.model
 
-data class Track (
+data class TrackDomainSearch (
+   val trackId: Long,
    val trackName: String,
    val artistName: String,
    val trackTimeMillis: Long,

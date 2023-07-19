@@ -1,14 +1,14 @@
 package com.practicum.playlistmaker.search.di
 
 import androidx.appcompat.app.AppCompatActivity
-import com.practicum.playlistmaker.app.App
+import com.practicum.playlistmaker.util.app.App
 import com.practicum.playlistmaker.search.data.network.ITunesApi
 import com.practicum.playlistmaker.search.data.NetworkClient
 import com.practicum.playlistmaker.search.data.SearchRepositoryImpl
-import com.practicum.playlistmaker.search.data.SharedPreferencesWriteReadImpl
+import com.practicum.playlistmaker.sharedpreferences.data.SharedPreferencesWriteReadImpl
 import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.domain.SearchRepository
-import com.practicum.playlistmaker.search.domain.SharedPreferencesWriteRead
+import com.practicum.playlistmaker.sharedpreferences.domain.SharedPreferencesWriteRead
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit

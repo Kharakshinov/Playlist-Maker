@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.search.domain.model.TrackDomainSearch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -25,7 +25,7 @@ class TrackViewHolder(itemView: View, listener: TrackAdapter.onTrackClickListene
         }
     }
 
-    fun bind (item: Track){
+    fun bind (item: TrackDomainSearch){
         track.text = item.trackName
         length.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
         author.text = item.artistName

@@ -1,23 +1,23 @@
-package com.practicum.playlistmaker.search.data
+package com.practicum.playlistmaker.sharedpreferences.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.practicum.playlistmaker.search.domain.SharedPreferencesWriteRead
-import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.search.domain.model.TrackDomainSearch
+import com.practicum.playlistmaker.sharedpreferences.domain.SharedPreferencesWriteRead
 import java.lang.reflect.Type
 
 class SharedPreferencesWriteReadImpl (
     private val sharedPreferences: SharedPreferences
     ) : SharedPreferencesWriteRead {
 
-    override fun readFromSharedPreferences(): ArrayList<Track> {
+    override fun readFromSharedPreferences(): ArrayList<TrackDomainSearch> {
         val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return ArrayList()
-        val type: Type = object : TypeToken<ArrayList<Track>>() {}.type
+        val type: Type = object : TypeToken<ArrayList<TrackDomainSearch>>() {}.type
         return Gson().fromJson(json, type)
     }
 
-    override fun writeToSharedPreferences(trackList: ArrayList<Track>) {
+    override fun writeToSharedPreferences(trackList: ArrayList<TrackDomainSearch>) {
         val json = Gson().toJson(trackList)
         sharedPreferences.edit()
             .putString(SEARCH_HISTORY_KEY, json)

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.app
+package com.practicum.playlistmaker.util.app
 
 import android.app.Application
 import android.content.res.Resources
@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDataModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerDomainModule
 import com.practicum.playlistmaker.audioplayer.di.audioPlayerPresentationModule
+import com.practicum.playlistmaker.db.di.dataBaseModule
+import com.practicum.playlistmaker.medialibrary.di.mediaLibraryDomainModule
 import com.practicum.playlistmaker.medialibrary.di.mediaLibraryPresentationModule
 import com.practicum.playlistmaker.search.di.searchDataModule
 import com.practicum.playlistmaker.search.di.searchDomainModule
@@ -25,7 +27,8 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 audioPlayerDataModule, audioPlayerDomainModule, audioPlayerPresentationModule,
-                mediaLibraryPresentationModule,
+                dataBaseModule,
+                mediaLibraryDomainModule, mediaLibraryPresentationModule,
                 searchDataModule, searchDomainModule, searchPresentationModule,
                 settingsDataModule, settingsDomainModule, settingsPresentationModule,
                 )
