@@ -113,6 +113,19 @@
             android:src="@drawable/button_add_to_favourite"
             />
 
+        <ImageView
+            android:contentDescription="@string/add_to_favourites"
+            android:id="@+id/button_add_to_favourites_activated"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/track_author"
+            android:layout_marginTop="@dimen/dp_56"
+            android:layout_marginEnd="@dimen/dp_24"
+            android:src="@drawable/button_add_to_favourite_activated"
+            android:visibility="gone"
+            />
+
         <TextView
             android:id="@+id/track_time_passed"
             android:layout_width="wrap_content"

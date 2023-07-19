@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.audioplayer.domain.model.Track
+import com.practicum.playlistmaker.audioplayer.domain.model.TrackDomainAudioplayer
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -26,8 +26,10 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var country: TextView
     private lateinit var playButton: ImageView
     private lateinit var pauseButton: ImageView
+    private lateinit var addToFavouritesButton: ImageView
+    private lateinit var activeAddToFavouritesButton: ImageView
     private lateinit var trackTimePassed: TextView
-    private lateinit var chosenTrack : Track
+    private lateinit var chosenTrack : TrackDomainAudioplayer
     private lateinit var url: String
     private lateinit var extras: Bundle
     private val viewModel: AudioPlayerViewModel by viewModel()
@@ -39,6 +41,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         setChosenTrack()
         setTrackData()
         viewModel.startPreparingPlayer(url)
+        viewModel.checkTrackInFavourites(chosenTrack)
 
         viewModel.state.observe(this){ state ->
             when (state){
@@ -57,6 +60,17 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         }
 
+        viewModel.favourites.observe(this){ state ->
+            when(state){
+                TrackState.Liked -> {
+                    showActiveAddToFavouritesButton()
+                }
+                TrackState.NotLiked -> {
+                    hideActiveAddToFavouritesButton()
+                }
+            }
+        }
+
         buttonGoBack.setOnClickListener {
             finish()
         }
@@ -67,6 +81,14 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         pauseButton.setOnClickListener{
             viewModel.onPauseButtonClicked()
+        }
+
+        addToFavouritesButton.setOnClickListener{
+            viewModel.addTrackToFavourites(chosenTrack)
+        }
+
+        activeAddToFavouritesButton.setOnClickListener{
+            viewModel.deleteTrackFromFavourites(chosenTrack)
         }
 
     }
@@ -88,13 +110,15 @@ class AudioPlayerActivity : AppCompatActivity() {
         country = findViewById(R.id.track_country)
         playButton = findViewById(R.id.button_play_track)
         pauseButton = findViewById(R.id.button_pause_track)
+        addToFavouritesButton = findViewById(R.id.button_add_to_favourites)
+        activeAddToFavouritesButton = findViewById(R.id.button_add_to_favourites_activated)
         trackTimePassed  = findViewById(R.id.track_time_passed)
     }
 
     private fun setChosenTrack(){
         extras = intent.extras!!
         val chosenTrackJSON = extras.getString(CHOSEN_TRACK)
-        chosenTrack = Gson().fromJson(chosenTrackJSON, Track::class.java)
+        chosenTrack = Gson().fromJson(chosenTrackJSON, TrackDomainAudioplayer::class.java)
     }
 
     private fun setTrackData(){
@@ -130,6 +154,14 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun hidePauseButton() {
         pauseButton.visibility = View.GONE
+    }
+
+    private fun showActiveAddToFavouritesButton() {
+        activeAddToFavouritesButton.visibility = View.VISIBLE
+    }
+
+    private fun hideActiveAddToFavouritesButton() {
+        activeAddToFavouritesButton.visibility = View.GONE
     }
 
     companion object {
