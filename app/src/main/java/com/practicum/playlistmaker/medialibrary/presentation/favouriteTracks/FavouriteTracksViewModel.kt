@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.db.domain.FavouriteTracksInteractor
 import com.practicum.playlistmaker.medialibrary.domain.MediaLibraryInteractor
-import com.practicum.playlistmaker.medialibrary.domain.models.TrackDomainMediaLibrary
 import com.practicum.playlistmaker.search.domain.model.TrackDomainSearch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,8 +16,6 @@ class FavouriteTracksViewModel(
     private val mediaLibraryInteractor: MediaLibraryInteractor,
 ): ViewModel() {
 
-    private lateinit var favouriteTracks: List<TrackDomainMediaLibrary>
-
     private val _state = MutableLiveData<FavouriteTracksState>()
     val state: LiveData<FavouriteTracksState> = _state
 
@@ -28,13 +25,11 @@ class FavouriteTracksViewModel(
                 favouriteTracksInteractor
                     .getFavouriteTracks()
                     .collect() {
-                        favouriteTracks = it
+                        if(it.isEmpty())
+                            _state.postValue(FavouriteTracksState.Empty)
+                        else
+                            _state.postValue(FavouriteTracksState.Content(it))
                     }
-                favouriteTracks = favouriteTracks.sortedByDescending { it.timeSaved }
-                if(favouriteTracks.isEmpty())
-                    _state.postValue(FavouriteTracksState.Empty)
-                else
-                    _state.postValue(FavouriteTracksState.Content(favouriteTracks))
             }
         }
     }
