@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.PlaylistMaker.Search"
-    tools:context="com.practicum.playlistmaker.search.presentation.SearchFragment">
+    tools:context="com.practicum.playlistmaker.presentation.search.SearchFragment">
 
     <FrameLayout
         android:id="@+id/go_back_view_group"

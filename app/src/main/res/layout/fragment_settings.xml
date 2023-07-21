@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:theme="@style/Theme.PlaylistMaker.Settings"
-    tools:context="com.practicum.playlistmaker.settings.presentation.SettingsFragment">
+    tools:context="com.practicum.playlistmaker.presentation.settings.SettingsFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

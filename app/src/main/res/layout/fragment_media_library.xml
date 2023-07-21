@@ -7,7 +7,7 @@
     android:background="?attr/text_color_white_black"
     android:orientation="vertical"
     android:theme="@style/Theme.PlaylistMaker.MediaLibrary"
-    tools:context="com.practicum.playlistmaker.medialibrary.presentation.MediaLibraryFragment">
+    tools:context="com.practicum.playlistmaker.presentation.medialibrary.MediaLibraryFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

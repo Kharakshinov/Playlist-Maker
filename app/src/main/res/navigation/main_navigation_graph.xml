@@ -6,17 +6,17 @@
     app:startDestination="@id/mediaLibraryFragment">
     <fragment
         android:id="@+id/mediaLibraryFragment"
-        android:name="com.practicum.playlistmaker.medialibrary.presentation.MediaLibraryFragment"
+        android:name="com.practicum.playlistmaker.presentation.medialibrary.MediaLibraryFragment"
         android:label="fragment_media_library"
         tools:layout="@layout/fragment_media_library" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.practicum.playlistmaker.search.presentation.SearchFragment"
+        android:name="com.practicum.playlistmaker.presentation.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.practicum.playlistmaker.settings.presentation.SettingsFragment"
+        android:name="com.practicum.playlistmaker.presentation.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
