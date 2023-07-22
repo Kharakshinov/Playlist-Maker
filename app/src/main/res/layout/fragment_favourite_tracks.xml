@@ -7,6 +7,14 @@
     android:theme="@style/Theme.PlaylistMaker.MediaLibrary"
     >
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerViewFavouriteTracks"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/dp_16"
+        />
+
     <ImageView
         android:id="@+id/icon_nothing_found"
         android:contentDescription="@string/icon_nothing_found"
@@ -14,7 +22,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/dp_120"
-        style="@style/IconNothingFound"/>
+        style="@style/IconNothingFound"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/placeholderMessage"
@@ -22,10 +31,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_20"
         android:textSize="@dimen/text_19"
+        android:text="@string/empty_medialibrary"
         android:textColor="?attr/text_color"
         android:fontFamily="@font/ys_display_medium"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/icon_nothing_found"
+        android:visibility="gone"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,6 +38,7 @@
     <style name="Theme.PlaylistMaker.MediaLibrary" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="text_color">@color/black</item>
         <item name="text_color_white_black">@color/white</item>
+        <item name="color_grey_white">@color/yp_text_grey</item>
     </style>
 
     <style name="Theme.PlaylistMaker.AudioPlayer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
