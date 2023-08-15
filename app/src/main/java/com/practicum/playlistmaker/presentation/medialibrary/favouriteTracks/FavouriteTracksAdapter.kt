@@ -8,13 +8,13 @@ import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLi
 
 class FavouriteTracksAdapter(): RecyclerView.Adapter<FavouriteTracksViewHolder>() {
     var tracks = emptyList<TrackDomainMediaLibrary>()
-    private var trackListener : onTrackClickListener? = null
+    private var trackListener : OnTrackClickListener? = null
 
-    interface onTrackClickListener {
+    interface OnTrackClickListener {
         fun onTrackClick(position: Int)
     }
 
-    fun setOnTrackClickListener(listener: onTrackClickListener){
+    fun setOnTrackClickListener(listener: OnTrackClickListener){
         trackListener = listener
     }
 

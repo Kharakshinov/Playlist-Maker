@@ -11,7 +11,7 @@ import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLi
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class FavouriteTracksViewHolder(itemView: View, listener: FavouriteTracksAdapter.onTrackClickListener?): RecyclerView.ViewHolder(itemView)  {
+class FavouriteTracksViewHolder(itemView: View, listener: FavouriteTracksAdapter.OnTrackClickListener?): RecyclerView.ViewHolder(itemView)  {
     private val photo: ImageView = itemView.findViewById(R.id.photoImageView)
     private val track: TextView = itemView.findViewById(R.id.track_name_TextView)
     private val author: TextView = itemView.findViewById(R.id.author_name)

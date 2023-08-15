@@ -24,4 +24,12 @@
     <string name="no_playlist">You haven\'t created\n any playlists</string>
     <string name="favourite_tracks">Favourite tracks</string>
     <string name="playlists">Playlists</string>
+    <string name="finish_creating_playlist">Finish creating a playlist?</string>
+    <string name="all_unsaved_data_will_be_lost">All unsaved data will be lost</string>
+    <string name="finish">Complete</string>
+    <string name="cancel">Cancel</string>
+    <string name="need_permission">Permission is required to upload a photo</string>
+    <string name="playlist_name">Name*</string>
+    <string name="playlist_description">Description</string>
+    <string name="create">Create</string>
 </resources>

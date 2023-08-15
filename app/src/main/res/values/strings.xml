@@ -44,4 +44,16 @@
     <string name="no_playlist">Вы не создали\n ни одного плейлиста</string>
     <string name="favourite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
+    <string name="playlist_photo_template" translatable="false">Шаблон для фото плейлиста</string>
+    <string name="finish_creating_playlist">Завершить создание плейлиста?</string>
+    <string name="all_unsaved_data_will_be_lost">Все несохраненные данные будут потеряны</string>
+    <string name="finish">Завершить</string>
+    <string name="cancel">Отмена</string>
+    <string name="photo_picker" translatable="false">PhotoPicker</string>
+    <string name="no_media_selected" translatable="false">No media selected</string>
+    <string name="myalbum" translatable="false">myalbum</string>
+    <string name="need_permission">Для загрузки фото требуется разрешение</string>
+    <string name="playlist_name">Название*</string>
+    <string name="playlist_description">Описание</string>
+    <string name="create">Создать</string>
 </resources>

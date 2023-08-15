@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,8 +25,12 @@ class PlaylistsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-                binding.placeholderMessage.text = requireActivity().getString(R.string.no_playlist)
-                binding.buttonNewPlaylist.visibility = View.VISIBLE
+            binding.placeholderMessage.text = requireActivity().getString(R.string.no_playlist)
+            binding.buttonNewPlaylist.visibility = View.VISIBLE
+
+        binding.buttonNewPlaylist.setOnClickListener(){
+            findNavController().navigate(R.id.action_mediaLibraryFragment_to_newPlaylistFragment)
+        }
     }
 
     override fun onDestroyView() {

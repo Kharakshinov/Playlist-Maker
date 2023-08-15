@@ -57,7 +57,7 @@ class FavouriteTracksFragment: Fragment() {
             }
         }
 
-        favouriteTracksAdapter.setOnTrackClickListener(object: FavouriteTracksAdapter.onTrackClickListener {
+        favouriteTracksAdapter.setOnTrackClickListener(object: FavouriteTracksAdapter.OnTrackClickListener {
             override fun onTrackClick(position: Int) {
                 if(clickDebounce()){
                     val chosenTrack = mapTrackDomainFromMediaLibraryToSearch(favouriteTracksAdapter.tracks[position])

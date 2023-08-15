@@ -8,7 +8,11 @@
         android:id="@+id/mediaLibraryFragment"
         android:name="com.practicum.playlistmaker.presentation.medialibrary.MediaLibraryFragment"
         android:label="fragment_media_library"
-        tools:layout="@layout/fragment_media_library" />
+        tools:layout="@layout/fragment_media_library" >
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.practicum.playlistmaker.presentation.search.SearchFragment"
@@ -19,4 +23,9 @@
         android:name="com.practicum.playlistmaker.presentation.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/newPlaylistFragment"
+        android:name="com.practicum.playlistmaker.presentation.medialibrary.playlists.newplaylist.NewPlaylistFragment"
+        android:label="fragment_new_playlist"
+        tools:layout="@layout/fragment_new_playlist" />
 </navigation>
