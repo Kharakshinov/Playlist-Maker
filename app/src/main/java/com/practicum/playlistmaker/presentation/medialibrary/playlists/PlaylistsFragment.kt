@@ -15,7 +15,7 @@ class PlaylistsFragment: Fragment() {
 
     private val viewModel: PlaylistsViewModel by viewModel()
 
-    private val playListsAdapter = PlaylistsAdapter()
+    private val playListsAdapterMedialibrary = PlaylistsAdapterMedialibrary()
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
@@ -35,8 +35,8 @@ class PlaylistsFragment: Fragment() {
         viewModel.state.observe(viewLifecycleOwner){ state ->
             when(state){
                 is PlaylistsState.Content -> {
-                    playListsAdapter.playlists = state.playlists
-                    playListsAdapter.notifyDataSetChanged()
+                    playListsAdapterMedialibrary.playlists = state.playlists
+                    playListsAdapterMedialibrary.notifyDataSetChanged()
                     binding.recyclerViewPlaylists.visibility = View.VISIBLE
                     binding.placeholderMessage.visibility = View.GONE
                     binding.iconNothingFound.visibility = View.GONE
@@ -67,7 +67,7 @@ class PlaylistsFragment: Fragment() {
     }
 
     private fun initAdapter() {
-        binding.recyclerViewPlaylists.adapter = playListsAdapter
+        binding.recyclerViewPlaylists.adapter = playListsAdapterMedialibrary
         binding.recyclerViewPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 }

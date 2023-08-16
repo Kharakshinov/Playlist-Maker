@@ -21,6 +21,7 @@
         <activity
             android:name=".presentation.audioplayer.AudioPlayerActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/Theme.PlaylistMaker.AudioPlayer">
             <meta-data
                 android:name="android.app.lib_name"

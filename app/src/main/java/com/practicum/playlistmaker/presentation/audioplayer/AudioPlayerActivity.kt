@@ -2,14 +2,22 @@ package com.practicum.playlistmaker.presentation.audioplayer
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentContainerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.audioplayer.model.TrackDomainAudioplayer
+import com.practicum.playlistmaker.presentation.medialibrary.playlists.PlaylistsState
+import com.practicum.playlistmaker.presentation.medialibrary.playlists.newplaylist.NewPlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -27,21 +35,32 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var playButton: ImageView
     private lateinit var pauseButton: ImageView
     private lateinit var addToFavouritesButton: ImageView
+    private lateinit var addToPlaylistButton: ImageView
     private lateinit var activeAddToFavouritesButton: ImageView
     private lateinit var trackTimePassed: TextView
     private lateinit var chosenTrack : TrackDomainAudioplayer
+    private lateinit var recyclerViewPlaylists: RecyclerView
+    private lateinit var bottomSheetContainer: LinearLayout
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var buttonNewPlaylist: Button
+    private lateinit var fragmentContainer: FragmentContainerView
+    private lateinit var overlay: View
     private lateinit var url: String
     private lateinit var extras: Bundle
     private val viewModel: AudioPlayerViewModel by viewModel()
+    private val playlistsAdapterAudioplayer = PlaylistsAdapterAudioplayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audioplayer)
         initView()
+        initAdapter()
         setChosenTrack()
         setTrackData()
+        bottomSheetBehavior()
         viewModel.startPreparingPlayer(url)
         viewModel.checkTrackInFavourites(chosenTrack)
+        viewModel.downloadPlaylists()
 
         viewModel.state.observe(this){ state ->
             when (state){
@@ -57,7 +76,6 @@ class AudioPlayerActivity : AppCompatActivity() {
                     updateTrackTimePassed(state.currentPosition)
                 }
             }
-
         }
 
         viewModel.favourites.observe(this){ state ->
@@ -67,6 +85,19 @@ class AudioPlayerActivity : AppCompatActivity() {
                 }
                 TrackState.NotLiked -> {
                     hideActiveAddToFavouritesButton()
+                }
+            }
+        }
+
+        viewModel.statePlaylists.observe(this){ state ->
+            when(state){
+                is PlaylistsState.Content -> {
+                    playlistsAdapterAudioplayer.playlists = state.playlists
+                    playlistsAdapterAudioplayer.notifyDataSetChanged()
+                    recyclerViewPlaylists.visibility = View.VISIBLE
+                }
+                PlaylistsState.Empty -> {
+                    recyclerViewPlaylists.visibility = View.GONE
                 }
             }
         }
@@ -81,6 +112,18 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         pauseButton.setOnClickListener{
             viewModel.onPauseButtonClicked()
+        }
+
+        addToPlaylistButton.setOnClickListener{
+            overlay.visibility = View.VISIBLE
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        buttonNewPlaylist.setOnClickListener{
+            val fragmentManager = supportFragmentManager
+            val fragment = NewPlaylistFragment()
+            fragmentManager.beginTransaction().add(R.id.rootFragmentContainerView, fragment).commit()
+            fragmentContainer.visibility = View.VISIBLE
         }
 
         addToFavouritesButton.setOnClickListener{
@@ -98,6 +141,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.pausePlayer()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.downloadPlaylists()
+    }
+
     private fun initView() {
         buttonGoBack = findViewById(R.id.button_go_back)
         trackImage = findViewById(R.id.track_image)
@@ -110,9 +158,15 @@ class AudioPlayerActivity : AppCompatActivity() {
         country = findViewById(R.id.track_country)
         playButton = findViewById(R.id.button_play_track)
         pauseButton = findViewById(R.id.button_pause_track)
+        addToPlaylistButton = findViewById(R.id.button_add_to_playlist)
         addToFavouritesButton = findViewById(R.id.button_add_to_favourites)
         activeAddToFavouritesButton = findViewById(R.id.button_add_to_favourites_activated)
         trackTimePassed  = findViewById(R.id.track_time_passed)
+        recyclerViewPlaylists = findViewById(R.id.recyclerViewPlaylists)
+        overlay = findViewById(R.id.overlay)
+        bottomSheetContainer = findViewById(R.id.standard_bottom_sheet)
+        buttonNewPlaylist = findViewById(R.id.button_new_playlist)
+        fragmentContainer = findViewById(R.id.rootFragmentContainerView)
     }
 
     private fun setChosenTrack(){
@@ -162,6 +216,34 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun hideActiveAddToFavouritesButton() {
         activeAddToFavouritesButton.visibility = View.GONE
+    }
+
+    private fun initAdapter() {
+        recyclerViewPlaylists.adapter = playlistsAdapterAudioplayer
+        recyclerViewPlaylists.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun bottomSheetBehavior(){
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
     }
 
     companion object {

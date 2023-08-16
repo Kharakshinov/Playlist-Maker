@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -25,6 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
+import com.practicum.playlistmaker.presentation.RootActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -36,8 +38,8 @@ class NewPlaylistFragment: Fragment() {
     private var _binding: FragmentNewPlaylistBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var bottomNavigationViewLine: View
+    private var bottomNavigationView: BottomNavigationView? = null
+    private var bottomNavigationViewLine: View? = null
 
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
@@ -76,7 +78,6 @@ class NewPlaylistFragment: Fragment() {
         }
 
         binding.buttonCreate.setOnClickListener{
-            findNavController().navigateUp()
             if(imageUri != null){
                 saveImageToPrivateStorage(imageUri!!)
             }
@@ -91,6 +92,7 @@ class NewPlaylistFragment: Fragment() {
                 )
             )
             showToast(binding.playlistName.text.toString())
+            navigateUp()
         }
 
         onBackPressedDispatcher()
@@ -190,7 +192,7 @@ class NewPlaylistFragment: Fragment() {
             .setNegativeButton(requireActivity().getString(R.string.cancel)) { _, _ ->
 
             }.setPositiveButton(requireActivity().getString(R.string.finish)) { _, _ ->
-                findNavController().navigateUp()
+                navigateUp()
             }
     }
 
@@ -198,7 +200,7 @@ class NewPlaylistFragment: Fragment() {
         if(imageUri != null || binding.playlistName.text.isNotEmpty() || binding.playlistDescription.text.isNotEmpty())
             confirmDialog.show()
         else
-            findNavController().navigateUp()
+            navigateUp()
     }
 
     private fun onBackPressedDispatcher(){
@@ -222,15 +224,19 @@ class NewPlaylistFragment: Fragment() {
     }
 
     private fun hideBottomNavigationView(){
-        bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigationView)
-        bottomNavigationViewLine = requireActivity().findViewById(R.id.bottomNavigationViewLine)
-        bottomNavigationView.visibility = View.GONE
-        bottomNavigationViewLine.visibility = View.GONE
+        if(activity is RootActivity){
+            bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigationView)
+            bottomNavigationViewLine = requireActivity().findViewById(R.id.bottomNavigationViewLine)
+            bottomNavigationView!!.visibility = View.GONE
+            bottomNavigationViewLine!!.visibility = View.GONE
+        }
     }
 
     private fun showBottomNavigationView(){
-        bottomNavigationView.visibility = View.VISIBLE
-        bottomNavigationViewLine.visibility = View.VISIBLE
+        if(activity is RootActivity){
+            bottomNavigationView!!.visibility = View.VISIBLE
+            bottomNavigationViewLine!!.visibility = View.VISIBLE
+        }
     }
 
     private fun setPlaylistPhoto(uri: Uri) {
@@ -239,5 +245,24 @@ class NewPlaylistFragment: Fragment() {
             .load(uri)
             .transform(RoundedCorners(radius))
             .into(binding.playlistPhotoTemplate)
+    }
+
+    private fun navigateUp(){
+        clearFields()
+        if (activity is RootActivity){
+            findNavController().navigateUp()
+        } else {
+            val audioplayerFragmentContainer = requireActivity().findViewById<FragmentContainerView>(R.id.rootFragmentContainerView)
+            if(audioplayerFragmentContainer.visibility == View.GONE){
+                requireActivity().finish()
+            }
+            audioplayerFragmentContainer.visibility = View.GONE
+        }
+    }
+
+    private fun clearFields(){
+        imageUri = null
+        binding.playlistName.setText("")
+        binding.playlistDescription.setText("")
     }
 }

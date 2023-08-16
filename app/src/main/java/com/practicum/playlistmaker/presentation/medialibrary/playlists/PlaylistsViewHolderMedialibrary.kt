@@ -9,7 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
 
-class PlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class PlaylistsViewHolderMedialibrary(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     private var playlistImage: ImageView = itemView.findViewById(R.id.photoPlaylist)
     private var playlistName: TextView = itemView.findViewById(R.id.playlist_name)
@@ -18,16 +18,16 @@ class PlaylistsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     fun bind(playlist: Playlist){
         playlistName.text = playlist.playlistName
 
-        var trackWordEnding = R.string.track
+        var trackWordEnding = "трек"
         when (playlist.addedTracksNumber % 20) {
             1 -> {
-                trackWordEnding = R.string.track
+                trackWordEnding = "трек"
             }
             in 2..4 -> {
-                trackWordEnding = R.string.track_a
+                trackWordEnding = "трека"
             }
             0, in 5..19 -> {
-                trackWordEnding = R.string.track_ov
+                trackWordEnding = "треков"
             }
         }
         numberTracks.text = "${playlist.addedTracksNumber} $trackWordEnding"
