@@ -12,6 +12,7 @@
     <dimen name="icon_padding_10">10dp</dimen>
     <dimen name="dp_0">0dp</dimen>
     <dimen name="dp_1">1dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
     <dimen name="dp_6">6dp</dimen>
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_11">11dp</dimen>
@@ -43,6 +44,8 @@
     <dimen name="dp_120">120dp</dimen>
     <dimen name="dp_134">134dp</dimen>
     <dimen name="dp_150">150dp</dimen>
+    <dimen name="dp_160">160dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
     <dimen name="dp_235">235dp</dimen>
     <dimen name="dp_246">246dp</dimen>
     <dimen name="dp_248">248dp</dimen>

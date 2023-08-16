@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -13,6 +14,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PlaylistsFragment: Fragment() {
 
     private val viewModel: PlaylistsViewModel by viewModel()
+
+    private val playListsAdapter = PlaylistsAdapter()
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
@@ -25,16 +28,46 @@ class PlaylistsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            binding.placeholderMessage.text = requireActivity().getString(R.string.no_playlist)
-            binding.buttonNewPlaylist.visibility = View.VISIBLE
+
+        initAdapter()
+        viewModel.downloadPlaylists()
+
+        viewModel.state.observe(viewLifecycleOwner){ state ->
+            when(state){
+                is PlaylistsState.Content -> {
+                    playListsAdapter.playlists = state.playlists
+                    playListsAdapter.notifyDataSetChanged()
+                    binding.recyclerViewPlaylists.visibility = View.VISIBLE
+                    binding.placeholderMessage.visibility = View.GONE
+                    binding.iconNothingFound.visibility = View.GONE
+                }
+                PlaylistsState.Empty -> {
+                    binding.recyclerViewPlaylists.visibility = View.GONE
+                    binding.placeholderMessage.visibility = View.VISIBLE
+                    binding.iconNothingFound.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        binding.buttonNewPlaylist.visibility = View.VISIBLE
 
         binding.buttonNewPlaylist.setOnClickListener(){
             findNavController().navigate(R.id.action_mediaLibraryFragment_to_newPlaylistFragment)
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.downloadPlaylists()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun initAdapter() {
+        binding.recyclerViewPlaylists.adapter = playListsAdapter
+        binding.recyclerViewPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 }

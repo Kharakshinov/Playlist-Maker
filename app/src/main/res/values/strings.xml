@@ -34,7 +34,11 @@
     <string name="my_email" translatable="false">d.kharakshinov@mail.ru</string>
     <string name="yandex_offer" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="image_album" translatable="false">Картинка альбома трека</string>
+    <string name="image_playlist" translatable="false">Картинка альбома плейлиста</string>
     <string name="track_time">Длительность</string>
+    <string name="track" translatable="false">трек</string>
+    <string name="track_a" translatable="false">трека</string>
+    <string name="track_ov" translatable="false">треков</string>
     <string name="album">Альбом</string>
     <string name="year">Год</string>
     <string name="genre">Жанр</string>

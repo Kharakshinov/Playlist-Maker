@@ -18,6 +18,8 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
@@ -155,7 +157,7 @@ class NewPlaylistFragment: Fragment() {
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     imageUri = uri
-                    binding.playlistPhotoTemplate.setImageURI(uri)
+                    setPlaylistPhoto(uri)
                 } else {
                     Log.d(requireActivity().getString(R.string.photo_picker), requireActivity().getString(R.string.no_media_selected))
                 }
@@ -229,5 +231,13 @@ class NewPlaylistFragment: Fragment() {
     private fun showBottomNavigationView(){
         bottomNavigationView.visibility = View.VISIBLE
         bottomNavigationViewLine.visibility = View.VISIBLE
+    }
+
+    private fun setPlaylistPhoto(uri: Uri) {
+        val radius = resources.getDimensionPixelSize(R.dimen.dp_8)
+        Glide.with(requireContext())
+            .load(uri)
+            .transform(RoundedCorners(radius))
+            .into(binding.playlistPhotoTemplate)
     }
 }
