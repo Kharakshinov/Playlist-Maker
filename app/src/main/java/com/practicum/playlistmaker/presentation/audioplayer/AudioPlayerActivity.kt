@@ -2,10 +2,7 @@ package com.practicum.playlistmaker.presentation.audioplayer
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +17,7 @@ import com.practicum.playlistmaker.presentation.medialibrary.playlists.Playlists
 import com.practicum.playlistmaker.presentation.medialibrary.playlists.newplaylist.NewPlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var buttonGoBack: ImageView
@@ -102,6 +99,18 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.trackToPlaylist.observe(this){ state ->
+            when(state){
+                is TrackToPlaylistState.InPlaylist -> showToastTrackInPlaylist(state.playlistName)
+                is TrackToPlaylistState.NotInPlaylist -> viewModel.addTrackToPlaylist(state.track, state.playlist)
+                is TrackToPlaylistState.SuccessfulAdd -> {
+                    showToastSuccessfullAdd(state.playlistName)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    viewModel.downloadPlaylists()
+                }
+            }
+        }
+
         buttonGoBack.setOnClickListener {
             finish()
         }
@@ -133,6 +142,13 @@ class AudioPlayerActivity : AppCompatActivity() {
         activeAddToFavouritesButton.setOnClickListener{
             viewModel.deleteTrackFromFavourites(chosenTrack)
         }
+
+        playlistsAdapterAudioplayer.setOnTrackClickListener(object: PlaylistsAdapterAudioplayer.OnTrackClickListener {
+            override fun onTrackClick(position: Int) {
+                val chosenPlaylist = playlistsAdapterAudioplayer.playlists[position]
+                viewModel.checkTrackInPlaylist(chosenTrack, chosenPlaylist)
+            }
+        })
 
     }
 
@@ -244,6 +260,18 @@ class AudioPlayerActivity : AppCompatActivity() {
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
+    }
+
+    private fun showToastTrackInPlaylist(playlistName: String){
+        val message = "Трек уже добавлен в плейлист $playlistName"
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
+            .show()
+    }
+
+    private fun showToastSuccessfullAdd(playlistName: String){
+        val message = "Добавлено в плейлист $playlistName"
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
+            .show()
     }
 
     companion object {

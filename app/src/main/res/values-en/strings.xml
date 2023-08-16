@@ -32,4 +32,6 @@
     <string name="playlist_name">Name*</string>
     <string name="playlist_description">Description</string>
     <string name="create">Create</string>
+    <string name="track_is_present_in_playlist">The track is already present in the selected playlist</string>
+    <string name="track_successfully_added_to_playlist">Track successfully added to playlist</string>
 </resources>

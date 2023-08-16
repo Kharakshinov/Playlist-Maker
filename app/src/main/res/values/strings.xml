@@ -60,4 +60,6 @@
     <string name="playlist_name">Название*</string>
     <string name="playlist_description">Описание</string>
     <string name="create">Создать</string>
+    <string name="track_is_present_in_playlist">Трек уже присутствует в выбранном плейлисте</string>
+    <string name="track_successfully_added_to_playlist">Трек успешно добавлен в плейлист</string>
 </resources>

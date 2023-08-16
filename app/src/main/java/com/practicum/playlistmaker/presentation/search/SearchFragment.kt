@@ -106,7 +106,7 @@ class SearchFragment: Fragment() {
         }
         binding.inputEditText.addTextChangedListener(simpleTextWatcher)
 
-        trackAdapter.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener {
+        trackAdapter.setOnTrackClickListener(object: TrackAdapter.OnTrackClickListener {
             override fun onTrackClick(position: Int) {
                 if(clickDebounce()){
                     val chosenTrack = trackAdapter.tracks[position]
@@ -119,7 +119,7 @@ class SearchFragment: Fragment() {
             }
         })
 
-        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener {
+        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.OnTrackClickListener {
             override fun onTrackClick(position: Int) {
                 if(clickDebounce()) {
                     val chosenTrack = trackAdapterHistory.tracks[position]

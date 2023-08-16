@@ -3,6 +3,8 @@ package com.practicum.playlistmaker.data.db.converters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.data.db.entity.PlaylistEntity
+import com.practicum.playlistmaker.data.db.entity.TrackToPlaylistEntity
+import com.practicum.playlistmaker.domain.audioplayer.model.TrackDomainAudioplayer
 import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
 
 class PlaylistDbConverter {
@@ -19,7 +21,7 @@ class PlaylistDbConverter {
     }
 
     fun map(playlistEntity: PlaylistEntity): Playlist{
-        val type = object: TypeToken<List<Long>>() {}.type
+        val type = object: TypeToken<ArrayList<Long>>() {}.type
         return Playlist(
             playlistEntity.playlistId,
             playlistEntity.playlistName,
@@ -27,6 +29,22 @@ class PlaylistDbConverter {
             playlistEntity.playlistImage,
             Gson().fromJson(playlistEntity.addedTracksId, type),
             playlistEntity.addedTracksNumber,
+        )
+    }
+
+    fun map(track: TrackDomainAudioplayer): TrackToPlaylistEntity {
+        return TrackToPlaylistEntity(
+            track.trackId,
+            track.trackName,
+            track.artistName,
+            track.trackTimeMillis,
+            track.artworkUrl100,
+            track.collectionName,
+            track.releaseDate,
+            track.primaryGenreName,
+            track.country,
+            track.previewUrl,
+            null
         )
     }
 }

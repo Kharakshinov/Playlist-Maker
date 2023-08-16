@@ -9,6 +9,7 @@ import com.practicum.playlistmaker.domain.audioplayer.TrackMediaPlayerInteractor
 import com.practicum.playlistmaker.domain.audioplayer.model.TrackDomainAudioplayer
 import com.practicum.playlistmaker.domain.db.FavouriteTracksInteractor
 import com.practicum.playlistmaker.domain.db.PlaylistsInteractor
+import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
 import com.practicum.playlistmaker.presentation.medialibrary.playlists.PlaylistsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,6 +34,9 @@ class AudioPlayerViewModel(
 
     private val _favourites = MutableLiveData<TrackState>()
     val favourites: LiveData<TrackState> = _favourites
+
+    private val _trackToPlaylist = MutableLiveData<TrackToPlaylistState>()
+    val trackToPlaylist: LiveData<TrackToPlaylistState> = _trackToPlaylist
 
     private var timerJob: Job? = null
 
@@ -154,6 +158,22 @@ class AudioPlayerViewModel(
                         else
                             _statePlaylists.postValue(PlaylistsState.Content(it))
                     }
+            }
+        }
+    }
+
+    fun checkTrackInPlaylist(chosenTrack: TrackDomainAudioplayer, chosenPlaylist: Playlist){
+        if(chosenPlaylist.addedTracksId.contains(chosenTrack.trackId))
+            _trackToPlaylist.postValue(TrackToPlaylistState.InPlaylist(chosenPlaylist.playlistName))
+        else
+            _trackToPlaylist.postValue(TrackToPlaylistState.NotInPlaylist(chosenTrack, chosenPlaylist))
+    }
+
+    fun addTrackToPlaylist(track: TrackDomainAudioplayer, chosenPlaylist: Playlist){
+        viewModelScope.launch{
+            withContext(Dispatchers.IO){
+                playlistsInteractor.putTrackInPlaylist(track, chosenPlaylist)
+                _trackToPlaylist.postValue(TrackToPlaylistState.SuccessfulAdd(chosenPlaylist.playlistName))
             }
         }
     }

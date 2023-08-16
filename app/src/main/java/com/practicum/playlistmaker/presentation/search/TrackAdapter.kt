@@ -9,13 +9,13 @@ import com.practicum.playlistmaker.domain.search.model.TrackDomainSearch
 class TrackAdapter(): RecyclerView.Adapter<TrackViewHolder> () {
 
     var tracks = ArrayList<TrackDomainSearch>()
-    private var trackListener : onTrackClickListener? = null
+    private var trackListener : OnTrackClickListener? = null
 
-    interface onTrackClickListener {
+    interface OnTrackClickListener {
         fun onTrackClick(position: Int)
     }
 
-    fun setOnTrackClickListener(listener: onTrackClickListener){
+    fun setOnTrackClickListener(listener: OnTrackClickListener){
         trackListener = listener
     }
 

@@ -5,6 +5,6 @@ data class Playlist (
     val playlistName: String,
     val playlistDescription: String?,
     val playlistImage: String?,
-    var addedTracksId: List<Long>,
+    var addedTracksId: ArrayList<Long>,
     var addedTracksNumber: Int,
 )

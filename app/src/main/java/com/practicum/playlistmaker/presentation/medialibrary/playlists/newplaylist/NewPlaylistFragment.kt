@@ -87,7 +87,7 @@ class NewPlaylistFragment: Fragment() {
                     playlistName = binding.playlistName.text.toString(),
                     playlistDescription = binding.playlistDescription.text.toString(),
                     playlistImage = fileString,
-                    addedTracksId = listOf(),
+                    addedTracksId = ArrayList(),
                     addedTracksNumber = 0,
                 )
             )
@@ -213,13 +213,13 @@ class NewPlaylistFragment: Fragment() {
 
     private fun showToast(playlistName: String){
         val message = "Плейлист $playlistName успешно создан"
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG)
+        Toast.makeText(requireActivity().applicationContext, message, Toast.LENGTH_LONG)
             .show()
     }
 
     private fun showToastNeedPermission(){
         val message = requireActivity().getString(R.string.need_permission)
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG)
+        Toast.makeText(requireActivity().applicationContext, message, Toast.LENGTH_LONG)
             .show()
     }
 
