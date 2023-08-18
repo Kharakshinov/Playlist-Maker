@@ -1,10 +1,13 @@
 package com.practicum.playlistmaker.presentation.medialibrary.playlists.newplaylist
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -18,15 +21,19 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.markodevcic.peko.PermissionRequester
+import com.markodevcic.peko.PermissionResult
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
 import com.practicum.playlistmaker.presentation.RootActivity
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -46,13 +53,7 @@ class NewPlaylistFragment: Fragment() {
     private var imageUri: Uri? = null
     private var fileString: String? = null
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean->
-        if (isGranted) {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        } else {
-            showToastNeedPermission()
-        }
-    }
+    private val requester = PermissionRequester.instance()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -70,7 +71,27 @@ class NewPlaylistFragment: Fragment() {
         hideBottomNavigationView()
 
         binding.playlistPhotoTemplate.setOnClickListener{
-            requestPermissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            lifecycleScope.launch {
+                if(Build.VERSION.SDK_INT >= 33){
+                    requester.request(android.Manifest.permission.READ_MEDIA_IMAGES)
+                } else {
+                    requester.request(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                }.collect { result ->
+                    when (result){
+                        is PermissionResult.Granted -> pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        is PermissionResult.Denied.NeedsRationale -> showToastNeedPermission()
+                        is PermissionResult.Denied.DeniedPermanently -> {
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.data = Uri.fromParts("package", requireContext().packageName, null)
+                            requireContext().startActivity(intent)
+                        }
+                        PermissionResult.Cancelled -> {
+                            return@collect
+                        }
+                    }
+                }
+            }
         }
 
         binding.buttonGoBack.setOnClickListener{
