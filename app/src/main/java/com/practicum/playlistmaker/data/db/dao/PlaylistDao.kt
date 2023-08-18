@@ -10,8 +10,8 @@ interface PlaylistDao {
     @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylist(playlist: PlaylistEntity)
 
-    @Delete(entity = PlaylistEntity::class)
-    fun deletePlaylistEntity(playlistEntity: PlaylistEntity)
+    @Query("DELETE FROM playlist_table WHERE playlist_id = :id")
+    fun deletePlaylistEntity(id: Int?)
 
     @Query("SELECT * FROM playlist_table")
     fun getPlaylists(): Flow<List<PlaylistEntity>>

@@ -15,7 +15,7 @@ class PlaylistsFragment: Fragment() {
 
     private val viewModel: PlaylistsViewModel by viewModel()
 
-    private val playListsAdapterMedialibrary = PlaylistsAdapterMedialibrary()
+    private val playListsAdapterMedialibrary: PlaylistsAdapterMedialibrary by lazy { PlaylistsAdapterMedialibrary() }
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!

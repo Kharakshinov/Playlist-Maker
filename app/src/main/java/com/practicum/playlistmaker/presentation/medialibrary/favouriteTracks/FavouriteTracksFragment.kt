@@ -21,7 +21,7 @@ class FavouriteTracksFragment: Fragment() {
 
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
-    private val favouriteTracksAdapter = FavouriteTracksAdapter()
+    private val favouriteTracksAdapter: FavouriteTracksAdapter by lazy{ FavouriteTracksAdapter() }
     private lateinit var historyList: ArrayList<TrackDomainSearch>
     private var isClickAllowed = true
 

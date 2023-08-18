@@ -30,8 +30,8 @@ class SearchFragment: Fragment() {
     }
 
     private val viewModel: SearchViewModel by viewModel()
-    private val trackAdapter = TrackAdapter()
-    private val trackAdapterHistory = TrackAdapter()
+    private val trackAdapter: TrackAdapter by lazy { TrackAdapter() }
+    private val trackAdapterHistory: TrackAdapter by lazy { TrackAdapter() }
     private var isClickAllowed = true
 
     private var _binding: FragmentSearchBinding? = null

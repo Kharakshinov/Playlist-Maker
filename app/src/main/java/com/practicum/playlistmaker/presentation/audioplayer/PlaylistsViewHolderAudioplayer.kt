@@ -24,19 +24,9 @@ class PlaylistsViewHolderAudioplayer(itemView: View, listener: PlaylistsAdapterA
     fun bind(playlist: Playlist){
         playlistName.text = playlist.playlistName
 
-        var trackWordEnding = "трек"
-        when (playlist.addedTracksNumber % 20) {
-            1 -> {
-                trackWordEnding = "трек"
-            }
-            in 2..4 -> {
-                trackWordEnding = "трека"
-            }
-            0, in 5..19 -> {
-                trackWordEnding = "треков"
-            }
-        }
-        numberTracks.text = "${playlist.addedTracksNumber} $trackWordEnding"
+        val trackWordEnding = itemView.resources.getQuantityString(R.plurals.plurals_1, playlist.addedTracksNumber, playlist.addedTracksNumber);
+
+        numberTracks.text = trackWordEnding
 
         val radius = itemView.resources.getDimensionPixelSize(R.dimen.dp_8)
         Glide.with(itemView)
