@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.PlaylistMaker.MediaLibrary"
-    >
+    android:theme="@style/Theme.PlaylistMaker.MediaLibrary">
 
     <Button
         android:id="@+id/button_new_playlist"
@@ -25,8 +24,7 @@
         android:fontFamily="@font/ys_display_medium"
         android:textAppearance="?attr/textAppearanceBody2"
         android:textFontWeight="500"
-        app:cornerRadius="@dimen/dp_54"
-        />
+        app:cornerRadius="@dimen/dp_54" />
 
     <ImageView
         android:id="@+id/icon_nothing_found"
@@ -44,9 +42,17 @@
         android:layout_marginTop="@dimen/dp_20"
         android:textSize="@dimen/text_19"
         android:textColor="?attr/text_color"
+        android:text="@string/no_playlist"
         android:fontFamily="@font/ys_display_medium"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/icon_nothing_found"
-        />
+        app:layout_constraintTop_toBottomOf="@id/icon_nothing_found"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlaylists"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_85"
+        android:layout_marginHorizontal="@dimen/dp_16"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

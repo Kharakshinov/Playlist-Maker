@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.util.app
 import android.app.Application
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatDelegate
+import com.markodevcic.peko.PermissionRequester
 import com.practicum.playlistmaker.di.audioplayer.audioPlayerDataModule
 import com.practicum.playlistmaker.di.audioplayer.audioPlayerDomainModule
 import com.practicum.playlistmaker.di.audioplayer.audioPlayerPresentationModule
@@ -22,6 +23,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        PermissionRequester.initialize(applicationContext)
 
         startKoin{
             androidContext(this@App)

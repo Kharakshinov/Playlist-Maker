@@ -21,7 +21,7 @@ class FavouriteTracksFragment: Fragment() {
 
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
-    private val favouriteTracksAdapter = FavouriteTracksAdapter()
+    private val favouriteTracksAdapter: FavouriteTracksAdapter by lazy{ FavouriteTracksAdapter() }
     private lateinit var historyList: ArrayList<TrackDomainSearch>
     private var isClickAllowed = true
 
@@ -57,7 +57,7 @@ class FavouriteTracksFragment: Fragment() {
             }
         }
 
-        favouriteTracksAdapter.setOnTrackClickListener(object: FavouriteTracksAdapter.onTrackClickListener {
+        favouriteTracksAdapter.setOnTrackClickListener(object: FavouriteTracksAdapter.OnTrackClickListener {
             override fun onTrackClick(position: Int) {
                 if(clickDebounce()){
                     val chosenTrack = mapTrackDomainFromMediaLibraryToSearch(favouriteTracksAdapter.tracks[position])

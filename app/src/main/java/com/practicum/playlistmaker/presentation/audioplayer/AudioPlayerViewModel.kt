@@ -8,6 +8,9 @@ import com.practicum.playlistmaker.domain.audioplayer.PlayerState
 import com.practicum.playlistmaker.domain.audioplayer.TrackMediaPlayerInteractor
 import com.practicum.playlistmaker.domain.audioplayer.model.TrackDomainAudioplayer
 import com.practicum.playlistmaker.domain.db.FavouriteTracksInteractor
+import com.practicum.playlistmaker.domain.db.PlaylistsInteractor
+import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
+import com.practicum.playlistmaker.presentation.medialibrary.playlists.PlaylistsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,7 +19,8 @@ import kotlinx.coroutines.withContext
 
 class AudioPlayerViewModel(
     private val trackMediaPlayerInteractor: TrackMediaPlayerInteractor,
-    private val favouriteTracksInteractor: FavouriteTracksInteractor
+    private val favouriteTracksInteractor: FavouriteTracksInteractor,
+    private val playlistsInteractor: PlaylistsInteractor,
 ): ViewModel() {
     private var isPlayerUsed = false
     private var isPlayerPrepared = false
@@ -25,8 +29,14 @@ class AudioPlayerViewModel(
     private val _state = MutableLiveData<AudioPlayerState>()
     val state: LiveData<AudioPlayerState> = _state
 
+    private val _statePlaylists = MutableLiveData<PlaylistsState>()
+    val statePlaylists: LiveData<PlaylistsState> = _statePlaylists
+
     private val _favourites = MutableLiveData<TrackState>()
     val favourites: LiveData<TrackState> = _favourites
+
+    private val _trackToPlaylist = MutableLiveData<TrackToPlaylistState>()
+    val trackToPlaylist: LiveData<TrackToPlaylistState> = _trackToPlaylist
 
     private var timerJob: Job? = null
 
@@ -133,6 +143,37 @@ class AudioPlayerViewModel(
             while (trackMediaPlayerInteractor.isPlaying()) {
                 delay(DELAY)
                 _state.postValue(AudioPlayerState.Play(showPlayerCurrentPosition()))
+            }
+        }
+    }
+
+    fun downloadPlaylists(){
+        viewModelScope.launch{
+            withContext(Dispatchers.IO){
+                playlistsInteractor
+                    .getPlaylists()
+                    .collect {
+                        if(it.isEmpty())
+                            _statePlaylists.postValue(PlaylistsState.Empty)
+                        else
+                            _statePlaylists.postValue(PlaylistsState.Content(it))
+                    }
+            }
+        }
+    }
+
+    fun checkTrackInPlaylist(chosenTrack: TrackDomainAudioplayer, chosenPlaylist: Playlist){
+        if(chosenPlaylist.addedTracksId.contains(chosenTrack.trackId))
+            _trackToPlaylist.postValue(TrackToPlaylistState.InPlaylist(chosenPlaylist.playlistName))
+        else
+            _trackToPlaylist.postValue(TrackToPlaylistState.NotInPlaylist(chosenTrack, chosenPlaylist))
+    }
+
+    fun addTrackToPlaylist(track: TrackDomainAudioplayer, chosenPlaylist: Playlist){
+        viewModelScope.launch{
+            withContext(Dispatchers.IO){
+                playlistsInteractor.putTrackInPlaylist(track, chosenPlaylist)
+                _trackToPlaylist.postValue(TrackToPlaylistState.SuccessfulAdd(chosenPlaylist.playlistName))
             }
         }
     }

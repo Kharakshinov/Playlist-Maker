@@ -19,6 +19,7 @@
         />
 
     <View
+        android:id="@+id/bottomNavigationViewLine"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/light_grey"

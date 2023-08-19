@@ -30,8 +30,8 @@ class SearchFragment: Fragment() {
     }
 
     private val viewModel: SearchViewModel by viewModel()
-    private val trackAdapter = TrackAdapter()
-    private val trackAdapterHistory = TrackAdapter()
+    private val trackAdapter: TrackAdapter by lazy { TrackAdapter() }
+    private val trackAdapterHistory: TrackAdapter by lazy { TrackAdapter() }
     private var isClickAllowed = true
 
     private var _binding: FragmentSearchBinding? = null
@@ -106,7 +106,7 @@ class SearchFragment: Fragment() {
         }
         binding.inputEditText.addTextChangedListener(simpleTextWatcher)
 
-        trackAdapter.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener {
+        trackAdapter.setOnTrackClickListener(object: TrackAdapter.OnTrackClickListener {
             override fun onTrackClick(position: Int) {
                 if(clickDebounce()){
                     val chosenTrack = trackAdapter.tracks[position]
@@ -119,7 +119,7 @@ class SearchFragment: Fragment() {
             }
         })
 
-        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.onTrackClickListener {
+        trackAdapterHistory.setOnTrackClickListener(object: TrackAdapter.OnTrackClickListener {
             override fun onTrackClick(position: Int) {
                 if(clickDebounce()) {
                     val chosenTrack = trackAdapterHistory.tracks[position]

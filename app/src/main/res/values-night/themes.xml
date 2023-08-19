@@ -41,8 +41,17 @@
         <item name="color_grey_white">@color/white</item>
     </style>
 
+    <style name="Theme.PlaylistMaker.NewPlaylist" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:background">@color/yp_black</item>
+        <item name="text_color">@color/white</item>
+        <item name="color_grey_white">@color/white</item>
+    </style>
+
     <style name="Theme.PlaylistMaker.AudioPlayer" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@color/yp_black</item>
         <item name="text_color">@color/white</item>
+        <item name="color_white_black">@color/yp_black</item>
+        <item name="color_light_grey_white">@color/white</item>
+        <item name="color_grey_white">@color/white</item>
     </style>
 </resources>

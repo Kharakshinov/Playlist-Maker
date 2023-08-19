@@ -2,7 +2,9 @@
 <resources>
     <attr name = "text_color" format = "reference"/>
     <attr name = "text_color_white_black" format = "reference"/>
+    <attr name = "color_white_black" format = "reference"/>
     <attr name = "color_grey_white" format = "reference"/>
+    <attr name = "color_light_grey_white" format = "reference"/>
     <attr name = "button_background_color" format = "reference"/>
     <attr name = "icon_color" format = "reference"/>
     <attr name = "search_color" format = "reference"/>

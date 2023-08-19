@@ -67,10 +67,11 @@
     <style name="IconGoBack">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:src">@drawable/icon_arrow_back</item>
+        <item name="android:src">@drawable/baseline_arrow_back_24</item>
         <item name="tint">?attr/text_color</item>
         <item name="iconGravity">textStart</item>
-        <item name="android:layout_marginTop">@dimen/margin_20</item>
+        <item name="android:layout_marginTop">@dimen/dp_16</item>
+        <item name="android:layout_marginStart">@dimen/dp_16</item>
     </style>
 
     <style name="IconNothingFound">
