@@ -23,6 +23,7 @@
     <string name="empty_medialibrary">Your media library is empty</string>
     <string name="no_playlist">You haven\'t created\n any playlists</string>
     <string name="favourite_tracks">Favourite tracks</string>
+    <string name="no_tracks">No tracks</string>
     <string name="playlists">Playlists</string>
     <string name="finish_creating_playlist">Finish creating a playlist?</string>
     <string name="all_unsaved_data_will_be_lost">All unsaved data will be lost</string>
@@ -34,4 +35,7 @@
     <string name="create">Create</string>
     <string name="track_is_present_in_playlist">The track is already present in the selected playlist</string>
     <string name="track_successfully_added_to_playlist">Track successfully added to playlist</string>
+    <string name="shure_to_delete_playlist">Are you sure you want to delete a track from your playlist?</string>
+    <string name="delete">Delete</string>
+    <string name="delete_track">Delete track</string>
 </resources>

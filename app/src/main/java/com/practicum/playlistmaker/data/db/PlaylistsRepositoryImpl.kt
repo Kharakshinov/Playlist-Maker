@@ -16,11 +16,11 @@ class PlaylistsRepositoryImpl(
 
 ): PlaylistsRepository {
     override fun getPlaylists(): Flow<List<Playlist>> {
-        return appDatabase.playlistDao().getPlaylists().map { playlists -> convertFromListPlaylistEntity(playlists) }
+        return appDatabase.playlistDao().getPlaylists().map { playlists -> convertFromListPlaylistEntityToListPlaylist(playlists) }
     }
 
     override suspend fun createPlaylist(playlist: Playlist) {
-        val playlistEntity = convertToPlaylistEntity(playlist)
+        val playlistEntity = convertFromPlaylistToPlaylistEntity(playlist)
         appDatabase.playlistDao().insertPlaylist(playlistEntity)
     }
 
@@ -29,11 +29,11 @@ class PlaylistsRepositoryImpl(
     }
 
     override suspend fun getPlaylist(playlistId: Int?): Playlist {
-        return convertFromPlaylistEntity(appDatabase.playlistDao().getPlaylistEntity(playlistId))
+        return convertFromPlaylistEntityToPlaylist(appDatabase.playlistDao().getPlaylistEntity(playlistId))
     }
 
     override suspend fun putTrackInPlaylist(track: TrackDomainAudioplayer, playlist: Playlist){
-        val trackToPlaylistEntity = convertToTrackToPlaylistEntity(track)
+        val trackToPlaylistEntity = convertFromTrackDomainAudioplayerToTrackToPlaylistEntity(track)
 
         playlist.addedTracksId.add(track.trackId)
         playlist.addedTracksNumber++
@@ -45,11 +45,32 @@ class PlaylistsRepositoryImpl(
         appDatabase.trackToPlaylistDao().insertTrack(trackToPlaylistEntity)
     }
 
-    override suspend fun getTracksInPlaylists(): List<TrackDomainMediaLibrary>{
-        return appDatabase.trackToPlaylistDao().getTracksInPlaylists().map{ tracksInPlaylists -> convertFromTrackToPlaylistEntity(tracksInPlaylists) }
+    override suspend fun deleteTrackFromPlaylist(track: TrackDomainMediaLibrary, playlist: Playlist){
+        playlist.addedTracksId.remove(track.trackId)
+        playlist.addedTracksNumber--
+        val newTracksId = playlist.addedTracksId.toString()
+        val addedTracksNumber = playlist.addedTracksNumber
+        val playlistId = playlist.playlistId
+        appDatabase.playlistDao().changeTracksList(newTracksId, playlistId!!, addedTracksNumber)
+
+        getPlaylists().collect {
+            var check = 0
+            it.forEach {
+                if(it.addedTracksId.contains(track.trackId))
+                    check++
+            }
+            if(check == 0){
+                val chosenTrackEntity = convertFromTrackDomainMediaLibraryToTrackToPlaylistEntity(track)
+                appDatabase.trackToPlaylistDao().deleteTrackEntity(chosenTrackEntity)
+            }
+        }
     }
 
-    override suspend fun getTracksInPlaylist(addedTracksId: ArrayList<Long>): List<TrackDomainMediaLibrary> {
+    override suspend fun getTracksInPlaylists(): List<TrackDomainMediaLibrary>{
+        return appDatabase.trackToPlaylistDao().getTracksInPlaylists().map{ tracksInPlaylists -> convertFromTrackToPlaylistEntityToTrackDomainMediaLibrary(tracksInPlaylists) }
+    }
+
+    override suspend fun getTracksInPlaylist(addedTracksId: ArrayList<Long>): ArrayList<TrackDomainMediaLibrary> {
         val tracksInPlaylists = getTracksInPlaylists()
         val tracksInPlaylist = arrayListOf<TrackDomainMediaLibrary>()
 
@@ -58,23 +79,27 @@ class PlaylistsRepositoryImpl(
         return tracksInPlaylist
     }
 
-    private fun convertFromPlaylistEntity(playlistEntity: PlaylistEntity): Playlist{
+    private fun convertFromPlaylistEntityToPlaylist(playlistEntity: PlaylistEntity): Playlist{
         return playlistDbConverter.map(playlistEntity)
     }
 
-    private fun convertFromListPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist>{
+    private fun convertFromListPlaylistEntityToListPlaylist(playlists: List<PlaylistEntity>): List<Playlist>{
         return playlists.map{ playlist -> playlistDbConverter.map(playlist)}
     }
 
-    private fun convertToPlaylistEntity(playlist: Playlist): PlaylistEntity{
+    private fun convertFromPlaylistToPlaylistEntity(playlist: Playlist): PlaylistEntity{
         return playlistDbConverter.map(playlist)
     }
 
-    private fun convertToTrackToPlaylistEntity(track: TrackDomainAudioplayer): TrackToPlaylistEntity{
+    private fun convertFromTrackDomainAudioplayerToTrackToPlaylistEntity(track: TrackDomainAudioplayer): TrackToPlaylistEntity{
         return playlistDbConverter.map(track)
     }
 
-    private fun convertFromTrackToPlaylistEntity(trackInPlaylist: TrackToPlaylistEntity): TrackDomainMediaLibrary{
+    private fun convertFromTrackDomainMediaLibraryToTrackToPlaylistEntity(track: TrackDomainMediaLibrary): TrackToPlaylistEntity{
+        return playlistDbConverter.map(track)
+    }
+
+    private fun convertFromTrackToPlaylistEntityToTrackDomainMediaLibrary(trackInPlaylist: TrackToPlaylistEntity): TrackDomainMediaLibrary{
         return playlistDbConverter.map(trackInPlaylist)
     }
 }

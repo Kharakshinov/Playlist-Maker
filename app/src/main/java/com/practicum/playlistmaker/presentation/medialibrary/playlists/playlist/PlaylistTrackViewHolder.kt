@@ -11,7 +11,11 @@ import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLi
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlaylistTrackViewHolder(itemView: View, listener: PlaylistTrackAdapter.OnTrackClickListener?): RecyclerView.ViewHolder(itemView)  {
+class PlaylistTrackViewHolder(
+    itemView: View,
+    listener: PlaylistTrackAdapter.OnTrackClickListener?,
+    listenerLong: PlaylistTrackAdapter.OnLongTrackClickListener?
+): RecyclerView.ViewHolder(itemView)  {
     private val photo: ImageView = itemView.findViewById(R.id.photoImageView)
     private val track: TextView = itemView.findViewById(R.id.track_name_TextView)
     private val author: TextView = itemView.findViewById(R.id.author_name)
@@ -22,6 +26,11 @@ class PlaylistTrackViewHolder(itemView: View, listener: PlaylistTrackAdapter.OnT
     init{
         itemView.setOnClickListener {
             listener?.onTrackClick(adapterPosition)
+        }
+
+        itemView.setOnLongClickListener(){
+            listenerLong?.onLongTrackClick(adapterPosition)
+            return@setOnLongClickListener true
         }
     }
 

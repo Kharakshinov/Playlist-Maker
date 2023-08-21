@@ -28,7 +28,11 @@ class PlaylistsInteractorImpl(
         playlistsRepository.putTrackInPlaylist(track, playlist)
     }
 
-    override suspend fun getTracksInPlaylist(addedTracksId: ArrayList<Long>): List<TrackDomainMediaLibrary> {
+    override suspend fun deleteTrackFromPlaylist(chosenTrack: TrackDomainMediaLibrary, playlist: Playlist){
+        playlistsRepository.deleteTrackFromPlaylist(chosenTrack, playlist)
+    }
+
+    override suspend fun getTracksInPlaylist(addedTracksId: ArrayList<Long>): ArrayList<TrackDomainMediaLibrary> {
         return playlistsRepository.getTracksInPlaylist(addedTracksId)
     }
 }

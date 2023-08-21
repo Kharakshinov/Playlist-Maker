@@ -21,6 +21,6 @@ val mediaLibraryPresentationModule = module {
     }
 
     viewModel{
-        PlaylistViewModel(get())
+        PlaylistViewModel(get(), get())
     }
 }

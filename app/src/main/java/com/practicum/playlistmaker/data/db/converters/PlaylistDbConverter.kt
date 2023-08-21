@@ -49,6 +49,22 @@ class PlaylistDbConverter {
         )
     }
 
+    fun map(track: TrackDomainMediaLibrary): TrackToPlaylistEntity {
+        return TrackToPlaylistEntity(
+            track.trackId,
+            track.trackName,
+            track.artistName,
+            track.trackTimeMillis,
+            track.artworkUrl100,
+            track.collectionName,
+            track.releaseDate,
+            track.primaryGenreName,
+            track.country,
+            track.previewUrl,
+            null
+        )
+    }
+
     fun map(trackInPlaylist: TrackToPlaylistEntity): TrackDomainMediaLibrary{
         return TrackDomainMediaLibrary(
             trackInPlaylist.trackId,

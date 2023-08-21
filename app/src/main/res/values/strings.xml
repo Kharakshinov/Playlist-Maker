@@ -48,6 +48,7 @@
     <string name="empty_medialibrary">Ваша медиатека пуста</string>
     <string name="no_playlist">Вы не создали\n ни одного плейлиста</string>
     <string name="favourite_tracks">Избранные треки</string>
+    <string name="no_tracks">Нет треков</string>
     <string name="playlists">Плейлисты</string>
     <string name="playlist_photo" translatable="false">Фото плейлиста</string>
     <string name="playlist_photo_template" translatable="false">Шаблон для фото плейлиста</string>
@@ -64,4 +65,7 @@
     <string name="create">Создать</string>
     <string name="track_is_present_in_playlist">Трек уже присутствует в выбранном плейлисте</string>
     <string name="track_successfully_added_to_playlist">Трек успешно добавлен в плейлист</string>
+    <string name="shure_to_delete_playlist">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="delete">Удалить</string>
+    <string name="delete_track">Удалить трек</string>
 </resources>
