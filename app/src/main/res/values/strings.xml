@@ -21,6 +21,7 @@
     <string name="hide_placeholders" translatable="false">Скрыть плейсхолдеры</string>
     <string name="icon_back" translatable="false">Иконка назад</string>
     <string name="icon_share" translatable="false">Иконка поделиться</string>
+    <string name="icon_more" translatable="false">Иконка подробнее</string>
     <string name="icon_support" translatable="false">Иконка поддержка</string>
     <string name="icon_clear" translatable="false">Иконка очистить</string>
     <string name="icon_search" translatable="false">Иконка Поиска</string>
@@ -48,6 +49,7 @@
     <string name="no_playlist">Вы не создали\n ни одного плейлиста</string>
     <string name="favourite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
+    <string name="playlist_photo" translatable="false">Фото плейлиста</string>
     <string name="playlist_photo_template" translatable="false">Шаблон для фото плейлиста</string>
     <string name="finish_creating_playlist">Завершить создание плейлиста?</string>
     <string name="all_unsaved_data_will_be_lost">Все несохраненные данные будут потеряны</string>

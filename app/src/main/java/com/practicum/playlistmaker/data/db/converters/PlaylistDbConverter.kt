@@ -6,6 +6,7 @@ import com.practicum.playlistmaker.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.data.db.entity.TrackToPlaylistEntity
 import com.practicum.playlistmaker.domain.audioplayer.model.TrackDomainAudioplayer
 import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
+import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLibrary
 
 class PlaylistDbConverter {
 
@@ -44,6 +45,22 @@ class PlaylistDbConverter {
             track.primaryGenreName,
             track.country,
             track.previewUrl,
+            null
+        )
+    }
+
+    fun map(trackInPlaylist: TrackToPlaylistEntity): TrackDomainMediaLibrary{
+        return TrackDomainMediaLibrary(
+            trackInPlaylist.trackId,
+            trackInPlaylist.trackName,
+            trackInPlaylist.artistName,
+            trackInPlaylist.trackTimeMillis,
+            trackInPlaylist.artworkUrl100,
+            trackInPlaylist.collectionName,
+            trackInPlaylist.releaseDate,
+            trackInPlaylist.primaryGenreName,
+            trackInPlaylist.country,
+            trackInPlaylist.previewUrl,
             null
         )
     }
