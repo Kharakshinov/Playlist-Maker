@@ -9,6 +9,7 @@ import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
 import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLibrary
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Date
 
 class PlaylistsRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -34,12 +35,22 @@ class PlaylistsRepositoryImpl(
         }
     }
 
+    override suspend fun editPlaylist(
+        playlistId: Int?,
+        playlistName: String,
+        playlistDescription: String,
+        playlistImage: String?
+    ) {
+        appDatabase.playlistDao().editPlaylist(playlistId, playlistName, playlistDescription, playlistImage)
+    }
+
     override suspend fun getPlaylist(playlistId: Int?): Playlist {
         return convertFromPlaylistEntityToPlaylist(appDatabase.playlistDao().getPlaylistEntity(playlistId))
     }
 
     override suspend fun putTrackInPlaylist(track: TrackDomainAudioplayer, playlist: Playlist){
         val trackToPlaylistEntity = convertFromTrackDomainAudioplayerToTrackToPlaylistEntity(track)
+        trackToPlaylistEntity.timeSaved = Date().time
 
         playlist.addedTracksId.add(track.trackId)
         playlist.addedTracksNumber++

@@ -39,11 +39,12 @@ class PlaylistTrackViewHolder(
         length.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
         author.text = item.artistName
 
+        val radius = itemView.resources.getDimensionPixelSize(R.dimen.dp_2)
         Glide.with(itemView)
-            .load(item.artworkUrl100)
+            .load(item.artworkUrl100.replaceAfterLast('/',"60x60bb.jpg"))
             .centerInside()
             .placeholder(R.drawable.icon_no_reply)
-            .transform(RoundedCorners(5))
+            .transform(RoundedCorners(radius))
             .into(photo)
 
         Glide.with(itemView)

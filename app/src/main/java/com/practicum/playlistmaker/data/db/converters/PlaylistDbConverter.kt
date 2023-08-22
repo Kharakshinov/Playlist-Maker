@@ -77,7 +77,7 @@ class PlaylistDbConverter {
             trackInPlaylist.primaryGenreName,
             trackInPlaylist.country,
             trackInPlaylist.previewUrl,
-            null
+            trackInPlaylist.timeSaved
         )
     }
 }

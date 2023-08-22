@@ -34,15 +34,15 @@ class PlaylistViewModel(
     }
 
     fun getTracksInPlaylist(addedTracksId: ArrayList<Long>){
-        lateinit var tracks: ArrayList<TrackDomainMediaLibrary>
         viewModelScope.launch{
             withContext(Dispatchers.IO){
-               tracks = playlistsInteractor
+               val tracks = playlistsInteractor
                     .getTracksInPlaylist(addedTracksId)
-                if(tracks.isEmpty())
+                val sortedTracks = ArrayList(tracks.sortedByDescending { it.timeSaved })
+                if(sortedTracks.isEmpty())
                     _tracks.postValue(TracksInPlaylistState.Empty)
                 else
-                    _tracks.postValue(TracksInPlaylistState.Content(tracks))
+                    _tracks.postValue(TracksInPlaylistState.Content(sortedTracks))
             }
         }
     }

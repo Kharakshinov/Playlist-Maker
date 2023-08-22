@@ -20,6 +20,20 @@ class PlaylistsInteractorImpl(
         playlistsRepository.deletePlaylist(playlistId)
     }
 
+    override suspend fun editPlaylist(
+        playlistId: Int?,
+        playlistName: String,
+        playlistDescription: String,
+        playlistImage: String?
+    ) {
+        playlistsRepository.editPlaylist(
+            playlistId,
+            playlistName,
+            playlistDescription,
+            playlistImage
+        )
+    }
+
     override suspend fun getPlaylist(playlistId: Int?): Playlist{
        return playlistsRepository.getPlaylist(playlistId)
     }
