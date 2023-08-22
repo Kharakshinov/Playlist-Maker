@@ -8,7 +8,7 @@
     <string name="media_library">Медиатека</string>
     <string name="settings">Настройки</string>
     <string name="black_theme">Темная тема</string>
-    <string name="share">Поделиться приложением</string>
+    <string name="share_application">Поделиться приложением</string>
     <string name="add_to_playlist" translatable="false">Добавить в плейлист</string>
     <string name="add_to_favourites" translatable="false">Добавить в избранные</string>
     <string name="button_play_track" translatable="false">Кнопка включить трек</string>
@@ -68,4 +68,10 @@
     <string name="shure_to_delete_playlist">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="delete">Удалить</string>
     <string name="delete_track">Удалить трек</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="no_tracks_in_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="share">Поделиться</string>
+    <string name="change_info">Редактировать информацию</string>
+    <string name="no">Нет</string>
+    <string name="yes">Да</string>
 </resources>

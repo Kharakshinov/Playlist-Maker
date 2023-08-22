@@ -55,6 +55,14 @@ class PlaylistViewModel(
         }
     }
 
+    fun deletePlaylist(playlistId: Int?){
+        viewModelScope.launch{
+            withContext(Dispatchers.IO){
+                playlistsInteractor.deletePlaylist(playlistId)
+            }
+        }
+    }
+
     fun readFromSharedPreferences(): ArrayList<TrackDomainSearch>{
         return mediaLibraryInteractor.readFromSharedPreferences()
     }
@@ -62,5 +70,4 @@ class PlaylistViewModel(
     fun writeToSharedPreferences(trackList: ArrayList<TrackDomainSearch>){
         mediaLibraryInteractor.writeToSharedPreferences(trackList)
     }
-
 }

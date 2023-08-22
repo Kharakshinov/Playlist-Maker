@@ -26,6 +26,12 @@ class PlaylistsRepositoryImpl(
 
     override suspend fun deletePlaylist(playlistId: Int?) {
         appDatabase.playlistDao().deletePlaylistEntity(playlistId)
+
+        val tracksInPlaylists = getTracksInPlaylists()
+        getPlaylists().collect{
+            val playlists = it
+            tracksInPlaylists.forEach { checkTrackInPlaylists(it, playlists) }
+        }
     }
 
     override suspend fun getPlaylist(playlistId: Int?): Playlist {
@@ -53,9 +59,14 @@ class PlaylistsRepositoryImpl(
         val playlistId = playlist.playlistId
         appDatabase.playlistDao().changeTracksList(newTracksId, playlistId!!, addedTracksNumber)
 
-        getPlaylists().collect {
+        getPlaylists().collect{
+            checkTrackInPlaylists(track, it)
+        }
+    }
+
+    private fun checkTrackInPlaylists(track: TrackDomainMediaLibrary, playlists: List<Playlist>){
             var check = 0
-            it.forEach {
+            playlists.forEach {
                 if(it.addedTracksId.contains(track.trackId))
                     check++
             }
@@ -63,7 +74,6 @@ class PlaylistsRepositoryImpl(
                 val chosenTrackEntity = convertFromTrackDomainMediaLibraryToTrackToPlaylistEntity(track)
                 appDatabase.trackToPlaylistDao().deleteTrackEntity(chosenTrackEntity)
             }
-        }
     }
 
     override suspend fun getTracksInPlaylists(): List<TrackDomainMediaLibrary>{

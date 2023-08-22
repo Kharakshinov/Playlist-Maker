@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -25,6 +27,8 @@ import com.practicum.playlistmaker.presentation.search.SearchFragment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistFragment: Fragment() {
 
@@ -39,9 +43,12 @@ class PlaylistFragment: Fragment() {
     private var bottomNavigationView: BottomNavigationView? = null
     private var bottomNavigationViewLine: View? = null
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+    private lateinit var bottomSheetFixed: BottomSheetBehavior<LinearLayout>
+    private lateinit var bottomSheetMenu: BottomSheetBehavior<LinearLayout>
     private lateinit var chosenPlaylist: Playlist
-    private lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private lateinit var confirmDialogDeleteTrack: MaterialAlertDialogBuilder
+    private lateinit var confirmDialogDeletePlaylist: MaterialAlertDialogBuilder
+    private var trackWordEnding = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -55,8 +62,7 @@ class PlaylistFragment: Fragment() {
         initAdapter()
         bottomSheetBehavior()
 
-        val playlistId = requireArguments().getInt(PLAYLIST_ID)
-        viewModel.getPlaylistById(playlistId)
+        viewModel.getPlaylistById(requireArguments().getInt(PLAYLIST_ID))
 
         viewModel.state.observe(viewLifecycleOwner){ state ->
             when(state){
@@ -84,12 +90,7 @@ class PlaylistFragment: Fragment() {
             }
         }
 
-        binding.buttonGoBack.setOnClickListener{
-            findNavController().navigateUp()
-        }
-
-        setOnTrackClickListener()
-        setOnLongTrackClickListener()
+        clickListeners()
     }
 
     override fun onResume() {
@@ -122,11 +123,32 @@ class PlaylistFragment: Fragment() {
     }
 
     private fun bottomSheetBehavior(){
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet).apply {
+        bottomSheetFixed = BottomSheetBehavior.from(binding.standardBottomSheet).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
         val bottomSheetPeekHeight = (resources.displayMetrics.heightPixels*0.3).toInt()
-        bottomSheetBehavior.peekHeight = bottomSheetPeekHeight
+        bottomSheetFixed.peekHeight = bottomSheetPeekHeight
+
+        bottomSheetMenu = BottomSheetBehavior.from(binding.menuBottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetMenu.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
     }
 
     private fun initView(){
@@ -145,8 +167,41 @@ class PlaylistFragment: Fragment() {
             trackTimeSumMin, trackTimeSumMin)
         binding.playlistTime.text = trackTimeSumEnding
 
-        val trackWordEnding = resources.getQuantityString(R.plurals.plurals_1, chosenPlaylist.addedTracksNumber, chosenPlaylist.addedTracksNumber)
+        trackWordEnding = resources.getQuantityString(R.plurals.plurals_1, chosenPlaylist.addedTracksNumber, chosenPlaylist.addedTracksNumber)
         binding.playlistTracksNumber.text = trackWordEnding
+    }
+
+    private fun showToast(){
+        val message = requireActivity().getString(R.string.no_tracks_in_playlist)
+        Toast.makeText(requireActivity().applicationContext, message, Toast.LENGTH_LONG)
+            .show()
+    }
+
+    private fun clickListeners(){
+        binding.buttonGoBack.setOnClickListener{
+            findNavController().navigateUp()
+        }
+
+        binding.iconShare.setOnClickListener{
+            shareTracks()
+        }
+
+        binding.iconMore.setOnClickListener{
+            bottomSheetMenu.state = BottomSheetBehavior.STATE_COLLAPSED
+            initBottomSheetMenu()
+        }
+
+        binding.bottomSheetButtonShare.setOnClickListener{
+            shareTracks()
+        }
+
+        binding.bottomSheetButtonDeletePlaylist.setOnClickListener{
+            setConfirmDialogDeletePlaylist(chosenPlaylist)
+            confirmDialogDeletePlaylist.show()
+        }
+
+        setOnTrackClickListener()
+        setOnLongTrackClickListener()
     }
 
     private fun setOnTrackClickListener(){
@@ -167,14 +222,14 @@ class PlaylistFragment: Fragment() {
     private fun setOnLongTrackClickListener(){
         trackAdapter.setOnLongClickListener(object: PlaylistTrackAdapter.OnLongTrackClickListener {
             override fun onLongTrackClick(position: Int) {
-                setConfirmDialog(trackAdapter.tracks[position])
-                confirmDialog.show()
+                setConfirmDialogDeleteTrack(trackAdapter.tracks[position])
+                confirmDialogDeleteTrack.show()
             }
         })
     }
 
-    private fun setConfirmDialog(chosenTrack: TrackDomainMediaLibrary){
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+    private fun setConfirmDialogDeleteTrack(chosenTrack: TrackDomainMediaLibrary){
+        confirmDialogDeleteTrack = MaterialAlertDialogBuilder(requireContext())
             .setTitle(requireActivity().getString(R.string.delete_track))
             .setMessage(requireActivity().getString(R.string.shure_to_delete_playlist))
             .setNegativeButton(requireActivity().getString(R.string.cancel)) { _, _ ->
@@ -182,6 +237,17 @@ class PlaylistFragment: Fragment() {
             }.setPositiveButton(requireActivity().getString(R.string.delete)) { _, _ ->
                 viewModel.deleteTrackFromPlaylist(chosenTrack, chosenPlaylist)
                 viewModel.getTracksInPlaylist(chosenPlaylist.addedTracksId)
+            }
+    }
+
+    private fun setConfirmDialogDeletePlaylist(chosenPlaylist: Playlist){
+        confirmDialogDeletePlaylist = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Хотите удалить плейлист \"${chosenPlaylist.playlistName}\"?")
+            .setNegativeButton(requireActivity().getString(R.string.no)) { _, _ ->
+
+            }.setPositiveButton(requireActivity().getString(R.string.yes)) { _, _ ->
+                viewModel.deletePlaylist(chosenPlaylist.playlistId)
+                findNavController().navigateUp()
             }
     }
 
@@ -235,6 +301,43 @@ class PlaylistFragment: Fragment() {
             }
         }
         viewModel.writeToSharedPreferences(historyList)
+    }
+
+    private fun shareTracks() {
+        if(trackAdapter.tracks.isEmpty()){
+            showToast()
+        } else {
+            val trackWordEnding = resources.getQuantityString(R.plurals.plurals_1, chosenPlaylist.addedTracksNumber, chosenPlaylist.addedTracksNumber)
+
+            var number = 1
+            var tracksTable = ""
+            while(number <= chosenPlaylist.addedTracksNumber){
+                tracksTable += "$number. ${trackAdapter.tracks[number - 1].artistName} - ${trackAdapter.tracks[number - 1].trackName} - ${SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackAdapter.tracks[number - 1].trackTimeMillis)}\n"
+                number++
+            }
+
+            val tracksInfo = "${chosenPlaylist.playlistName}\n${chosenPlaylist.playlistDescription}\n$trackWordEnding\n$tracksTable"
+            val sendIntent : Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, tracksInfo)
+                type = "text/plain"
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            requireActivity().startActivity(shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
+    }
+
+    private fun initBottomSheetMenu(){
+        val radius = resources.getDimensionPixelSize(R.dimen.dp_2)
+        Glide.with(requireContext())
+            .load(chosenPlaylist.playlistImage)
+            .centerInside()
+            .placeholder(R.drawable.icon_no_reply)
+            .transform(RoundedCorners(radius))
+            .into(binding.bottomSheetPlaylistPhoto)
+
+        binding.bottomSheetPlaylistName.text = chosenPlaylist.playlistName
+        binding.bottomSheetTracksNumber.text = trackWordEnding
     }
 
     companion object {

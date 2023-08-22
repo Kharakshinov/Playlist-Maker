@@ -7,7 +7,7 @@
     <string name="media_library">Media library</string>
     <string name="settings">Settings</string>
     <string name="black_theme">Black theme</string>
-    <string name="share">Share app</string>
+    <string name="share_application">Share app</string>
     <string name="write_support">Write to support</string>
     <string name="user_agreement">User agreement</string>
     <string name="refresh">Refresh</string>
@@ -38,4 +38,10 @@
     <string name="shure_to_delete_playlist">Are you sure you want to delete a track from your playlist?</string>
     <string name="delete">Delete</string>
     <string name="delete_track">Delete track</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="no_tracks_in_playlist">There is no track list to share in this playlist</string>
+    <string name="share">Share</string>
+    <string name="change_info">Edit Information</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>
