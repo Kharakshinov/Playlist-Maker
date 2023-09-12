@@ -38,20 +38,20 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
-class NewPlaylistFragment: Fragment() {
+open class NewPlaylistFragment: Fragment() {
 
     private val viewModel: NewPlaylistViewModel by viewModel()
 
     private var _binding: FragmentNewPlaylistBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     private var bottomNavigationView: BottomNavigationView? = null
     private var bottomNavigationViewLine: View? = null
 
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
     private lateinit var pickMedia : ActivityResultLauncher<PickVisualMediaRequest>
-    private var imageUri: Uri? = null
-    private var fileString: String? = null
+    var imageUri: Uri? = null
+    var fileString: String? = null
 
     private val requester = PermissionRequester.instance()
 
@@ -69,7 +69,86 @@ class NewPlaylistFragment: Fragment() {
         setConfirmDialog()
         setPickMedia()
         hideBottomNavigationView()
+        clickListeners()
+        onBackPressedDispatcher()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        hideBottomNavigationView()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        showBottomNavigationView()
+        _binding = null
+    }
+
+    fun setPlaylistNameTextWatcher(){
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.isNullOrEmpty()){
+                    binding.buttonCreate.isEnabled = false
+                    binding.playlistName.isActivated = false
+                    binding.nameActiveText.visibility = View.GONE
+                } else{
+                    binding.buttonCreate.isEnabled = true
+                    binding.playlistName.isActivated = true
+                    binding.nameActiveText.visibility = View.VISIBLE
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        }
+        binding.playlistName.addTextChangedListener(simpleTextWatcher)
+    }
+
+    fun setPlaylistDescriptionTextWatcher(){
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.isNullOrEmpty()){
+                    binding.playlistDescription.isActivated = false
+                    binding.descriptionActiveText.visibility = View.GONE
+                } else {
+                    binding.playlistDescription.isActivated = true
+                    binding.descriptionActiveText.visibility = View.VISIBLE
+                }
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        }
+        binding.playlistDescription.addTextChangedListener(simpleTextWatcher)
+    }
+
+    fun setPickMedia(){
+        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    imageUri = uri
+                    setPlaylistPhoto(uri)
+                } else {
+                    Log.d(requireActivity().getString(R.string.photo_picker), requireActivity().getString(R.string.no_media_selected))
+                }
+            }
+    }
+
+    open fun clickListeners(){
+        binding.buttonGoBack.setOnClickListener{
+            backPressedLogic()
+        }
+        buttonCreateClickListener()
+        playlistPhotoClickListener()
+    }
+
+    fun playlistPhotoClickListener(){
         binding.playlistPhotoTemplate.setOnClickListener{
             lifecycleScope.launch {
                 if(Build.VERSION.SDK_INT >= 33){
@@ -93,11 +172,9 @@ class NewPlaylistFragment: Fragment() {
                 }
             }
         }
+    }
 
-        binding.buttonGoBack.setOnClickListener{
-            backPressedLogic()
-        }
-
+    open fun buttonCreateClickListener(){
         binding.buttonCreate.setOnClickListener{
             if(imageUri != null){
                 saveImageToPrivateStorage(imageUri!!)
@@ -115,79 +192,9 @@ class NewPlaylistFragment: Fragment() {
             showToast(binding.playlistName.text.toString())
             navigateUp()
         }
-
-        onBackPressedDispatcher()
     }
 
-    override fun onResume() {
-        super.onResume()
-        onBackPressedDispatcher()
-        hideBottomNavigationView()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        showBottomNavigationView()
-        _binding = null
-    }
-
-    private fun setPlaylistNameTextWatcher(){
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.isNullOrEmpty()){
-                    binding.buttonCreate.isEnabled = false
-                    binding.playlistName.isActivated = false
-                    binding.nameActiveText.visibility = View.GONE
-                } else{
-                    binding.buttonCreate.isEnabled = true
-                    binding.playlistName.isActivated = true
-                    binding.nameActiveText.visibility = View.VISIBLE
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        }
-        binding.playlistName.addTextChangedListener(simpleTextWatcher)
-    }
-
-    private fun setPlaylistDescriptionTextWatcher(){
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.isNullOrEmpty()){
-                    binding.playlistDescription.isActivated = false
-                    binding.descriptionActiveText.visibility = View.GONE
-                } else {
-                    binding.playlistDescription.isActivated = true
-                    binding.descriptionActiveText.visibility = View.VISIBLE
-                }
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        }
-        binding.playlistDescription.addTextChangedListener(simpleTextWatcher)
-    }
-
-    private fun setPickMedia(){
-        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                if (uri != null) {
-                    imageUri = uri
-                    setPlaylistPhoto(uri)
-                } else {
-                    Log.d(requireActivity().getString(R.string.photo_picker), requireActivity().getString(R.string.no_media_selected))
-                }
-            }
-    }
-
-    private fun saveImageToPrivateStorage(uri: Uri) {
+    fun saveImageToPrivateStorage(uri: Uri) {
         val filePath = File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), requireActivity().getString(R.string.myalbum))
         if (!filePath.exists()){
             filePath.mkdirs()

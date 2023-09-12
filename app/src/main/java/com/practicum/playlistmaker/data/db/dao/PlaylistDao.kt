@@ -13,6 +13,12 @@ interface PlaylistDao {
     @Query("DELETE FROM playlist_table WHERE playlist_id = :id")
     fun deletePlaylistEntity(id: Int?)
 
+    @Query("UPDATE playlist_table SET playlist_id =:id, playlistName =:name, playlistDescription =:description, playlistImage =:image WHERE playlist_id = :id")
+    fun editPlaylist(id: Int?, name: String, description: String, image: String?)
+
+    @Query("SELECT * FROM playlist_table WHERE playlist_id = :id")
+    fun getPlaylistEntity(id: Int?): PlaylistEntity
+
     @Query("SELECT * FROM playlist_table")
     fun getPlaylists(): Flow<List<PlaylistEntity>>
 

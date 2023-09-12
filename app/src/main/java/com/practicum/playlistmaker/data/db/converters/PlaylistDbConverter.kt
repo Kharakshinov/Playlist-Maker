@@ -6,11 +6,11 @@ import com.practicum.playlistmaker.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.data.db.entity.TrackToPlaylistEntity
 import com.practicum.playlistmaker.domain.audioplayer.model.TrackDomainAudioplayer
 import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
+import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLibrary
 
 class PlaylistDbConverter {
 
-    fun map(playlist: Playlist): PlaylistEntity{
-        return PlaylistEntity(
+    fun map(playlist: Playlist) = PlaylistEntity(
             playlist.playlistId,
             playlist.playlistName,
             playlist.playlistDescription,
@@ -18,7 +18,7 @@ class PlaylistDbConverter {
             Gson().toJson(playlist.addedTracksId),
             playlist.addedTracksNumber,
         )
-    }
+
 
     fun map(playlistEntity: PlaylistEntity): Playlist{
         val type = object: TypeToken<ArrayList<Long>>() {}.type
@@ -32,8 +32,7 @@ class PlaylistDbConverter {
         )
     }
 
-    fun map(track: TrackDomainAudioplayer): TrackToPlaylistEntity {
-        return TrackToPlaylistEntity(
+    fun map(track: TrackDomainAudioplayer) = TrackToPlaylistEntity(
             track.trackId,
             track.trackName,
             track.artistName,
@@ -46,5 +45,32 @@ class PlaylistDbConverter {
             track.previewUrl,
             null
         )
-    }
+
+    fun map(track: TrackDomainMediaLibrary) = TrackToPlaylistEntity(
+            track.trackId,
+            track.trackName,
+            track.artistName,
+            track.trackTimeMillis,
+            track.artworkUrl100,
+            track.collectionName,
+            track.releaseDate,
+            track.primaryGenreName,
+            track.country,
+            track.previewUrl,
+            null
+        )
+
+    fun map(trackInPlaylist: TrackToPlaylistEntity) = TrackDomainMediaLibrary(
+            trackInPlaylist.trackId,
+            trackInPlaylist.trackName,
+            trackInPlaylist.artistName,
+            trackInPlaylist.trackTimeMillis,
+            trackInPlaylist.artworkUrl100,
+            trackInPlaylist.collectionName,
+            trackInPlaylist.releaseDate,
+            trackInPlaylist.primaryGenreName,
+            trackInPlaylist.country,
+            trackInPlaylist.previewUrl,
+            trackInPlaylist.timeSaved
+        )
 }

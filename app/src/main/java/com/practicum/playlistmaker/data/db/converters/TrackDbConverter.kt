@@ -6,8 +6,7 @@ import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLi
 
 class TrackDbConverter {
 
-    fun map(track: TrackDomainAudioplayer): TrackEntity {
-        return TrackEntity(
+    fun map(track: TrackDomainAudioplayer) = TrackEntity(
             track.trackId,
             track.trackName,
             track.artistName,
@@ -20,10 +19,8 @@ class TrackDbConverter {
             track.previewUrl,
             null
         )
-    }
 
-    fun map(trackEntity: TrackEntity): TrackDomainMediaLibrary {
-        return TrackDomainMediaLibrary(
+    fun map(trackEntity: TrackEntity) = TrackDomainMediaLibrary(
             trackEntity.trackId,
             trackEntity.trackName,
             trackEntity.artistName,
@@ -36,5 +33,4 @@ class TrackDbConverter {
             trackEntity.previewUrl,
             trackEntity.timeSaved
         )
-    }
 }

@@ -9,11 +9,17 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.domain.medialibrary.models.Playlist
 
-class PlaylistsViewHolderMedialibrary(itemView: View): RecyclerView.ViewHolder(itemView) {
+class PlaylistsViewHolderMedialibrary(itemView: View, listener: PlaylistsAdapterMedialibrary.OnTrackClickListener?): RecyclerView.ViewHolder(itemView) {
 
     private var playlistImage: ImageView = itemView.findViewById(R.id.photoPlaylist)
     private var playlistName: TextView = itemView.findViewById(R.id.playlist_name)
     private var numberTracks: TextView = itemView.findViewById(R.id.number_tracks)
+
+    init{
+        itemView.setOnClickListener {
+            listener?.onTrackClick(adapterPosition)
+        }
+    }
 
     fun bind(playlist: Playlist){
         playlistName.text = playlist.playlistName

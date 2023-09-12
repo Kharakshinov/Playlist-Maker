@@ -28,7 +28,7 @@
 
     <Button
         android:id="@+id/button_share_application"
-        android:text="@string/share"
+        android:text="@string/share_application"
         app:icon="@drawable/icon_share"
         style="@style/ButtonSettings" />
 

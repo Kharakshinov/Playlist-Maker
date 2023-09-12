@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.practicum.playlistmaker.presentation.medialibrary.playlists.playlist.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment: Fragment() {
@@ -54,6 +56,13 @@ class PlaylistsFragment: Fragment() {
         binding.buttonNewPlaylist.setOnClickListener(){
             findNavController().navigate(R.id.action_mediaLibraryFragment_to_newPlaylistFragment)
         }
+
+        playListsAdapterMedialibrary.setOnTrackClickListener(object: PlaylistsAdapterMedialibrary.OnTrackClickListener{
+            override fun onTrackClick(position: Int) {
+                val chosenPlaylist = playListsAdapterMedialibrary.playlists[position]
+                findNavController().navigate(R.id.action_mediaLibraryFragment_to_playlistFragment, bundleOf(PlaylistFragment.PLAYLIST_ID to chosenPlaylist.playlistId))
+            }
+        })
     }
 
     override fun onResume() {
