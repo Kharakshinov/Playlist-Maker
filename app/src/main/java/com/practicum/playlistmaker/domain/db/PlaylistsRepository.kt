@@ -14,5 +14,5 @@ interface PlaylistsRepository {
     suspend fun putTrackInPlaylist(track: TrackDomainAudioplayer, playlist: Playlist)
     suspend fun deleteTrackFromPlaylist(track: TrackDomainMediaLibrary, playlist: Playlist)
     suspend fun getTracksInPlaylists(): List<TrackDomainMediaLibrary>
-    suspend fun getTracksInPlaylist(addedTracksId: ArrayList<Long>): ArrayList<TrackDomainMediaLibrary>
+    suspend fun getTracksInPlaylistWithId(addedTracksId: ArrayList<Long>): ArrayList<TrackDomainMediaLibrary>
 }

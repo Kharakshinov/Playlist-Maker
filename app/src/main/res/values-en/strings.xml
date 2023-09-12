@@ -44,4 +44,6 @@
     <string name="change_info">Edit Information</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
 </resources>

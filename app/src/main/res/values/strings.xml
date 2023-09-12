@@ -74,4 +74,6 @@
     <string name="change_info">Редактировать информацию</string>
     <string name="no">Нет</string>
     <string name="yes">Да</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Редактировать</string>
 </resources>

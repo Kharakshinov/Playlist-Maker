@@ -91,7 +91,7 @@ class PlaylistsRepositoryImpl(
         return appDatabase.trackToPlaylistDao().getTracksInPlaylists().map{ tracksInPlaylists -> convertFromTrackToPlaylistEntityToTrackDomainMediaLibrary(tracksInPlaylists) }
     }
 
-    override suspend fun getTracksInPlaylist(addedTracksId: ArrayList<Long>): ArrayList<TrackDomainMediaLibrary> {
+    override suspend fun getTracksInPlaylistWithId(addedTracksId: ArrayList<Long>): ArrayList<TrackDomainMediaLibrary> {
         val tracksInPlaylists = getTracksInPlaylists()
         val tracksInPlaylist = arrayListOf<TrackDomainMediaLibrary>()
 

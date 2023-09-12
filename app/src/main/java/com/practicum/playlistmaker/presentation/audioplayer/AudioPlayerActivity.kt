@@ -2,7 +2,8 @@ package com.practicum.playlistmaker.presentation.audioplayer
 
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -16,7 +17,7 @@ import com.practicum.playlistmaker.presentation.medialibrary.playlists.Playlists
 import com.practicum.playlistmaker.presentation.medialibrary.playlists.newplaylist.NewPlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -37,7 +38,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         initAdapter()
         setChosenTrack()
         setTrackData()
-        bottomSheetBehavior()
+        setUpBottomSheetBehavior()
         viewModel.startPreparingPlayer(url)
         viewModel.checkTrackInFavourites(chosenTrack)
         viewModel.downloadPlaylists()
@@ -203,7 +204,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.recyclerViewPlaylists.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun bottomSheetBehavior(){
+    private fun setUpBottomSheetBehavior(){
         bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }

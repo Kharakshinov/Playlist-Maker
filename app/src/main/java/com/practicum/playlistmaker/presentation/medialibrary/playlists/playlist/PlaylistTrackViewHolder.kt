@@ -39,6 +39,12 @@ class PlaylistTrackViewHolder(
         length.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
         author.text = item.artistName
 
+        initPlaylistPhoto(item)
+        initElliplseIcon()
+        initForwardIcon()
+    }
+
+    private fun initPlaylistPhoto(item: TrackDomainMediaLibrary){
         val radius = itemView.resources.getDimensionPixelSize(R.dimen.dp_2)
         Glide.with(itemView)
             .load(item.artworkUrl100.replaceAfterLast('/',"60x60bb.jpg"))
@@ -46,16 +52,19 @@ class PlaylistTrackViewHolder(
             .placeholder(R.drawable.icon_no_reply)
             .transform(RoundedCorners(radius))
             .into(photo)
+    }
 
+    private fun initElliplseIcon(){
         Glide.with(itemView)
             .load(R.drawable.icon_ellipse)
             .centerInside()
             .into(ellipse)
+    }
 
+    private fun initForwardIcon(){
         Glide.with(itemView)
             .load(R.drawable.icon_arrow_forward)
             .centerInside()
             .into(iconForward)
-
     }
 }

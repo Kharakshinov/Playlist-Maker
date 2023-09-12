@@ -61,7 +61,7 @@ class PlaylistFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         hideBottomNavigationView()
         initAdapter()
-        bottomSheetBehavior()
+        setUpBottomSheetBehavior()
 
         viewModel.getPlaylistById(requireArguments().getInt(PLAYLIST_ID))
 
@@ -123,7 +123,7 @@ class PlaylistFragment: Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun bottomSheetBehavior(){
+    private fun setUpBottomSheetBehavior(){
         bottomSheetFixed = BottomSheetBehavior.from(binding.standardBottomSheet).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
         }

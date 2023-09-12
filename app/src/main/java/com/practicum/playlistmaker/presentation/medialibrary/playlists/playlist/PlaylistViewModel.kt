@@ -37,7 +37,7 @@ class PlaylistViewModel(
         viewModelScope.launch{
             withContext(Dispatchers.IO){
                val tracks = playlistsInteractor
-                    .getTracksInPlaylist(addedTracksId)
+                    .getTracksInPlaylistWithId(addedTracksId)
                 val sortedTracks = ArrayList(tracks.sortedByDescending { it.timeSaved })
                 if(sortedTracks.isEmpty())
                     _tracks.postValue(TracksInPlaylistState.Empty)

@@ -44,8 +44,8 @@ class EditPlaylistFragment: NewPlaylistFragment() {
 
         binding.playlistName.setText(chosenPlaylist.playlistName)
         binding.playlistDescription.setText("${chosenPlaylist.playlistDescription}")
-        binding.buttonCreate.text = "Сохранить"
-        binding.fragmentText.text = "Редактировать"
+        binding.buttonCreate.text = getString(R.string.save)
+        binding.fragmentText.text = getString(R.string.edit)
     }
 
     override fun clickListeners() {

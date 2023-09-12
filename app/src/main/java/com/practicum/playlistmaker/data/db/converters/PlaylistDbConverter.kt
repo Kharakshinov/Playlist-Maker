@@ -10,8 +10,7 @@ import com.practicum.playlistmaker.domain.medialibrary.models.TrackDomainMediaLi
 
 class PlaylistDbConverter {
 
-    fun map(playlist: Playlist): PlaylistEntity{
-        return PlaylistEntity(
+    fun map(playlist: Playlist) = PlaylistEntity(
             playlist.playlistId,
             playlist.playlistName,
             playlist.playlistDescription,
@@ -19,7 +18,7 @@ class PlaylistDbConverter {
             Gson().toJson(playlist.addedTracksId),
             playlist.addedTracksNumber,
         )
-    }
+
 
     fun map(playlistEntity: PlaylistEntity): Playlist{
         val type = object: TypeToken<ArrayList<Long>>() {}.type
@@ -33,8 +32,7 @@ class PlaylistDbConverter {
         )
     }
 
-    fun map(track: TrackDomainAudioplayer): TrackToPlaylistEntity {
-        return TrackToPlaylistEntity(
+    fun map(track: TrackDomainAudioplayer) = TrackToPlaylistEntity(
             track.trackId,
             track.trackName,
             track.artistName,
@@ -47,10 +45,8 @@ class PlaylistDbConverter {
             track.previewUrl,
             null
         )
-    }
 
-    fun map(track: TrackDomainMediaLibrary): TrackToPlaylistEntity {
-        return TrackToPlaylistEntity(
+    fun map(track: TrackDomainMediaLibrary) = TrackToPlaylistEntity(
             track.trackId,
             track.trackName,
             track.artistName,
@@ -63,10 +59,8 @@ class PlaylistDbConverter {
             track.previewUrl,
             null
         )
-    }
 
-    fun map(trackInPlaylist: TrackToPlaylistEntity): TrackDomainMediaLibrary{
-        return TrackDomainMediaLibrary(
+    fun map(trackInPlaylist: TrackToPlaylistEntity) = TrackDomainMediaLibrary(
             trackInPlaylist.trackId,
             trackInPlaylist.trackName,
             trackInPlaylist.artistName,
@@ -79,5 +73,4 @@ class PlaylistDbConverter {
             trackInPlaylist.previewUrl,
             trackInPlaylist.timeSaved
         )
-    }
 }
