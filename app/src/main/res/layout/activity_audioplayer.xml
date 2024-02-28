@@ -79,31 +79,16 @@
             android:src="@drawable/button_add_to_playlist"
             />
 
-        <ImageView
-            android:contentDescription="@string/button_play_track"
+        <com.practicum.playlistmaker.presentation.audioplayer.PlaybackButtonView
             android:id="@+id/button_play_track"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:layout_marginTop="@dimen/dp_38"
             app:layout_constraintStart_toEndOf="@id/button_add_to_playlist"
             app:layout_constraintEnd_toStartOf="@id/button_add_to_favourites"
             app:layout_constraintTop_toBottomOf="@id/track_author"
-            android:layout_marginTop="@dimen/dp_38"
-            android:src="@drawable/button_play"
-            app:tint="?attr/text_color"
-            />
-
-        <ImageView
-            android:contentDescription="@string/button_pause_track"
-            android:id="@+id/button_pause_track"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/button_add_to_playlist"
-            app:layout_constraintEnd_toStartOf="@id/button_add_to_favourites"
-            app:layout_constraintTop_toBottomOf="@id/track_author"
-            android:layout_marginTop="@dimen/dp_38"
-            android:src="@drawable/button_pause"
-            app:tint="?attr/text_color"
-            android:visibility="gone"
+            app:playButtonImageResId="@drawable/button_play"
+            app:pauseButtonImageResId="@drawable/button_pause"
             />
 
         <ImageView

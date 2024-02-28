@@ -25,6 +25,7 @@ class AudioPlayerViewModel(
     private var isPlayerUsed = false
     private var isPlayerPrepared = false
     private lateinit var favouriteTracksId: List<Long>
+    private var currentAudioPlayerState: AudioPlayerState? = null
 
     private val _state = MutableLiveData<AudioPlayerState>()
     val state: LiveData<AudioPlayerState> = _state
@@ -41,7 +42,12 @@ class AudioPlayerViewModel(
     private var timerJob: Job? = null
 
     init{
-        _state.postValue(AudioPlayerState.NotReady)
+        postAudioPlayerState(AudioPlayerState.NotReady)
+    }
+
+    private fun postAudioPlayerState(state: AudioPlayerState){
+        _state.postValue(state)
+        currentAudioPlayerState = state
     }
 
     fun startPreparingPlayer(url: String){
@@ -54,13 +60,15 @@ class AudioPlayerViewModel(
    }
 
     fun onPlayButtonClicked() {
-        startPlayer()
-        _state.postValue(AudioPlayerState.Play(showPlayerCurrentPosition()))
-    }
-
-    fun onPauseButtonClicked() {
-        pausePlayer()
-        _state.postValue(AudioPlayerState.Pause)
+        if(currentAudioPlayerState is AudioPlayerState.Pause
+            || currentAudioPlayerState is AudioPlayerState.Ready
+            || currentAudioPlayerState is AudioPlayerState.OnStart) {
+            startPlayer()
+            postAudioPlayerState(AudioPlayerState.Play(showPlayerCurrentPosition()))
+        } else if (currentAudioPlayerState is AudioPlayerState.Play){
+            pausePlayer()
+            postAudioPlayerState(AudioPlayerState.Pause)
+        }
     }
 
     private fun startPlayer() {
@@ -70,7 +78,7 @@ class AudioPlayerViewModel(
     }
 
     fun pausePlayer() {
-        _state.postValue(AudioPlayerState.Pause)
+        postAudioPlayerState(AudioPlayerState.Pause)
         trackMediaPlayerInteractor.pausePlayer()
         timerJob?.cancel()
     }
@@ -124,10 +132,10 @@ class AudioPlayerViewModel(
             when(state) {
                 PlayerState.NOT_READY -> {}
                 PlayerState.PREPARED -> {
-                    _state.postValue(AudioPlayerState.Ready)
+                    postAudioPlayerState(AudioPlayerState.Ready)
                 }
                 PlayerState.COMPLETE -> {
-                    _state.postValue(AudioPlayerState.OnStart)
+                    postAudioPlayerState(AudioPlayerState.OnStart)
                     timerJob?.cancel()
                 }
             }
@@ -142,7 +150,7 @@ class AudioPlayerViewModel(
         timerJob = viewModelScope.launch {
             while (trackMediaPlayerInteractor.isPlaying()) {
                 delay(DELAY)
-                _state.postValue(AudioPlayerState.Play(showPlayerCurrentPosition()))
+                postAudioPlayerState(AudioPlayerState.Play(showPlayerCurrentPosition()))
             }
         }
     }
