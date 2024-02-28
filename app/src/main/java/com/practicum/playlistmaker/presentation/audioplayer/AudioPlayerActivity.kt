@@ -48,12 +48,11 @@ class AudioPlayerActivity : AppCompatActivity() {
                 AudioPlayerState.NotReady -> playButtonAvailability(false)
                 AudioPlayerState.Ready -> playButtonAvailability(true)
                 AudioPlayerState.OnStart -> {
-                    hidePauseButton()
                     updateTrackTimePassed(ZERO)
+                    binding.buttonPlayTrack.updateButtonState()
                 }
-                AudioPlayerState.Pause -> hidePauseButton()
+                AudioPlayerState.Pause -> {}
                 is AudioPlayerState.Play -> {
-                    showPauseButton()
                     updateTrackTimePassed(state.currentPosition)
                 }
             }
@@ -103,12 +102,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.buttonPlayTrack.setOnClickListener{
+        binding.buttonPlayTrack.onTouchListener = {
             viewModel.onPlayButtonClicked()
-        }
-
-        binding.buttonPauseTrack.setOnClickListener{
-            viewModel.onPauseButtonClicked()
         }
 
         binding.buttonAddToPlaylist.setOnClickListener{
@@ -181,14 +176,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun updateTrackTimePassed(position: String) {
         binding.trackTimePassed.text = position
-    }
-
-    private fun showPauseButton() {
-        binding.buttonPauseTrack.visibility = View.VISIBLE
-    }
-
-    private fun hidePauseButton() {
-        binding.buttonPauseTrack.visibility = View.GONE
     }
 
     private fun showActiveAddToFavouritesButton() {
