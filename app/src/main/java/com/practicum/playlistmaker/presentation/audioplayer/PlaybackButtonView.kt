@@ -22,6 +22,7 @@ class PlaybackButtonView @JvmOverloads constructor(
 
     private var imageRect = RectF(0f, 0f, 0f, 0f)
     private var isPlaying = false
+    private var isClickEnabled = false
     private var imagePlayButtonBitmap: Bitmap? = null
     private var imagePauseButtonBitmap: Bitmap? = null
 
@@ -46,18 +47,24 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                return true
-            }
+        if(isClickEnabled){
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    return true
+                }
 
-            MotionEvent.ACTION_UP -> {
-                onTouchListener?.invoke()
-                updateButtonState()
-                return true
+                MotionEvent.ACTION_UP -> {
+                    onTouchListener?.invoke()
+                    updateButtonState()
+                    return true
+                }
             }
         }
         return super.onTouchEvent(event)
+    }
+
+    fun updateСlickAccessibility(isEnabled: Boolean) {
+        isClickEnabled = isEnabled
     }
 
     fun updateButtonState() {
@@ -76,10 +83,10 @@ class PlaybackButtonView @JvmOverloads constructor(
         imageRect = RectF(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat())
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         val imageBitmap = if (isPlaying) imagePauseButtonBitmap else imagePlayButtonBitmap
         if (imageBitmap != null) {
-            canvas?.drawBitmap(imageBitmap, null, imageRect, null)
+            canvas.drawBitmap(imageBitmap, null, imageRect, null)
         }
     }
 }

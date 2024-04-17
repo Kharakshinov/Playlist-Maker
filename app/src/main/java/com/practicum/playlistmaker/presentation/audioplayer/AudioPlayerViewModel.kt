@@ -30,6 +30,8 @@ class AudioPlayerViewModel(
     private val _state = MutableLiveData<AudioPlayerState>()
     val state: LiveData<AudioPlayerState> = _state
 
+    private var audioPlayerControl: AudioPlayerControl? = null
+
     private val _statePlaylists = MutableLiveData<PlaylistsState>()
     val statePlaylists: LiveData<PlaylistsState> = _statePlaylists
 
@@ -50,6 +52,16 @@ class AudioPlayerViewModel(
         currentAudioPlayerState = state
     }
 
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        this.audioPlayerControl = audioPlayerControl
+
+        viewModelScope.launch {
+            audioPlayerControl.getPlayerState().collect { state ->
+                postAudioPlayerState(state)
+            }
+        }
+    }
+
     fun startPreparingPlayer(url: String){
         if(!isPlayerPrepared)
             preparePlayer(url)
@@ -57,16 +69,21 @@ class AudioPlayerViewModel(
 
    override fun onCleared(){
        releasePlayer()
+       removeAudioPlayerControl()
    }
+
+    fun removeAudioPlayerControl() {
+        audioPlayerControl = null
+    }
 
     fun onPlayButtonClicked() {
         if(currentAudioPlayerState is AudioPlayerState.Pause
             || currentAudioPlayerState is AudioPlayerState.Ready
             || currentAudioPlayerState is AudioPlayerState.OnStart) {
-            startPlayer()
+            audioPlayerControl?.startPlayer()
             postAudioPlayerState(AudioPlayerState.Play(showPlayerCurrentPosition()))
         } else if (currentAudioPlayerState is AudioPlayerState.Play){
-            pausePlayer()
+            audioPlayerControl?.pausePlayer()
             postAudioPlayerState(AudioPlayerState.Pause)
         }
     }
@@ -76,6 +93,12 @@ class AudioPlayerViewModel(
         startTimer()
         isPlayerUsed = true
     }
+
+    fun showForegroundNotification() =
+        audioPlayerControl?.showForegroundNotification()
+
+    fun hideForegroundNotification() =
+        audioPlayerControl?.hideForegroundNotification()
 
     fun pausePlayer() {
         postAudioPlayerState(AudioPlayerState.Pause)
