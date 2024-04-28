@@ -1,9 +1,17 @@
 package com.practicum.playlistmaker.presentation.audioplayer
 
+import android.Manifest
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -30,6 +38,29 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val viewModel: AudioPlayerViewModel by viewModel()
     private val playlistsAdapterAudioplayer: PlaylistsAdapterAudioplayer by lazy { PlaylistsAdapterAudioplayer() }
 
+    private var isPlaying = false
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindMusicService()
+        } else {
+            Toast.makeText(this, "Can't bind service!", Toast.LENGTH_LONG).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAudioplayerBinding.inflate(layoutInflater)
@@ -45,8 +76,8 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         viewModel.state.observe(this){ state ->
             when (state){
-                AudioPlayerState.NotReady -> playButtonAvailability(false)
-                AudioPlayerState.Ready -> playButtonAvailability(true)
+                AudioPlayerState.NotReady -> binding.buttonPlayTrack.updateСlickAccessibility(false)
+                AudioPlayerState.Ready -> binding.buttonPlayTrack.updateСlickAccessibility(true)
                 AudioPlayerState.OnStart -> {
                     updateTrackTimePassed(ZERO)
                     binding.buttonPlayTrack.updateButtonState()
@@ -54,6 +85,7 @@ class AudioPlayerActivity : AppCompatActivity() {
                 AudioPlayerState.Pause -> {}
                 is AudioPlayerState.Play -> {
                     updateTrackTimePassed(state.currentPosition)
+                    isPlaying = true
                 }
             }
         }
@@ -135,13 +167,38 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        checkPermissionAndBindMusicService()
+        super.onStart()
+    }
+
+    private fun checkPermissionAndBindMusicService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService()
+        }
+    }
+
+    private fun bindMusicService() {
+        val intent = Intent(this, MusicService::class.java).apply {
+            putExtra("song_url", chosenTrack.previewUrl)
+            putExtra(NOTIFICATION_TEXT, "${chosenTrack.artistName} - ${chosenTrack.trackName}")
+        }
+
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
     override fun onPause() {
         super.onPause()
-        viewModel.pausePlayer()
+        if(isPlaying) {
+            viewModel.showForegroundNotification()
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.hideForegroundNotification()
         viewModel.downloadPlaylists()
     }
 
@@ -219,7 +276,16 @@ class AudioPlayerActivity : AppCompatActivity() {
             .show()
     }
 
+    override fun onDestroy() {
+        unbindMusicService()
+        super.onDestroy()
+    }
+
+    private fun unbindMusicService() =
+        unbindService(serviceConnection)
+
     companion object {
+        const val NOTIFICATION_TEXT = "notification_text"
         private const val CHOSEN_TRACK = "chosen_track"
         private const val ZERO = "00:00"
     }
